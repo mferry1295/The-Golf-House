@@ -1144,7 +1144,15 @@ export default function PropertyPlanner() {
       </div>
 
       {/* Canvas */}
-      <div className={`planner-canvas ${pathMode ? 'planner-canvas--drawing' : ''}`} ref={canvasRef} onMouseDown={is3D ? undefined : handleCanvasMouseDown} style={{ cursor: is3D ? 'default' : pathMode ? 'crosshair' : isPanning ? 'grabbing' : 'grab' }}>
+      <div className={`planner-canvas ${pathMode ? 'planner-canvas--drawing' : ''}`} ref={canvasRef} onMouseDown={(e) => {
+        if (is3D) {
+          setSelectedId(null)
+          setIsPanning(true)
+          setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y })
+        } else {
+          handleCanvasMouseDown(e)
+        }
+      }} style={{ cursor: is3D ? (isPanning ? 'grabbing' : 'grab') : pathMode ? 'crosshair' : isPanning ? 'grabbing' : 'grab' }}>
         {/* 3D Isometric View */}
         {is3D && <Isometric3DView elements={elements} zoom={zoom} pan={pan} showGrid={showGrid} selectedId={selectedId} />}
 
