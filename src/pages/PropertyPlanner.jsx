@@ -459,130 +459,187 @@ function Isometric3DView({ elements, zoom, pan, showGrid, selectedId }) {
     const pw = el.w * SCALE, ph = el.h * SCALE
     const h = getElementHeight(el)
     const isSel = el.id === selectedId
+    const roofH = h + 15
+    const x0 = el.x + ox, y0 = el.y + oy
 
-    // 4 corners of the base
-    const bl = toIso(el.x + ox, el.y + oy + ph)
-    const br = toIso(el.x + ox + pw, el.y + oy + ph)
-    const tr = toIso(el.x + ox + pw, el.y + oy)
-    const tl = toIso(el.x + ox, el.y + oy)
+    // Wall corners - base (ground)
+    const gBL = toIso(x0, y0 + ph)
+    const gBR = toIso(x0 + pw, y0 + ph)
+    const gTR = toIso(x0 + pw, y0)
+    const gTL = toIso(x0, y0)
 
-    // 4 corners of the top
-    const blT = toIso(el.x + ox, el.y + oy + ph, h)
-    const brT = toIso(el.x + ox + pw, el.y + oy + ph, h)
-    const trT = toIso(el.x + ox + pw, el.y + oy, h)
-    const tlT = toIso(el.x + ox, el.y + oy, h)
+    // Wall corners - top (eave line)
+    const eBL = toIso(x0, y0 + ph, h)
+    const eBR = toIso(x0 + pw, y0 + ph, h)
+    const eTR = toIso(x0 + pw, y0, h)
+    const eTL = toIso(x0, y0, h)
 
-    // Roof peak (ridge line at center, higher)
-    const roofH = h + 18
-    const midY = el.y + oy + ph / 2
-    const rleft = toIso(el.x + ox, midY, roofH)
-    const rright = toIso(el.x + ox + pw, midY, roofH)
+    // Hip roof: ridge runs along the LONG axis (X), inset from short ends
+    const ridgeInset = Math.min(ph / 2, pw * 0.2) // inset from each end
+    const midY = y0 + ph / 2 // ridge Y = center of depth
+    const rL = toIso(x0 + ridgeInset, midY, roofH)        // left ridge point
+    const rR = toIso(x0 + pw - ridgeInset, midY, roofH)   // right ridge point
 
     const wallColor = el.shape === 'clubhouse' ? '#c4a878' : el.shape === 'cabin' ? '#b89868' : '#a89070'
-    const roofColor = '#5a5a58'
-    const roofDark = '#484848'
-    const wallDark = el.shape === 'clubhouse' ? '#a08858' : '#8a7048'
+    const wallDark = el.shape === 'clubhouse' ? '#a08858' : el.shape === 'cabin' ? '#8a7048' : '#887058'
+    const roofLight = '#6a6a66'
+    const roofDark = '#505050'
+    const roofFront = '#5a5a56'
+    const roofBack = '#585855'
 
-    // Chimney for clubhouse/cabin
-    const chimney = (el.shape === 'clubhouse' || el.shape === 'cabin') ? (() => {
-      const cx1 = el.x + ox + pw * 0.2, cy1 = midY
-      const chH = roofH + 12
-      const c1 = toIso(cx1, cy1, roofH)
-      const c2 = toIso(cx1 + 6, cy1, roofH)
-      const c3 = toIso(cx1 + 6, cy1, chH)
-      const c4 = toIso(cx1, cy1, chH)
-      const c5 = toIso(cx1, cy1 + 6, chH)
-      const c6 = toIso(cx1 + 6, cy1 + 6, chH)
-      const c7 = toIso(cx1 + 6, cy1 + 6, roofH)
-      return (
-        <g>
-          <polygon points={`${c4.x},${c4.y} ${c3.x},${c3.y} ${c6.x},${c6.y} ${c5.x},${c5.y}`} fill="#8a6a4a" stroke="#6a4a2a" strokeWidth="0.5" />
-          <polygon points={`${c3.x},${c3.y} ${c2.x},${c2.y} ${c7.x},${c7.y} ${c6.x},${c6.y}`} fill="#7a5a3a" stroke="#6a4a2a" strokeWidth="0.5" />
-          <polygon points={`${c4.x},${c4.y} ${c3.x},${c3.y} ${c2.x},${c2.y} ${c1.x},${c1.y}`} fill="#9a7a5a" stroke="#6a4a2a" strokeWidth="0.5" />
-        </g>
-      )
-    })() : null
-
-    // Porch columns for clubhouse/cabin
-    const porch = (el.shape === 'clubhouse' || el.shape === 'cabin') ? (() => {
-      const cols = []
-      const porchH = h * 0.7
-      const count = el.shape === 'clubhouse' ? 7 : 4
-      for (let i = 0; i < count; i++) {
-        const cx = el.x + ox + (pw / (count + 1)) * (i + 1)
-        const cy = el.y + oy + ph + 2
-        const base = toIso(cx, cy)
-        const top = toIso(cx, cy, porchH)
-        cols.push(
-          <line key={i} x1={base.x} y1={base.y} x2={top.x} y2={top.y} stroke="#e8dcc8" strokeWidth="2" />
-        )
-      }
-      // Porch roof
-      const pl = toIso(el.x + ox, el.y + oy + ph + 4, porchH)
-      const pr = toIso(el.x + ox + pw, el.y + oy + ph + 4, porchH)
-      const plb = toIso(el.x + ox, el.y + oy + ph + 4)
-      const prb = toIso(el.x + ox + pw, el.y + oy + ph + 4)
-      return (
-        <g>
-          <polygon points={`${plb.x},${plb.y} ${prb.x},${prb.y} ${pr.x},${pr.y} ${pl.x},${pl.y}`} fill="rgba(90,80,60,0.25)" />
-          {cols}
-          <line x1={pl.x} y1={pl.y} x2={pr.x} y2={pr.y} stroke="#d8c8a8" strokeWidth="1.5" />
-        </g>
-      )
-    })() : null
-
-    // Windows
-    const windows = (() => {
-      const wins = []
-      const winCount = Math.floor(pw / 20)
-      const winH = h * 0.4
-      const winBottom = h * 0.15
-      for (let i = 0; i < winCount; i++) {
-        const wx = el.x + ox + (pw / (winCount + 1)) * (i + 1)
-        const wy = el.y + oy + ph // front face
-        const wb = toIso(wx, wy, winBottom)
-        const wt = toIso(wx, wy, winBottom + winH)
-        wins.push(
-          <rect key={i} x={wb.x - 3} y={wt.y} width="6" height={wb.y - wt.y} fill="#f0e8c8" opacity="0.7" rx="0.5" />
-        )
-      }
-      return wins
-    })()
+    // Porch (extends from front/bottom wall)
+    const hasPorch = el.shape === 'clubhouse' || el.shape === 'cabin'
+    const porchDepth = 8
+    const porchH = h * 0.6
 
     return (
       <g key={el.id} opacity={isSel ? 1 : 0.95}>
         {/* Ground shadow */}
-        <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${br.x + 8},${br.y + 4} ${bl.x + 8},${bl.y + 4}`} fill="rgba(0,0,0,0.12)" />
+        <polygon
+          points={`${gBL.x + 6},${gBL.y + 4} ${gBR.x + 6},${gBR.y + 4} ${gTR.x + 6},${gTR.y + 4} ${gTL.x + 6},${gTL.y + 4}`}
+          fill="rgba(0,0,0,0.1)"
+        />
 
-        {/* Right wall (front-facing) */}
-        <polygon points={`${br.x},${br.y} ${tr.x},${tr.y} ${trT.x},${trT.y} ${brT.x},${brT.y}`} fill={wallDark} stroke="#5a4a30" strokeWidth="0.5" />
+        {/* Back wall (right side in iso, y=y0) - only visible top part above roof sometimes, usually hidden */}
 
-        {/* Front wall (left-facing) */}
-        <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${brT.x},${brT.y} ${blT.x},${blT.y}`} fill={wallColor} stroke="#5a4a30" strokeWidth="0.5" />
+        {/* Right wall (x=x0+pw side) */}
+        <polygon
+          points={`${gBR.x},${gBR.y} ${gTR.x},${gTR.y} ${eTR.x},${eTR.y} ${eBR.x},${eBR.y}`}
+          fill={wallDark} stroke="#5a4a30" strokeWidth="0.5"
+        />
+
+        {/* Front wall (y=y0+ph side, bottom in iso) */}
+        <polygon
+          points={`${gBL.x},${gBL.y} ${gBR.x},${gBR.y} ${eBR.x},${eBR.y} ${eBL.x},${eBL.y}`}
+          fill={wallColor} stroke="#5a4a30" strokeWidth="0.5"
+        />
 
         {/* Windows on front wall */}
-        {windows}
+        {(() => {
+          const wins = []
+          const count = Math.max(2, Math.floor(pw / 22))
+          for (let i = 0; i < count; i++) {
+            const wx = x0 + (pw / (count + 1)) * (i + 1)
+            const wy = y0 + ph
+            const wBot = toIso(wx, wy, h * 0.15)
+            const wTop = toIso(wx, wy, h * 0.55)
+            wins.push(
+              <rect key={i} x={wBot.x - 3} y={wTop.y} width="6" height={Math.max(2, wBot.y - wTop.y)} fill="#f0e8c8" opacity="0.65" rx="0.5" />
+            )
+          }
+          return wins
+        })()}
+
+        {/* Door on front wall */}
+        {(() => {
+          const dx = x0 + pw / 2, dy = y0 + ph
+          const dBot = toIso(dx, dy, 0)
+          const dTop = toIso(dx, dy, h * 0.6)
+          return <rect x={dBot.x - 4} y={dTop.y} width="8" height={Math.max(2, dBot.y - dTop.y)} fill="#5a3a20" stroke="#4a2a10" strokeWidth="0.5" rx="0.5" />
+        })()}
 
         {/* Porch */}
-        {porch}
+        {hasPorch && (() => {
+          const py = y0 + ph + porchDepth
+          const pBL = toIso(x0, py)
+          const pBR = toIso(x0 + pw, py)
+          const pTL = toIso(x0, py, porchH)
+          const pTR = toIso(x0 + pw, py, porchH)
+          // Porch floor shadow
+          const cols = []
+          const colCount = el.shape === 'clubhouse' ? 6 : 3
+          for (let i = 0; i < colCount; i++) {
+            const cx = x0 + (pw / (colCount + 1)) * (i + 1)
+            const cBase = toIso(cx, py)
+            const cTop = toIso(cx, py, porchH)
+            cols.push(<line key={i} x1={cBase.x} y1={cBase.y} x2={cTop.x} y2={cTop.y} stroke="#e0d0b8" strokeWidth="1.5" />)
+          }
+          return (
+            <g>
+              {/* Porch floor */}
+              <polygon points={`${gBL.x},${gBL.y} ${gBR.x},${gBR.y} ${pBR.x},${pBR.y} ${pBL.x},${pBL.y}`} fill="rgba(180,160,130,0.3)" stroke="rgba(100,80,60,0.2)" strokeWidth="0.5" />
+              {/* Columns */}
+              {cols}
+              {/* Porch roof overhang */}
+              <polygon points={`${eBL.x},${eBL.y} ${eBR.x},${eBR.y} ${pTR.x},${pTR.y} ${pTL.x},${pTL.y}`} fill="rgba(80,80,75,0.35)" stroke="rgba(60,60,55,0.3)" strokeWidth="0.5" />
+              {/* Railing */}
+              <line x1={pBL.x} y1={pBL.y} x2={pBR.x} y2={pBR.y} stroke="#d8c8a8" strokeWidth="1" />
+            </g>
+          )
+        })()}
 
-        {/* Roof - left slope */}
-        <polygon points={`${blT.x},${blT.y} ${tlT.x},${tlT.y} ${rleft.x},${rleft.y} ${toIso(el.x + ox, midY, roofH).x},${toIso(el.x + ox, midY, roofH).y}`} fill={roofColor} stroke="#3a3a3a" strokeWidth="0.8" />
-
-        {/* Roof - right slope */}
-        <polygon points={`${brT.x},${brT.y} ${trT.x},${trT.y} ${rright.x},${rright.y} ${rleft.x},${rleft.y}`} fill={roofDark} stroke="#3a3a3a" strokeWidth="0.8" />
-
-        {/* Roof - front gable */}
-        <polygon points={`${blT.x},${blT.y} ${brT.x},${brT.y} ${toIso(el.x + ox + pw / 2, el.y + oy + ph, roofH).x},${toIso(el.x + ox + pw / 2, el.y + oy + ph, roofH).y}`} fill={roofColor} stroke="#3a3a3a" strokeWidth="0.5" opacity="0.9" />
-
+        {/* ── HIP ROOF ── */}
+        {/* Front slope (facing viewer, y=y0+ph side) */}
+        <polygon
+          points={`${eBL.x},${eBL.y} ${eBR.x},${eBR.y} ${rR.x},${rR.y} ${rL.x},${rL.y}`}
+          fill={roofFront} stroke="#3a3a3a" strokeWidth="0.6"
+        />
+        {/* Right hip triangle (x=x0+pw end) */}
+        <polygon
+          points={`${eBR.x},${eBR.y} ${eTR.x},${eTR.y} ${rR.x},${rR.y}`}
+          fill={roofDark} stroke="#3a3a3a" strokeWidth="0.6"
+        />
+        {/* Back slope (away from viewer, y=y0 side) */}
+        <polygon
+          points={`${eTR.x},${eTR.y} ${eTL.x},${eTL.y} ${rL.x},${rL.y} ${rR.x},${rR.y}`}
+          fill={roofLight} stroke="#3a3a3a" strokeWidth="0.6"
+        />
+        {/* Left hip triangle (x=x0 end) */}
+        <polygon
+          points={`${eTL.x},${eTL.y} ${eBL.x},${eBL.y} ${rL.x},${rL.y}`}
+          fill={roofBack} stroke="#3a3a3a" strokeWidth="0.6"
+        />
         {/* Ridge line */}
-        <line x1={rleft.x} y1={rleft.y} x2={rright.x} y2={rright.y} stroke="#666" strokeWidth="1" />
+        <line x1={rL.x} y1={rL.y} x2={rR.x} y2={rR.y} stroke="#777" strokeWidth="1.2" />
 
         {/* Chimney */}
-        {chimney}
+        {(el.shape === 'clubhouse' || el.shape === 'cabin') && (() => {
+          const chX = x0 + pw * 0.25, chW = 6, chD = 5
+          const chTop = roofH + 10
+          // Front face
+          const cf1 = toIso(chX, midY + chD, roofH - 2)
+          const cf2 = toIso(chX + chW, midY + chD, roofH - 2)
+          const cf3 = toIso(chX + chW, midY + chD, chTop)
+          const cf4 = toIso(chX, midY + chD, chTop)
+          // Side face
+          const cs1 = toIso(chX + chW, midY, roofH - 2)
+          const cs2 = toIso(chX + chW, midY, chTop)
+          // Top face
+          const ct1 = toIso(chX, midY, chTop)
+          return (
+            <g>
+              <polygon points={`${cf1.x},${cf1.y} ${cf2.x},${cf2.y} ${cf3.x},${cf3.y} ${cf4.x},${cf4.y}`} fill="#8a6a4a" stroke="#5a4a2a" strokeWidth="0.4" />
+              <polygon points={`${cf2.x},${cf2.y} ${cs1.x},${cs1.y} ${cs2.x},${cs2.y} ${cf3.x},${cf3.y}`} fill="#7a5a3a" stroke="#5a4a2a" strokeWidth="0.4" />
+              <polygon points={`${cf4.x},${cf4.y} ${cf3.x},${cf3.y} ${cs2.x},${cs2.y} ${ct1.x},${ct1.y}`} fill="#9a7a5a" stroke="#5a4a2a" strokeWidth="0.4" />
+            </g>
+          )
+        })()}
 
-        {/* Selection glow */}
-        {isSel && <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${tr.x},${tr.y} ${tl.x},${tl.y}`} fill="none" stroke="#C4A97D" strokeWidth="2" strokeDasharray="4,3" />}
+        {/* Dormers on front slope */}
+        {(el.shape === 'clubhouse' || el.shape === 'cabin') && (() => {
+          const dCount = el.shape === 'clubhouse' ? 4 : 2
+          const dormers = []
+          for (let i = 0; i < dCount; i++) {
+            const dx = x0 + (pw / (dCount + 1)) * (i + 1)
+            const dy = y0 + ph
+            const dw = 8, dh = 10
+            const dBase = h + 2
+            const dPeak = h + 10
+            const d1 = toIso(dx - dw/2, dy, dBase)
+            const d2 = toIso(dx + dw/2, dy, dBase)
+            const d3 = toIso(dx, dy, dPeak)
+            dormers.push(
+              <g key={i}>
+                <polygon points={`${d1.x},${d1.y} ${d2.x},${d2.y} ${d3.x},${d3.y}`} fill="#5a5a58" stroke="#444" strokeWidth="0.4" />
+                <rect x={d1.x + 1} y={d3.y + 2} width={Math.max(2, d2.x - d1.x - 2)} height={Math.max(2, d1.y - d3.y - 3)} fill="#e8d8b8" opacity="0.6" rx="0.3" />
+              </g>
+            )
+          }
+          return dormers
+        })()}
+
+        {/* Selection highlight */}
+        {isSel && <polygon points={`${gBL.x},${gBL.y} ${gBR.x},${gBR.y} ${gTR.x},${gTR.y} ${gTL.x},${gTL.y}`} fill="none" stroke="#C4A97D" strokeWidth="2" strokeDasharray="4,3" />}
       </g>
     )
   }
