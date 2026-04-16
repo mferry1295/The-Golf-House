@@ -388,6 +388,346 @@ function ShapeRenderer({ el, pw, ph }) {
 }
 
 // ══════════════════════════════════════════════
+//  ISOMETRIC 3D RENDERER
+// ══════════════════════════════════════════════
+
+// Convert 2D top-down coords to isometric projection
+function toIso(x, y, z = 0) {
+  const angle = Math.PI / 6 // 30 degrees
+  return {
+    x: (x - y) * Math.cos(angle),
+    y: (x + y) * Math.sin(angle) - z,
+  }
+}
+
+// Get element height for 3D extrusion
+function getElementHeight(el) {
+  if (el.shape === 'clubhouse') return 55
+  if (el.shape === 'cabin') return 40
+  if (el.shape === 'building') return 35
+  if (el.shape === 'tree') return el.type === 'oak-tree' ? 50 : 45
+  if (el.shape === 'pool') return -5 // sunken
+  if (['green', 'chipping', 'teebox', 'fairway', 'bunker'].includes(el.shape)) return 1
+  if (el.shape === 'garden') return 4
+  if (el.shape === 'flag') return 25
+  if (el.shape === 'circle') return el.type === 'fire-pit' ? 3 : 5
+  return 15 // rect default
+}
+
+function Isometric3DView({ elements, zoom, pan, showGrid, selectedId }) {
+  const svgW = 2400, svgH = 1600
+
+  // Sort elements by depth (back to front) for painter's algorithm
+  const sorted = [...elements].filter(e => e.shape !== 'path')
+    .sort((a, b) => (a.x + a.y) - (b.x + b.y))
+
+  const pathEls = elements.filter(e => e.shape === 'path')
+
+  // Render a ground tile
+  function renderGround() {
+    const corners = [
+      toIso(0, 0), toIso(1000, 0), toIso(1000, 800), toIso(0, 800)
+    ]
+    return (
+      <polygon
+        points={corners.map(c => `${c.x + 600},${c.y + 400}`).join(' ')}
+        fill="#3a5a32"
+        stroke="rgba(74,103,65,0.3)"
+        strokeWidth="1"
+      />
+    )
+  }
+
+  // Render isometric grid
+  function renderGrid() {
+    if (!showGrid) return null
+    const lines = []
+    const step = 30
+    for (let i = 0; i <= 1000; i += step) {
+      const a = toIso(i, 0), b = toIso(i, 800)
+      lines.push(<line key={`gx${i}`} x1={a.x + 600} y1={a.y + 400} x2={b.x + 600} y2={b.y + 400} stroke="rgba(74,103,65,0.15)" strokeWidth="0.5" />)
+      if (i <= 800) {
+        const c = toIso(0, i), d = toIso(1000, i)
+        lines.push(<line key={`gy${i}`} x1={c.x + 600} y1={c.y + 400} x2={d.x + 600} y2={d.y + 400} stroke="rgba(74,103,65,0.15)" strokeWidth="0.5" />)
+      }
+    }
+    return lines
+  }
+
+  // Render a building (box with roof)
+  function renderBuilding(el, ox, oy) {
+    const pw = el.w * SCALE, ph = el.h * SCALE
+    const h = getElementHeight(el)
+    const isSel = el.id === selectedId
+
+    // 4 corners of the base
+    const bl = toIso(el.x + ox, el.y + oy + ph)
+    const br = toIso(el.x + ox + pw, el.y + oy + ph)
+    const tr = toIso(el.x + ox + pw, el.y + oy)
+    const tl = toIso(el.x + ox, el.y + oy)
+
+    // 4 corners of the top
+    const blT = toIso(el.x + ox, el.y + oy + ph, h)
+    const brT = toIso(el.x + ox + pw, el.y + oy + ph, h)
+    const trT = toIso(el.x + ox + pw, el.y + oy, h)
+    const tlT = toIso(el.x + ox, el.y + oy, h)
+
+    // Roof peak (ridge line at center, higher)
+    const roofH = h + 18
+    const midY = el.y + oy + ph / 2
+    const rleft = toIso(el.x + ox, midY, roofH)
+    const rright = toIso(el.x + ox + pw, midY, roofH)
+
+    const wallColor = el.shape === 'clubhouse' ? '#c4a878' : el.shape === 'cabin' ? '#b89868' : '#a89070'
+    const roofColor = '#5a5a58'
+    const roofDark = '#484848'
+    const wallDark = el.shape === 'clubhouse' ? '#a08858' : '#8a7048'
+
+    // Chimney for clubhouse/cabin
+    const chimney = (el.shape === 'clubhouse' || el.shape === 'cabin') ? (() => {
+      const cx1 = el.x + ox + pw * 0.2, cy1 = midY
+      const chH = roofH + 12
+      const c1 = toIso(cx1, cy1, roofH)
+      const c2 = toIso(cx1 + 6, cy1, roofH)
+      const c3 = toIso(cx1 + 6, cy1, chH)
+      const c4 = toIso(cx1, cy1, chH)
+      const c5 = toIso(cx1, cy1 + 6, chH)
+      const c6 = toIso(cx1 + 6, cy1 + 6, chH)
+      const c7 = toIso(cx1 + 6, cy1 + 6, roofH)
+      return (
+        <g>
+          <polygon points={`${c4.x},${c4.y} ${c3.x},${c3.y} ${c6.x},${c6.y} ${c5.x},${c5.y}`} fill="#8a6a4a" stroke="#6a4a2a" strokeWidth="0.5" />
+          <polygon points={`${c3.x},${c3.y} ${c2.x},${c2.y} ${c7.x},${c7.y} ${c6.x},${c6.y}`} fill="#7a5a3a" stroke="#6a4a2a" strokeWidth="0.5" />
+          <polygon points={`${c4.x},${c4.y} ${c3.x},${c3.y} ${c2.x},${c2.y} ${c1.x},${c1.y}`} fill="#9a7a5a" stroke="#6a4a2a" strokeWidth="0.5" />
+        </g>
+      )
+    })() : null
+
+    // Porch columns for clubhouse/cabin
+    const porch = (el.shape === 'clubhouse' || el.shape === 'cabin') ? (() => {
+      const cols = []
+      const porchH = h * 0.7
+      const count = el.shape === 'clubhouse' ? 7 : 4
+      for (let i = 0; i < count; i++) {
+        const cx = el.x + ox + (pw / (count + 1)) * (i + 1)
+        const cy = el.y + oy + ph + 2
+        const base = toIso(cx, cy)
+        const top = toIso(cx, cy, porchH)
+        cols.push(
+          <line key={i} x1={base.x} y1={base.y} x2={top.x} y2={top.y} stroke="#e8dcc8" strokeWidth="2" />
+        )
+      }
+      // Porch roof
+      const pl = toIso(el.x + ox, el.y + oy + ph + 4, porchH)
+      const pr = toIso(el.x + ox + pw, el.y + oy + ph + 4, porchH)
+      const plb = toIso(el.x + ox, el.y + oy + ph + 4)
+      const prb = toIso(el.x + ox + pw, el.y + oy + ph + 4)
+      return (
+        <g>
+          <polygon points={`${plb.x},${plb.y} ${prb.x},${prb.y} ${pr.x},${pr.y} ${pl.x},${pl.y}`} fill="rgba(90,80,60,0.25)" />
+          {cols}
+          <line x1={pl.x} y1={pl.y} x2={pr.x} y2={pr.y} stroke="#d8c8a8" strokeWidth="1.5" />
+        </g>
+      )
+    })() : null
+
+    // Windows
+    const windows = (() => {
+      const wins = []
+      const winCount = Math.floor(pw / 20)
+      const winH = h * 0.4
+      const winBottom = h * 0.15
+      for (let i = 0; i < winCount; i++) {
+        const wx = el.x + ox + (pw / (winCount + 1)) * (i + 1)
+        const wy = el.y + oy + ph // front face
+        const wb = toIso(wx, wy, winBottom)
+        const wt = toIso(wx, wy, winBottom + winH)
+        wins.push(
+          <rect key={i} x={wb.x - 3} y={wt.y} width="6" height={wb.y - wt.y} fill="#f0e8c8" opacity="0.7" rx="0.5" />
+        )
+      }
+      return wins
+    })()
+
+    return (
+      <g key={el.id} opacity={isSel ? 1 : 0.95}>
+        {/* Ground shadow */}
+        <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${br.x + 8},${br.y + 4} ${bl.x + 8},${bl.y + 4}`} fill="rgba(0,0,0,0.12)" />
+
+        {/* Right wall (front-facing) */}
+        <polygon points={`${br.x},${br.y} ${tr.x},${tr.y} ${trT.x},${trT.y} ${brT.x},${brT.y}`} fill={wallDark} stroke="#5a4a30" strokeWidth="0.5" />
+
+        {/* Front wall (left-facing) */}
+        <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${brT.x},${brT.y} ${blT.x},${blT.y}`} fill={wallColor} stroke="#5a4a30" strokeWidth="0.5" />
+
+        {/* Windows on front wall */}
+        {windows}
+
+        {/* Porch */}
+        {porch}
+
+        {/* Roof - left slope */}
+        <polygon points={`${blT.x},${blT.y} ${tlT.x},${tlT.y} ${rleft.x},${rleft.y} ${toIso(el.x + ox, midY, roofH).x},${toIso(el.x + ox, midY, roofH).y}`} fill={roofColor} stroke="#3a3a3a" strokeWidth="0.8" />
+
+        {/* Roof - right slope */}
+        <polygon points={`${brT.x},${brT.y} ${trT.x},${trT.y} ${rright.x},${rright.y} ${rleft.x},${rleft.y}`} fill={roofDark} stroke="#3a3a3a" strokeWidth="0.8" />
+
+        {/* Roof - front gable */}
+        <polygon points={`${blT.x},${blT.y} ${brT.x},${brT.y} ${toIso(el.x + ox + pw / 2, el.y + oy + ph, roofH).x},${toIso(el.x + ox + pw / 2, el.y + oy + ph, roofH).y}`} fill={roofColor} stroke="#3a3a3a" strokeWidth="0.5" opacity="0.9" />
+
+        {/* Ridge line */}
+        <line x1={rleft.x} y1={rleft.y} x2={rright.x} y2={rright.y} stroke="#666" strokeWidth="1" />
+
+        {/* Chimney */}
+        {chimney}
+
+        {/* Selection glow */}
+        {isSel && <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${tr.x},${tr.y} ${tl.x},${tl.y}`} fill="none" stroke="#C4A97D" strokeWidth="2" strokeDasharray="4,3" />}
+      </g>
+    )
+  }
+
+  // Render a tree
+  function renderTree(el, ox, oy) {
+    const h = getElementHeight(el)
+    const r = (el.w * SCALE) / 2
+    const cx = el.x + ox + r, cy = el.y + oy + r
+    const base = toIso(cx, cy)
+    const top = toIso(cx, cy, h)
+    const isOak = el.type === 'oak-tree'
+
+    return (
+      <g key={el.id}>
+        {/* Shadow on ground */}
+        <ellipse cx={base.x + 6} cy={base.y + 3} rx={r * 0.7} ry={r * 0.3} fill="rgba(0,0,0,0.15)" />
+        {/* Trunk */}
+        <line x1={base.x} y1={base.y} x2={top.x} y2={top.y} stroke="#5a4a30" strokeWidth={isOak ? 4 : 3} />
+        {/* Canopy */}
+        <ellipse cx={top.x} cy={top.y - 4} rx={r * (isOak ? 1.1 : 0.85)} ry={r * (isOak ? 0.7 : 0.55)} fill={isOak ? '#3a6a2a' : '#2a4a20'} />
+        <ellipse cx={top.x - 2} cy={top.y - 8} rx={r * 0.7} ry={r * 0.45} fill={isOak ? '#4a7a38' : '#3a5a2a'} />
+        <ellipse cx={top.x + 3} cy={top.y - 2} rx={r * 0.5} ry={r * 0.35} fill={isOak ? '#3a7030' : '#2a5022'} opacity="0.8" />
+      </g>
+    )
+  }
+
+  // Render a flat element (green, bunker, pool, etc.)
+  function renderFlat(el, ox, oy) {
+    const pw = el.w * SCALE, ph = el.h * SCALE
+    const h = getElementHeight(el)
+    const isSel = el.id === selectedId
+
+    const bl = toIso(el.x + ox, el.y + oy + ph, h)
+    const br = toIso(el.x + ox + pw, el.y + oy + ph, h)
+    const tr = toIso(el.x + ox + pw, el.y + oy, h)
+    const tl = toIso(el.x + ox, el.y + oy, h)
+
+    let fillColor = el.color
+    let extra = null
+
+    if (el.shape === 'pool') {
+      fillColor = '#4a9aaa'
+      extra = (
+        <>
+          <line x1={(bl.x + tl.x) / 2} y1={(bl.y + tl.y) / 2 + 2} x2={(br.x + tr.x) / 2} y2={(br.y + tr.y) / 2 + 2} stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+          <line x1={(bl.x + tl.x) / 2} y1={(bl.y + tl.y) / 2 - 2} x2={(br.x + tr.x) / 2} y2={(br.y + tr.y) / 2 - 2} stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+        </>
+      )
+    }
+
+    if (el.shape === 'green') {
+      // Flag
+      const flagBase = toIso(el.x + ox + pw * 0.55, el.y + oy + ph * 0.4, 1)
+      const flagTop = toIso(el.x + ox + pw * 0.55, el.y + oy + ph * 0.4, 20)
+      extra = (
+        <>
+          <line x1={flagBase.x} y1={flagBase.y} x2={flagTop.x} y2={flagTop.y} stroke="#fff" strokeWidth="1" />
+          <polygon points={`${flagTop.x},${flagTop.y} ${flagTop.x + 8},${flagTop.y + 3} ${flagTop.x},${flagTop.y + 6}`} fill="#cc3333" />
+        </>
+      )
+    }
+
+    if (el.shape === 'bunker') {
+      // Sand texture lines
+      const m1 = toIso(el.x + ox + pw * 0.3, el.y + oy + ph * 0.3, h)
+      const m2 = toIso(el.x + ox + pw * 0.7, el.y + oy + ph * 0.6, h)
+      extra = <line x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y} stroke="rgba(180,160,120,0.3)" strokeWidth="1" />
+    }
+
+    if (el.shape === 'circle') {
+      // Fire pit / plunge rendered as circle
+      const center = toIso(el.x + ox + pw / 2, el.y + oy + ph / 2, h)
+      const r = pw * 0.35
+      return (
+        <g key={el.id}>
+          <ellipse cx={center.x} cy={center.y} rx={r} ry={r * 0.55} fill={el.color} stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+          {el.type === 'fire-pit' && <ellipse cx={center.x} cy={center.y} rx={r * 0.5} ry={r * 0.28} fill="#e8a030" opacity="0.6" />}
+        </g>
+      )
+    }
+
+    return (
+      <g key={el.id}>
+        <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${tr.x},${tr.y} ${tl.x},${tl.y}`} fill={fillColor} stroke="rgba(0,0,0,0.15)" strokeWidth="0.8" opacity="0.9" />
+        {extra}
+        {isSel && <polygon points={`${bl.x},${bl.y} ${br.x},${br.y} ${tr.x},${tr.y} ${tl.x},${tl.y}`} fill="none" stroke="#C4A97D" strokeWidth="2" strokeDasharray="4,3" />}
+      </g>
+    )
+  }
+
+  // Render a path in isometric
+  function renderIsoPath(el, ox, oy) {
+    if (!el.points || el.points.length < 2) return null
+    const isoPoints = el.points.map(p => toIso(p.x + ox, p.y + oy, 0.5))
+    let d = `M ${isoPoints[0].x} ${isoPoints[0].y}`
+    for (let i = 1; i < isoPoints.length; i++) {
+      const prev = isoPoints[i - 1], curr = isoPoints[i]
+      const next = isoPoints[i + 1] || curr, pp = isoPoints[i - 2] || prev
+      d += ` C ${prev.x + (curr.x - pp.x) / 4},${prev.y + (curr.y - pp.y) / 4} ${curr.x - (next.x - prev.x) / 4},${curr.y - (next.y - prev.y) / 4} ${curr.x},${curr.y}`
+    }
+    const dash = el.pathStyle === 'dashed' ? '8,4' : el.pathStyle === 'dotted' ? '3,3' : 'none'
+    return (
+      <g key={el.id}>
+        <path d={d} fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth={el.strokeWidth + 1} strokeLinecap="round" strokeLinejoin="round" />
+        <path d={d} fill="none" stroke={el.color} strokeWidth={el.strokeWidth} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={dash} opacity="0.85" />
+      </g>
+    )
+  }
+
+  const ox = 0, oy = 0
+
+  return (
+    <svg width={svgW} height={svgH} style={{ position: 'absolute', top: 0, left: 0 }} viewBox={`0 0 ${svgW} ${svgH}`}>
+      <defs>
+        <linearGradient id="sky3d" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#c8d8e8" />
+          <stop offset="60%" stopColor="#a0b8c8" />
+          <stop offset="100%" stopColor="#7a9a70" />
+        </linearGradient>
+      </defs>
+      {/* Sky background */}
+      <rect width={svgW} height={svgH} fill="url(#sky3d)" />
+
+      <g transform={`translate(${pan.x * 0.8} ${pan.y * 0.8}) scale(${zoom / 120})`}>
+        {/* Ground plane */}
+        {renderGround()}
+        {renderGrid()}
+
+        {/* Paths first (on ground) */}
+        {pathEls.map(el => renderIsoPath(el, ox, oy))}
+
+        {/* Elements sorted back-to-front */}
+        {sorted.map(el => {
+          if (el.shape === 'tree') return renderTree(el, ox, oy)
+          if (['clubhouse', 'cabin', 'building'].includes(el.shape)) return renderBuilding(el, ox, oy)
+          if (el.shape === 'rect') return renderBuilding(el, ox, oy)
+          return renderFlat(el, ox, oy)
+        })}
+      </g>
+    </svg>
+  )
+}
+
+// ══════════════════════════════════════════════
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════
 
@@ -804,14 +1144,15 @@ export default function PropertyPlanner() {
       </div>
 
       {/* Canvas */}
-      <div className={`planner-canvas ${pathMode ? 'planner-canvas--drawing' : ''}`} ref={canvasRef} onMouseDown={handleCanvasMouseDown} style={{ cursor: pathMode ? 'crosshair' : isPanning ? 'grabbing' : 'grab', perspective: is3D ? '1200px' : 'none' }}>
+      <div className={`planner-canvas ${pathMode ? 'planner-canvas--drawing' : ''}`} ref={canvasRef} onMouseDown={is3D ? undefined : handleCanvasMouseDown} style={{ cursor: is3D ? 'default' : pathMode ? 'crosshair' : isPanning ? 'grabbing' : 'grab' }}>
+        {/* 3D Isometric View */}
+        {is3D && <Isometric3DView elements={elements} zoom={zoom} pan={pan} showGrid={showGrid} selectedId={selectedId} />}
+
+        {/* Top-down View */}
         <div className="planner-canvas__transform" style={{
-          transform: is3D
-            ? `translate(${pan.x}px, ${pan.y}px) scale(${zoom / 100}) rotateX(55deg) rotateZ(-30deg)`
-            : `translate(${pan.x}px, ${pan.y}px) scale(${zoom / 100})`,
-          transformOrigin: is3D ? '50% 50%' : '0 0',
-          transformStyle: is3D ? 'preserve-3d' : 'flat',
-          transition: 'transform 0.6s ease',
+          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom / 100})`,
+          transformOrigin: '0 0',
+          display: is3D ? 'none' : 'block',
         }}>
           {/* Grid */}
           {showGrid && (
