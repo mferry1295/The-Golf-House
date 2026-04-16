@@ -1,0 +1,167 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(245, 240, 232, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(196, 169, 125, 0.2);
+  transition: background 0.3s;
+}
+
+.navbar--dark {
+  background: rgba(43, 53, 41, 0.98);
+}
+
+.navbar--dark .navbar__logo-title,
+.navbar--dark .navbar__logo-sub,
+.navbar--dark .navbar__links a {
+  color: var(--cream);
+}
+
+.navbar__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar__logo-mark {
+  color: var(--warm-gold);
+  font-size: 1.5rem;
+}
+
+.navbar__logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__logo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--deep-forest);
+}
+
+.navbar__logo-sub {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--tobacco);
+  font-weight: 500;
+}
+
+.navbar__links {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar__links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--deep-forest);
+  transition: color 0.2s;
+  position: relative;
+}
+
+.navbar__links a:hover {
+  color: var(--carolina-green);
+}
+
+.navbar__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--warm-gold);
+  transition: width 0.3s;
+}
+
+.navbar__links a:hover::after {
+  width: 100%;
+}
+
+.navbar__cta {
+  background: var(--deep-forest);
+  color: var(--cream) !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.1em !important;
+  transition: background 0.2s !important;
+}
+
+.navbar__cta:hover {
+  background: var(--carolina-green) !important;
+}
+
+.navbar__cta::after {
+  display: none !important;
+}
+
+.navbar__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.navbar__toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--deep-forest);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.navbar--dark .navbar__toggle span {
+  background: var(--cream);
+}
+
+@media (max-width: 900px) {
+  .navbar__toggle {
+    display: flex;
+  }
+
+  .navbar__links {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+  }
+
+  .navbar--dark .navbar__links {
+    background: var(--deep-forest);
+  }
+
+  .navbar__links--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+}

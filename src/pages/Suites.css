@@ -1,0 +1,158 @@
+.suites-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--deep-forest);
+  text-align: center;
+}
+
+.suites-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(139, 111, 78, 0.2) 0%, transparent 70%);
+}
+
+.suites-hero__content {
+  position: relative;
+  z-index: 1;
+  color: var(--cream);
+}
+
+.suites-hero__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.suites-hero__sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--warm-gold);
+}
+
+.suites-intro {
+  padding: 5rem 0;
+  background: var(--cream);
+}
+
+.suites-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.suites-cards {
+  padding: 4rem 0 6rem;
+  background: var(--white);
+}
+
+.suites-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.cabin-card {
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid rgba(196, 169, 125, 0.2);
+  transition: all 0.3s;
+}
+
+.cabin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(43, 53, 41, 0.1);
+}
+
+.cabin-card__header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(196, 169, 125, 0.2);
+}
+
+.cabin-card__name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--deep-forest);
+  margin-bottom: 0.25rem;
+}
+
+.cabin-card__price {
+  font-size: 0.85rem;
+  color: var(--warm-gold);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.cabin-card__meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cabin-card__meta-item {
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  background: var(--white);
+  border-radius: 4px;
+}
+
+.cabin-card__meta-label {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tobacco);
+  margin-bottom: 0.25rem;
+}
+
+.cabin-card__meta-value {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--deep-forest);
+}
+
+.cabin-card__features {
+  margin-bottom: 1.5rem;
+}
+
+.cabin-card__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.cabin-card__check {
+  color: var(--carolina-green);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.cabin-card__btn {
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .suites-intro__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .suites-cards__grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}

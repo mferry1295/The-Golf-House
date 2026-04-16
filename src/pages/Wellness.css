@@ -1,0 +1,157 @@
+.well-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--deep-forest);
+  text-align: center;
+}
+
+.well-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(107, 127, 106, 0.25) 0%, transparent 70%);
+}
+
+.well-hero__content {
+  position: relative;
+  z-index: 1;
+  color: var(--cream);
+}
+
+.well-hero__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.well-hero__sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--warm-gold);
+}
+
+.well-section {
+  padding: 6rem 0;
+  background: var(--cream);
+}
+
+.well-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.well-grid__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.well-card {
+  padding: 2rem;
+  border-radius: 8px;
+  color: var(--cream);
+}
+
+.well-card--plunge {
+  background: linear-gradient(135deg, #2a4a5a, #1a3040);
+}
+
+.well-card--sauna {
+  background: linear-gradient(135deg, var(--tobacco), #7a5f3e);
+}
+
+.well-card--fitness {
+  background: var(--carolina-green);
+}
+
+.well-card__icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.well-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.well-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+/* Journey Timeline */
+.well-journey {
+  padding: 6rem 0;
+  background: var(--deep-forest);
+}
+
+.journey-grid {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.journey-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  position: relative;
+}
+
+.journey-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 90px;
+  top: 2.5rem;
+  bottom: -0.5rem;
+  width: 1px;
+  background: rgba(196, 169, 125, 0.3);
+}
+
+.journey-item__time {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--warm-gold);
+  min-width: 75px;
+  text-align: right;
+  padding-top: 0.15rem;
+}
+
+.journey-item__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--warm-gold);
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+}
+
+.journey-item__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--cream);
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+}
+
+.journey-item__desc {
+  font-size: 0.85rem;
+  color: var(--sage);
+}
+
+@media (max-width: 768px) {
+  .well-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

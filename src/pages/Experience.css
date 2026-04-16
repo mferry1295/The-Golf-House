@@ -1,0 +1,140 @@
+.exp-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--deep-forest);
+  text-align: center;
+}
+
+.exp-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(74, 103, 65, 0.25) 0%, transparent 70%);
+}
+
+.exp-hero__content {
+  position: relative;
+  z-index: 1;
+  color: var(--cream);
+}
+
+.exp-hero__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.exp-hero__sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--warm-gold);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.exp-section {
+  padding: 6rem 0;
+}
+
+.exp-section--dark {
+  background: var(--deep-forest);
+}
+
+.exp-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.exp-section__grid--reverse {
+  direction: rtl;
+}
+
+.exp-section__grid--reverse > * {
+  direction: ltr;
+}
+
+.exp-section__features {
+  margin-top: 1rem;
+}
+
+.exp-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #4a4a4a;
+}
+
+.exp-feature__dash {
+  color: var(--warm-gold);
+  flex-shrink: 0;
+}
+
+.exp-section__visual {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.exp-visual-card {
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+  color: var(--cream);
+}
+
+.exp-visual-card--green {
+  background: var(--carolina-green);
+}
+
+.exp-visual-card--gold {
+  background: var(--tobacco);
+}
+
+.exp-visual-card--tobacco {
+  background: var(--tobacco);
+}
+
+.exp-visual-card--forest {
+  background: var(--deep-forest);
+  border: 1px solid rgba(196, 169, 125, 0.2);
+}
+
+.exp-visual-card__icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.exp-visual-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.exp-visual-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.exp-cta {
+  padding: 5rem 0;
+  background: var(--carolina-green);
+}
+
+@media (max-width: 768px) {
+  .exp-section__grid,
+  .exp-section__grid--reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+    gap: 2rem;
+  }
+}
