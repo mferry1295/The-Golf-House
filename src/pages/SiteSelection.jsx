@@ -208,13 +208,9 @@ export default function SiteSelection() {
 
   return (
     <div className="site-selection">
-      <div className="site-selection__hero">
+      <div className="site-selection__hero site-selection__hero--slim">
         <div className="site-selection__hero-inner">
-          <span className="site-selection__label">SITE SELECTION ANALYSIS</span>
-          <h1 className="site-selection__title">Where Will The Next Albatross Club Open?</h1>
-          <p className="site-selection__subtitle">
-            Rounds concentration analysis across America's top 300 courses — identifying the strongest metropolitan clusters for the next Albatross Club property.
-          </p>
+          <h1 className="site-selection__label-heading">Site Selection Analysis</h1>
         </div>
       </div>
 

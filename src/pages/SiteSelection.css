@@ -12,6 +12,17 @@
   position: relative;
   overflow: hidden;
 }
+.site-selection__hero--slim {
+  padding: 2rem 2rem 1.75rem;
+}
+.site-selection__label-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  margin: 0;
+}
 
 .site-selection__hero::before {
   content: '';
@@ -87,7 +98,7 @@
 
 /* Sections */
 .site-section {
-  padding: 4.5rem 2rem;
+  padding: 3rem 2rem;
 }
 
 .site-section--dark {
