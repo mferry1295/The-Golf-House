@@ -624,6 +624,29 @@
   line-height: 1.5;
 }
 
+/* Highlighted metric (Avg ADR) on region cards */
+.region-metric--highlight {
+  background: rgba(196, 169, 125, 0.15);
+  border-color: rgba(196, 169, 125, 0.4);
+}
+.region-metric--highlight .region-metric__value {
+  color: var(--warm-gold);
+}
+
+/* Extra course-table columns */
+.designer-cell {
+  color: var(--tobacco);
+  font-size: 0.82rem;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lodging-cell {
+  color: var(--warm-gold);
+  font-weight: 600;
+}
+
 /* Weight Panel */
 .weight-panel {
   background: #fff;

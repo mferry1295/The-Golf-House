@@ -53,7 +53,7 @@ function fmt(n) {
   return n.toLocaleString()
 }
 
-const DEFAULT_WEIGHTS = { rounds: 40, top100: 25, top10: 20, count: 15 }
+const DEFAULT_WEIGHTS = { rounds: 30, top100: 20, top10: 15, count: 10, lodging: 25 }
 
 export default function SiteSelection() {
   const [accessFilter, setAccessFilter] = useState('All')
@@ -80,11 +80,12 @@ export default function SiteSelection() {
     })
 
     // Normalize weights so they sum to 1 (handles user-entered values that don't total 100)
-    const wSum = Math.max(1, weights.rounds + weights.top100 + weights.top10 + weights.count)
+    const wSum = Math.max(1, weights.rounds + weights.top100 + weights.top10 + weights.count + weights.lodging)
     const wRounds = weights.rounds / wSum
     const wTop100 = weights.top100 / wSum
     const wTop10 = weights.top10 / wSum
     const wCount = weights.count / wSum
+    const wLodging = weights.lodging / wSum
 
     const regions = REGIONS.map(r => {
       const matching = courses.filter(c => c.state === r.state && r.cities.some(city => c.city && c.city.toLowerCase().includes(city.toLowerCase())))
@@ -92,13 +93,40 @@ export default function SiteSelection() {
       const top10 = matching.filter(c => c.rank <= 10).length
       const top50 = matching.filter(c => c.rank <= 50).length
       const top100 = matching.filter(c => c.rank <= 100).length
+      const avgLodging = matching.length ? Math.round(matching.reduce((s, c) => s + (c.lodgingRate || 0), 0) / matching.length) : 0
+      const avgSeasonality = matching.length ? matching.reduce((s, c) => s + (c.seasonality || 0), 0) / matching.length : 0
+      const avgYearOpened = matching.length ? Math.round(matching.reduce((s, c) => s + (c.yearOpened || 0), 0) / matching.length) : 0
+      const avgAdditionalSpend = matching.length ? Math.round(matching.reduce((s, c) => s + (c.additionalSpend || 0), 0) / matching.length) : 0
+
       // Each sub-score normalized to 0-100
       const roundsScore = Math.min(100, totalRounds / 800)
       const top100Score = Math.min(100, top100 * 12)
       const top10Score = Math.min(100, top10 * 25)
       const countScore = Math.min(100, matching.length * 10)
-      const siteScore = Math.round(roundsScore * wRounds + top100Score * wTop100 + top10Score * wTop10 + countScore * wCount)
-      return { ...r, courses: matching, totalRounds, top10, top50, top100, siteScore, subScores: { rounds: Math.round(roundsScore), top100: Math.round(top100Score), top10: Math.round(top10Score), count: Math.round(countScore) } }
+      // Lodging ADR benchmark: $150 → 0, $550 → 50, $950+ → 100
+      const lodgingScore = Math.max(0, Math.min(100, (avgLodging - 150) / 8))
+
+      const siteScore = Math.round(
+        roundsScore * wRounds +
+        top100Score * wTop100 +
+        top10Score * wTop10 +
+        countScore * wCount +
+        lodgingScore * wLodging
+      )
+      return {
+        ...r,
+        courses: matching,
+        totalRounds, top10, top50, top100,
+        avgLodging, avgSeasonality, avgYearOpened, avgAdditionalSpend,
+        siteScore,
+        subScores: {
+          rounds: Math.round(roundsScore),
+          top100: Math.round(top100Score),
+          top10: Math.round(top10Score),
+          count: Math.round(countScore),
+          lodging: Math.round(lodgingScore),
+        }
+      }
     }).sort((a, b) => b.siteScore - a.siteScore)
 
     const top = Object.values(byState).sort((a, b) => b.totalRounds - a.totalRounds).slice(0, 10)
@@ -126,6 +154,9 @@ export default function SiteSelection() {
       if (sortBy === 'totalRounds') return (b.totalRounds || 0) - (a.totalRounds || 0)
       if (sortBy === 'rank') return a.rank - b.rank
       if (sortBy === 'playableDays') return (b.playableDays || 0) - (a.playableDays || 0)
+      if (sortBy === 'lodgingRate') return (b.lodgingRate || 0) - (a.lodgingRate || 0)
+      if (sortBy === 'yearOpened') return (b.yearOpened || 0) - (a.yearOpened || 0)
+      if (sortBy === 'yearOpenedAsc') return (a.yearOpened || 9999) - (b.yearOpened || 9999)
       return 0
     })
     return list.slice(0, 100)
@@ -213,6 +244,14 @@ export default function SiteSelection() {
                   <div className="region-metric">
                     <div className="region-metric__value">{r.top10}</div>
                     <div className="region-metric__label">Top 10</div>
+                  </div>
+                  <div className="region-metric region-metric--highlight">
+                    <div className="region-metric__value">${r.avgLodging}</div>
+                    <div className="region-metric__label">Avg ADR / Night</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__value">{Math.round(r.avgSeasonality * 100)}%</div>
+                    <div className="region-metric__label">Season Avg</div>
                   </div>
                 </div>
                 <div className="region-card__bar">
@@ -352,6 +391,9 @@ export default function SiteSelection() {
                 <option value="totalRounds">Total Rounds / Yr</option>
                 <option value="rank">Course Rank</option>
                 <option value="playableDays">Playable Days / Yr</option>
+                <option value="lodgingRate">Lodging Rate</option>
+                <option value="yearOpened">Year Opened (Newest)</option>
+                <option value="yearOpenedAsc">Year Opened (Oldest)</option>
               </select>
             </div>
             {(selectedState || selectedRegion) && (
@@ -374,11 +416,14 @@ export default function SiteSelection() {
                 <tr>
                   <th>#</th>
                   <th>Course</th>
+                  <th>Designer</th>
                   <th>City</th>
                   <th>State</th>
                   <th>Access</th>
+                  <th className="num">Est.</th>
                   <th className="num">Days/Yr</th>
                   <th className="num">Rounds/Yr</th>
+                  <th className="num">Lodging $/Nt</th>
                 </tr>
               </thead>
               <tbody>
@@ -389,11 +434,14 @@ export default function SiteSelection() {
                       <div className="course-name">{c.course}</div>
                       {c.notes && <div className="course-note">{c.notes}</div>}
                     </td>
+                    <td className="designer-cell">{c.designer || '—'}</td>
                     <td>{c.city}</td>
                     <td><span className="state-pill">{c.state}</span></td>
                     <td><span className={`access-pill access-pill--${c.access?.toLowerCase().replace('-', '')}`}>{c.access}</span></td>
+                    <td className="num">{c.yearOpened}</td>
                     <td className="num">{c.playableDays}</td>
                     <td className="num rounds-cell">{fmt(c.totalRounds)}</td>
+                    <td className="num lodging-cell">${c.lodgingRate}</td>
                   </tr>
                 ))}
               </tbody>
@@ -410,12 +458,13 @@ export default function SiteSelection() {
 }
 
 function WeightPanel({ weights, setWeights, defaults }) {
-  const sum = weights.rounds + weights.top100 + weights.top10 + weights.count
+  const sum = weights.rounds + weights.top100 + weights.top10 + weights.count + weights.lodging
   const factors = [
     { key: 'rounds', label: 'Rounds Concentration', desc: 'Annual rounds played across the metro. Higher rounds = more demand to capture.' },
     { key: 'top100', label: 'Top-100 Presence', desc: 'Number of top-100 courses. Flagship courses drive destination travel.' },
     { key: 'top10', label: 'Elite Anchors', desc: 'Top-10 course presence. Signals a pilgrimage destination.' },
-    { key: 'count', label: 'Course Density', desc: 'Total top-300 courses. Richer cluster supports longer stays.' }
+    { key: 'count', label: 'Course Density', desc: 'Total top-300 courses. Richer cluster supports longer stays.' },
+    { key: 'lodging', label: 'Lodging ADR Benchmark', desc: 'Avg nightly lodging rate at existing top-course properties. Proxies pricing power for The Albatross Club.' }
   ]
 
   const update = (key, value) => setWeights(prev => ({ ...prev, [key]: value }))
