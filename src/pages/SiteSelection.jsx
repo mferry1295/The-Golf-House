@@ -55,7 +55,7 @@ function fmt(n) {
   return n.toLocaleString()
 }
 
-const DEFAULT_WEIGHTS = { rounds: 35, top100: 25, count: 10, lodging: 30 }
+const DEFAULT_WEIGHTS = { rounds: 25, top100: 20, count: 10, lodging: 15, build: 15, operate: 15 }
 
 export default function SiteSelection() {
   const [accessFilter, setAccessFilter] = useState('All')
@@ -85,11 +85,13 @@ export default function SiteSelection() {
     })
 
     // Normalize weights so they sum to 1 (handles user-entered values that don't total 100)
-    const wSum = Math.max(1, weights.rounds + weights.top100 + weights.count + weights.lodging)
+    const wSum = Math.max(1, weights.rounds + weights.top100 + weights.count + weights.lodging + weights.build + weights.operate)
     const wRounds = weights.rounds / wSum
     const wTop100 = weights.top100 / wSum
     const wCount = weights.count / wSum
     const wLodging = weights.lodging / wSum
+    const wBuild = weights.build / wSum
+    const wOperate = weights.operate / wSum
 
     // Pass 1: compute raw metrics for every region
     const rawRegions = REGIONS.map(r => {
@@ -102,7 +104,9 @@ export default function SiteSelection() {
       const avgSeasonality = matching.length ? matching.reduce((s, c) => s + (c.seasonality || 0), 0) / matching.length : 0
       const avgYearOpened = matching.length ? Math.round(matching.reduce((s, c) => s + (c.yearOpened || 0), 0) / matching.length) : 0
       const avgAdditionalSpend = matching.length ? Math.round(matching.reduce((s, c) => s + (c.additionalSpend || 0), 0) / matching.length) : 0
-      return { ...r, courses: matching, totalRounds, top10, top50, top100, avgLodging, avgSeasonality, avgYearOpened, avgAdditionalSpend }
+      const avgBuildCost = matching.length ? Math.round((matching.reduce((s, c) => s + (c.buildCost || 0), 0) / matching.length) * 10) / 10 : 0
+      const avgOperateCost = matching.length ? Math.round((matching.reduce((s, c) => s + (c.operateCost || 0), 0) / matching.length) * 10) / 10 : 0
+      return { ...r, courses: matching, totalRounds, top10, top50, top100, avgLodging, avgSeasonality, avgYearOpened, avgAdditionalSpend, avgBuildCost, avgOperateCost }
     })
 
     // Pass 2: normalize each sub-score to 0–100 relative to the top region on that factor
@@ -111,18 +115,30 @@ export default function SiteSelection() {
     const maxTop100 = Math.max(1, ...rawRegions.map(r => r.top100))
     const maxCount = Math.max(1, ...rawRegions.map(r => r.courses.length))
     const maxLodging = Math.max(1, ...rawRegions.map(r => r.avgLodging))
+    // For cost factors: min-max with inversion (lower cost = higher score)
+    const buildCosts = rawRegions.map(r => r.avgBuildCost).filter(v => v > 0)
+    const operateCosts = rawRegions.map(r => r.avgOperateCost).filter(v => v > 0)
+    const minBuild = Math.min(...buildCosts, 10), maxBuild = Math.max(...buildCosts, 1)
+    const minOperate = Math.min(...operateCosts, 10), maxOperate = Math.max(...operateCosts, 1)
+    const buildRange = Math.max(0.1, maxBuild - minBuild)
+    const operateRange = Math.max(0.1, maxOperate - minOperate)
 
     const regions = rawRegions.map(r => {
       const roundsScore = (r.totalRounds / maxRounds) * 100
       const top100Score = (r.top100 / maxTop100) * 100
       const countScore = (r.courses.length / maxCount) * 100
       const lodgingScore = (r.avgLodging / maxLodging) * 100
+      // Inverted cost scores: cheapest region = 100, most expensive = 0
+      const buildScore = r.avgBuildCost > 0 ? ((maxBuild - r.avgBuildCost) / buildRange) * 100 : 0
+      const operateScore = r.avgOperateCost > 0 ? ((maxOperate - r.avgOperateCost) / operateRange) * 100 : 0
 
       const siteScore = Math.round(
         roundsScore * wRounds +
         top100Score * wTop100 +
         countScore * wCount +
-        lodgingScore * wLodging
+        lodgingScore * wLodging +
+        buildScore * wBuild +
+        operateScore * wOperate
       )
       return {
         ...r,
@@ -132,6 +148,8 @@ export default function SiteSelection() {
           top100: Math.round(top100Score),
           count: Math.round(countScore),
           lodging: Math.round(lodgingScore),
+          build: Math.round(buildScore),
+          operate: Math.round(operateScore),
         }
       }
     }).sort((a, b) => b.siteScore - a.siteScore)
@@ -253,8 +271,12 @@ export default function SiteSelection() {
                     <div className="region-metric__label">Avg ADR / Night</div>
                   </div>
                   <div className="region-metric">
-                    <div className="region-metric__value">{Math.round(r.avgSeasonality * 100)}%</div>
-                    <div className="region-metric__label">Season Avg</div>
+                    <div className="region-metric__value">{r.avgBuildCost.toFixed(1)}<span className="region-metric__suffix">/10</span></div>
+                    <div className="region-metric__label">Build Cost</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__value">{r.avgOperateCost.toFixed(1)}<span className="region-metric__suffix">/10</span></div>
+                    <div className="region-metric__label">Operate Cost</div>
                   </div>
                 </div>
                 <div className="region-card__bar">
@@ -269,9 +291,11 @@ export default function SiteSelection() {
                     { key: 'top100', label: 'Top-100', weight: weights.top100 },
                     { key: 'count', label: 'Course Density', weight: weights.count },
                     { key: 'lodging', label: 'Lodging ADR', weight: weights.lodging },
+                    { key: 'build', label: 'Build Cost', weight: weights.build },
+                    { key: 'operate', label: 'Operate Cost', weight: weights.operate },
                   ].map(f => {
                     const sub = r.subScores[f.key]
-                    const wSum = weights.rounds + weights.top100 + weights.count + weights.lodging
+                    const wSum = weights.rounds + weights.top100 + weights.count + weights.lodging + weights.build + weights.operate
                     const wPct = wSum ? Math.round((f.weight / wSum) * 100) : 0
                     const contribution = Math.round((sub * f.weight) / (wSum || 1))
                     return (
@@ -491,6 +515,8 @@ export default function SiteSelection() {
                       <div><span>Playable Days</span><strong>{selectedCourse.playableDays}</strong></div>
                       <div><span>Rounds / Yr</span><strong>{fmt(selectedCourse.totalRounds)}</strong></div>
                       <div><span>Lodging / Night</span><strong className="gold">${selectedCourse.lodgingRate}</strong></div>
+                      <div><span>Build Cost</span><strong>{selectedCourse.buildCost}/10</strong></div>
+                      <div><span>Operate Cost</span><strong>{selectedCourse.operateCost}/10</strong></div>
                     </div>
                   </div>
                 )}
@@ -582,6 +608,8 @@ export default function SiteSelection() {
                   <th className="num">Days/Yr</th>
                   <th className="num">Rounds/Yr</th>
                   <th className="num">Lodging $/Nt</th>
+                  <th className="num">Build</th>
+                  <th className="num">Op.</th>
                 </tr>
               </thead>
               <tbody>
@@ -600,6 +628,8 @@ export default function SiteSelection() {
                     <td className="num">{c.playableDays}</td>
                     <td className="num rounds-cell">{fmt(c.totalRounds)}</td>
                     <td className="num lodging-cell">${c.lodgingRate}</td>
+                    <td className="num cost-cell">{c.buildCost}</td>
+                    <td className="num cost-cell">{c.operateCost}</td>
                   </tr>
                 ))}
               </tbody>
@@ -616,12 +646,14 @@ export default function SiteSelection() {
 }
 
 function WeightPanel({ weights, setWeights, defaults }) {
-  const sum = weights.rounds + weights.top100 + weights.count + weights.lodging
+  const sum = weights.rounds + weights.top100 + weights.count + weights.lodging + weights.build + weights.operate
   const factors = [
     { key: 'rounds', label: 'Rounds Concentration', desc: 'Annual rounds played across the metro. Higher rounds = more demand to capture.' },
     { key: 'top100', label: 'Top-100 Presence', desc: 'Number of top-100 courses. Flagship courses drive destination travel.' },
     { key: 'count', label: 'Course Density', desc: 'Total top-300 courses. Richer cluster supports longer stays.' },
-    { key: 'lodging', label: 'Lodging ADR Benchmark', desc: 'Avg nightly lodging rate at existing top-course properties. Proxies pricing power for The Albatross Club.' }
+    { key: 'lodging', label: 'Lodging ADR Benchmark', desc: 'Avg nightly lodging rate at existing top-course properties. Proxies pricing power.' },
+    { key: 'build', label: 'Build Cost Efficiency', desc: 'Land + construction cost tier (lower = better). Inverted so cheaper markets score higher.' },
+    { key: 'operate', label: 'Operate Cost Efficiency', desc: 'Labor + state-level operating cost tier (lower = better). Inverted so cheaper markets score higher.' }
   ]
 
   const update = (key, value) => setWeights(prev => ({ ...prev, [key]: value }))

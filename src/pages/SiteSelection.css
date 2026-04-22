@@ -827,6 +827,12 @@
 .region-metric--highlight .region-metric__value {
   color: var(--warm-gold);
 }
+.region-metric__suffix {
+  font-size: 0.6em;
+  opacity: 0.55;
+  font-weight: 400;
+  margin-left: 0.15em;
+}
 
 /* Extra course-table columns */
 .designer-cell {
@@ -840,6 +846,10 @@
 .lodging-cell {
   color: var(--warm-gold);
   font-weight: 600;
+}
+.cost-cell {
+  color: rgba(245, 240, 232, 0.7);
+  font-weight: 500;
 }
 
 /* Weight Panel */

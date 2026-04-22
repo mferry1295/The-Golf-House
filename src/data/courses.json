@@ -15,7 +15,9 @@
     "dailyRounds": 20,
     "totalRounds": 3840,
     "additionalSpend": 115,
-    "lodgingRate": 225
+    "lodgingRate": 225,
+    "buildCost": 7,
+    "operateCost": 9
   },
   {
     "rank": 2,
@@ -33,7 +35,9 @@
     "dailyRounds": 20,
     "totalRounds": 5580,
     "additionalSpend": 115,
-    "lodgingRate": 225
+    "lodgingRate": 225,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 3,
@@ -51,7 +55,9 @@
     "dailyRounds": 20,
     "totalRounds": 6460,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 4,
@@ -69,7 +75,9 @@
     "dailyRounds": 20,
     "totalRounds": 3220,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 5,
@@ -87,7 +95,9 @@
     "dailyRounds": 20,
     "totalRounds": 3460,
     "additionalSpend": 115,
-    "lodgingRate": 225
+    "lodgingRate": 225,
+    "buildCost": 6,
+    "operateCost": 6
   },
   {
     "rank": 6,
@@ -105,7 +115,9 @@
     "dailyRounds": 20,
     "totalRounds": 3460,
     "additionalSpend": 165,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 6
   },
   {
     "rank": 7,
@@ -123,7 +135,9 @@
     "dailyRounds": 20,
     "totalRounds": 3220,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 8,
@@ -141,7 +155,9 @@
     "dailyRounds": 20,
     "totalRounds": 3080,
     "additionalSpend": 115,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 9,
@@ -159,7 +175,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 280,
-    "lodgingRate": 1125
+    "lodgingRate": 1125,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 10,
@@ -177,7 +195,9 @@
     "dailyRounds": 20,
     "totalRounds": 3220,
     "additionalSpend": 215,
-    "lodgingRate": 600
+    "lodgingRate": 600,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 11,
@@ -195,7 +215,9 @@
     "dailyRounds": 20,
     "totalRounds": 3080,
     "additionalSpend": 165,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 12,
@@ -213,7 +235,9 @@
     "dailyRounds": 20,
     "totalRounds": 3600,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 13,
@@ -231,7 +255,9 @@
     "dailyRounds": 20,
     "totalRounds": 3220,
     "additionalSpend": 190,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 14,
@@ -249,7 +275,9 @@
     "dailyRounds": 20,
     "totalRounds": 3220,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 7,
+    "operateCost": 10
   },
   {
     "rank": 15,
@@ -267,7 +295,9 @@
     "dailyRounds": 20,
     "totalRounds": 2600,
     "additionalSpend": 115,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 16,
@@ -285,7 +315,9 @@
     "dailyRounds": 20,
     "totalRounds": 6460,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 17,
@@ -303,7 +335,9 @@
     "dailyRounds": 20,
     "totalRounds": 3080,
     "additionalSpend": 190,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 9
   },
   {
     "rank": 18,
@@ -321,7 +355,9 @@
     "dailyRounds": 20,
     "totalRounds": 6460,
     "additionalSpend": 215,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 19,
@@ -339,7 +375,9 @@
     "dailyRounds": 20,
     "totalRounds": 3160,
     "additionalSpend": 115,
-    "lodgingRate": 225
+    "lodgingRate": 225,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 20,
@@ -357,7 +395,9 @@
     "dailyRounds": 20,
     "totalRounds": 2600,
     "additionalSpend": 165,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 21,
@@ -375,7 +415,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 5,
+    "operateCost": 10
   },
   {
     "rank": 22,
@@ -393,7 +435,9 @@
     "dailyRounds": 40,
     "totalRounds": 11160,
     "additionalSpend": 150,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 23,
@@ -411,7 +455,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 205,
-    "lodgingRate": 875
+    "lodgingRate": 875,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 24,
@@ -429,7 +475,9 @@
     "dailyRounds": 180,
     "totalRounds": 50580,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 25,
@@ -447,7 +495,9 @@
     "dailyRounds": 40,
     "totalRounds": 8320,
     "additionalSpend": 100,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 3,
+    "operateCost": 3
   },
   {
     "rank": 26,
@@ -465,7 +515,9 @@
     "dailyRounds": 180,
     "totalRounds": 25200,
     "additionalSpend": 155,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 27,
@@ -483,7 +535,9 @@
     "dailyRounds": 40,
     "totalRounds": 10280,
     "additionalSpend": 200,
-    "lodgingRate": 625
+    "lodgingRate": 625,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 28,
@@ -501,7 +555,9 @@
     "dailyRounds": 40,
     "totalRounds": 9360,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 4,
+    "operateCost": 3
   },
   {
     "rank": 29,
@@ -519,7 +575,9 @@
     "dailyRounds": 40,
     "totalRounds": 9360,
     "additionalSpend": 100,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 3,
+    "operateCost": 3
   },
   {
     "rank": 30,
@@ -537,7 +595,9 @@
     "dailyRounds": 180,
     "totalRounds": 51120,
     "additionalSpend": 255,
-    "lodgingRate": 1150
+    "lodgingRate": 1150,
+    "buildCost": 9,
+    "operateCost": 4
   },
   {
     "rank": 31,
@@ -555,7 +615,9 @@
     "dailyRounds": 40,
     "totalRounds": 7520,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 3,
+    "operateCost": 2
   },
   {
     "rank": 32,
@@ -573,7 +635,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 205,
-    "lodgingRate": 800
+    "lodgingRate": 800,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 33,
@@ -591,7 +655,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 175,
-    "lodgingRate": 400
+    "lodgingRate": 400,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 34,
@@ -609,7 +675,9 @@
     "dailyRounds": 40,
     "totalRounds": 6720,
     "additionalSpend": 100,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 3,
+    "operateCost": 7
   },
   {
     "rank": 35,
@@ -627,7 +695,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 175,
-    "lodgingRate": 400
+    "lodgingRate": 400,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 36,
@@ -645,7 +715,9 @@
     "dailyRounds": 40,
     "totalRounds": 11160,
     "additionalSpend": 100,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 2,
+    "operateCost": 5
   },
   {
     "rank": 37,
@@ -663,7 +735,9 @@
     "dailyRounds": 40,
     "totalRounds": 10280,
     "additionalSpend": 100,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 3,
+    "operateCost": 2
   },
   {
     "rank": 38,
@@ -681,7 +755,9 @@
     "dailyRounds": 200,
     "totalRounds": 34400,
     "additionalSpend": 85,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 6,
+    "operateCost": 10
   },
   {
     "rank": 39,
@@ -699,7 +775,9 @@
     "dailyRounds": 40,
     "totalRounds": 10280,
     "additionalSpend": 150,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 40,
@@ -717,7 +795,9 @@
     "dailyRounds": 40,
     "totalRounds": 11360,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 3,
+    "operateCost": 4
   },
   {
     "rank": 41,
@@ -735,7 +815,9 @@
     "dailyRounds": 180,
     "totalRounds": 58320,
     "additionalSpend": 205,
-    "lodgingRate": 725
+    "lodgingRate": 725,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 42,
@@ -753,7 +835,9 @@
     "dailyRounds": 40,
     "totalRounds": 7680,
     "additionalSpend": 150,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 5,
+    "operateCost": 9
   },
   {
     "rank": 43,
@@ -771,7 +855,9 @@
     "dailyRounds": 40,
     "totalRounds": 5880,
     "additionalSpend": 175,
-    "lodgingRate": 550
+    "lodgingRate": 550,
+    "buildCost": 5,
+    "operateCost": 4
   },
   {
     "rank": 44,
@@ -789,7 +875,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 205,
-    "lodgingRate": 875
+    "lodgingRate": 875,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 45,
@@ -807,7 +895,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 175,
-    "lodgingRate": 400
+    "lodgingRate": 400,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 46,
@@ -825,7 +915,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 47,
@@ -843,7 +935,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 150,
-    "lodgingRate": 325
+    "lodgingRate": 325,
+    "buildCost": 8,
+    "operateCost": 7
   },
   {
     "rank": 48,
@@ -861,7 +955,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 100,
-    "lodgingRate": 175
+    "lodgingRate": 175,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 49,
@@ -879,7 +975,9 @@
     "dailyRounds": 200,
     "totalRounds": 28000,
     "additionalSpend": 35,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 50,
@@ -897,7 +995,9 @@
     "dailyRounds": 40,
     "totalRounds": 6720,
     "additionalSpend": 150,
-    "lodgingRate": 400
+    "lodgingRate": 400,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 51,
@@ -915,7 +1015,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 52,
@@ -933,7 +1035,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 53,
@@ -951,7 +1055,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 54,
@@ -969,7 +1075,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 55,
@@ -987,7 +1095,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 56,
@@ -1005,7 +1115,9 @@
     "dailyRounds": 40,
     "totalRounds": 7680,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 57,
@@ -1023,7 +1135,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 58,
@@ -1041,7 +1155,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 59,
@@ -1059,7 +1175,9 @@
     "dailyRounds": 40,
     "totalRounds": 13880,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 60,
@@ -1077,7 +1195,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 4
   },
   {
     "rank": 61,
@@ -1095,7 +1215,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 190,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 62,
@@ -1113,7 +1235,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 63,
@@ -1131,7 +1255,9 @@
     "dailyRounds": 40,
     "totalRounds": 6720,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 9,
+    "operateCost": 7
   },
   {
     "rank": 64,
@@ -1149,7 +1275,9 @@
     "dailyRounds": 40,
     "totalRounds": 4560,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 8,
+    "operateCost": 7
   },
   {
     "rank": 65,
@@ -1167,7 +1295,9 @@
     "dailyRounds": 40,
     "totalRounds": 4800,
     "additionalSpend": 160,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 4,
+    "operateCost": 4
   },
   {
     "rank": 66,
@@ -1185,7 +1315,9 @@
     "dailyRounds": 40,
     "totalRounds": 11720,
     "additionalSpend": 85,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 67,
@@ -1203,7 +1335,9 @@
     "dailyRounds": 40,
     "totalRounds": 8000,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 7
   },
   {
     "rank": 68,
@@ -1221,7 +1355,9 @@
     "dailyRounds": 40,
     "totalRounds": 7200,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 69,
@@ -1239,7 +1375,9 @@
     "dailyRounds": 40,
     "totalRounds": 5200,
     "additionalSpend": 85,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 70,
@@ -1257,7 +1395,9 @@
     "dailyRounds": 40,
     "totalRounds": 7120,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 71,
@@ -1275,7 +1415,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 72,
@@ -1293,7 +1435,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 85,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 73,
@@ -1311,7 +1455,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 9
   },
   {
     "rank": 74,
@@ -1329,7 +1475,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 75,
@@ -1347,7 +1495,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 76,
@@ -1365,7 +1515,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 240,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 77,
@@ -1383,7 +1535,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 78,
@@ -1401,7 +1555,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 79,
@@ -1419,7 +1575,9 @@
     "dailyRounds": 40,
     "totalRounds": 9000,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 6,
+    "operateCost": 6
   },
   {
     "rank": 80,
@@ -1437,7 +1595,9 @@
     "dailyRounds": 40,
     "totalRounds": 9360,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 3
   },
   {
     "rank": 81,
@@ -1455,7 +1615,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 190,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 82,
@@ -1473,7 +1635,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 83,
@@ -1491,7 +1655,9 @@
     "dailyRounds": 40,
     "totalRounds": 12920,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 7,
+    "operateCost": 10
   },
   {
     "rank": 84,
@@ -1509,7 +1675,9 @@
     "dailyRounds": 40,
     "totalRounds": 7680,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 9
   },
   {
     "rank": 85,
@@ -1527,7 +1695,9 @@
     "dailyRounds": 40,
     "totalRounds": 6800,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 86,
@@ -1545,7 +1715,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 85,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 2,
+    "operateCost": 7
   },
   {
     "rank": 87,
@@ -1563,7 +1735,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 7
   },
   {
     "rank": 88,
@@ -1581,7 +1755,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 10
   },
   {
     "rank": 89,
@@ -1599,7 +1775,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 9
   },
   {
     "rank": 90,
@@ -1617,7 +1795,9 @@
     "dailyRounds": 40,
     "totalRounds": 7680,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 9
   },
   {
     "rank": 91,
@@ -1635,7 +1815,9 @@
     "dailyRounds": 40,
     "totalRounds": 6160,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 92,
@@ -1653,7 +1835,9 @@
     "dailyRounds": 40,
     "totalRounds": 7520,
     "additionalSpend": 85,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 3,
+    "operateCost": 2
   },
   {
     "rank": 93,
@@ -1671,7 +1855,9 @@
     "dailyRounds": 200,
     "totalRounds": 64600,
     "additionalSpend": 80,
-    "lodgingRate": 250
+    "lodgingRate": 250,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 94,
@@ -1689,7 +1875,9 @@
     "dailyRounds": 40,
     "totalRounds": 9000,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 3
   },
   {
     "rank": 95,
@@ -1707,7 +1895,9 @@
     "dailyRounds": 40,
     "totalRounds": 10280,
     "additionalSpend": 85,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 96,
@@ -1725,7 +1915,9 @@
     "dailyRounds": 40,
     "totalRounds": 11720,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 97,
@@ -1743,7 +1935,9 @@
     "dailyRounds": 40,
     "totalRounds": 5200,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 98,
@@ -1761,7 +1955,9 @@
     "dailyRounds": 40,
     "totalRounds": 6440,
     "additionalSpend": 160,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 99,
@@ -1779,7 +1975,9 @@
     "dailyRounds": 40,
     "totalRounds": 6320,
     "additionalSpend": 185,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 4
   },
   {
     "rank": 100,
@@ -1797,7 +1995,9 @@
     "dailyRounds": 40,
     "totalRounds": 6920,
     "additionalSpend": 135,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 6
   },
   {
     "rank": 101,
@@ -1815,7 +2015,9 @@
     "dailyRounds": 60,
     "totalRounds": 6840,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 9,
+    "operateCost": 7
   },
   {
     "rank": 102,
@@ -1833,7 +2035,9 @@
     "dailyRounds": 200,
     "totalRounds": 28000,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 103,
@@ -1851,7 +2055,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 104,
@@ -1869,7 +2075,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 105,
@@ -1887,7 +2095,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 4
   },
   {
     "rank": 106,
@@ -1905,7 +2115,9 @@
     "dailyRounds": 60,
     "totalRounds": 13500,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 107,
@@ -1923,7 +2135,9 @@
     "dailyRounds": 60,
     "totalRounds": 12000,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 108,
@@ -1941,7 +2155,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 109,
@@ -1959,7 +2175,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 7
   },
   {
     "rank": 110,
@@ -1977,7 +2195,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 111,
@@ -1995,7 +2215,9 @@
     "dailyRounds": 60,
     "totalRounds": 7800,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 112,
@@ -2013,7 +2235,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 180,
-    "lodgingRate": 600
+    "lodgingRate": 600,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 113,
@@ -2031,7 +2255,9 @@
     "dailyRounds": 60,
     "totalRounds": 10080,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 7
   },
   {
     "rank": 114,
@@ -2049,7 +2275,9 @@
     "dailyRounds": 60,
     "totalRounds": 10200,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 115,
@@ -2067,7 +2295,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 116,
@@ -2085,7 +2315,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 175,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 117,
@@ -2103,7 +2335,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 118,
@@ -2121,7 +2355,9 @@
     "dailyRounds": 180,
     "totalRounds": 30420,
     "additionalSpend": 125,
-    "lodgingRate": 350
+    "lodgingRate": 350,
+    "buildCost": 3,
+    "operateCost": 4
   },
   {
     "rank": 119,
@@ -2139,7 +2375,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 120,
@@ -2157,7 +2395,9 @@
     "dailyRounds": 60,
     "totalRounds": 13500,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 6
   },
   {
     "rank": 121,
@@ -2175,7 +2415,9 @@
     "dailyRounds": 60,
     "totalRounds": 11700,
     "additionalSpend": 130,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 122,
@@ -2193,7 +2435,9 @@
     "dailyRounds": 60,
     "totalRounds": 10200,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 123,
@@ -2211,7 +2455,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 124,
@@ -2229,7 +2475,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 6
   },
   {
     "rank": 125,
@@ -2247,7 +2495,9 @@
     "dailyRounds": 200,
     "totalRounds": 46000,
     "additionalSpend": 75,
-    "lodgingRate": 250
+    "lodgingRate": 250,
+    "buildCost": 7,
+    "operateCost": 8
   },
   {
     "rank": 126,
@@ -2265,7 +2515,9 @@
     "dailyRounds": 180,
     "totalRounds": 25200,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 127,
@@ -2283,7 +2535,9 @@
     "dailyRounds": 180,
     "totalRounds": 25200,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 128,
@@ -2301,7 +2555,9 @@
     "dailyRounds": 60,
     "totalRounds": 12000,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 3
   },
   {
     "rank": 129,
@@ -2319,7 +2575,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 130,
@@ -2337,7 +2595,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 3,
+    "operateCost": 4
   },
   {
     "rank": 131,
@@ -2355,7 +2615,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 3,
+    "operateCost": 4
   },
   {
     "rank": 132,
@@ -2373,7 +2635,9 @@
     "dailyRounds": 60,
     "totalRounds": 16200,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 3
   },
   {
     "rank": 133,
@@ -2391,7 +2655,9 @@
     "dailyRounds": 180,
     "totalRounds": 58320,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 134,
@@ -2409,7 +2675,9 @@
     "dailyRounds": 180,
     "totalRounds": 58320,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 135,
@@ -2427,7 +2695,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 136,
@@ -2445,7 +2715,9 @@
     "dailyRounds": 60,
     "totalRounds": 10140,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 7
   },
   {
     "rank": 137,
@@ -2463,7 +2735,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 4
   },
   {
     "rank": 138,
@@ -2481,7 +2755,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 139,
@@ -2499,7 +2775,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 9
   },
   {
     "rank": 140,
@@ -2517,7 +2795,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 141,
@@ -2535,7 +2815,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 8,
+    "operateCost": 4
   },
   {
     "rank": 142,
@@ -2553,7 +2835,9 @@
     "dailyRounds": 60,
     "totalRounds": 9360,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 4
   },
   {
     "rank": 143,
@@ -2571,7 +2855,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 7
   },
   {
     "rank": 144,
@@ -2589,7 +2875,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 145,
@@ -2607,7 +2895,9 @@
     "dailyRounds": 180,
     "totalRounds": 25200,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 146,
@@ -2625,7 +2915,9 @@
     "dailyRounds": 180,
     "totalRounds": 43020,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 3,
+    "operateCost": 6
   },
   {
     "rank": 147,
@@ -2643,7 +2935,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 148,
@@ -2661,7 +2955,9 @@
     "dailyRounds": 180,
     "totalRounds": 62460,
     "additionalSpend": 225,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 149,
@@ -2679,7 +2975,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 7
   },
   {
     "rank": 150,
@@ -2697,7 +2995,9 @@
     "dailyRounds": 60,
     "totalRounds": 14040,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 8
   },
   {
     "rank": 151,
@@ -2715,7 +3015,9 @@
     "dailyRounds": 60,
     "totalRounds": 11700,
     "additionalSpend": 130,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 152,
@@ -2733,7 +3035,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 153,
@@ -2751,7 +3055,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 154,
@@ -2769,7 +3075,9 @@
     "dailyRounds": 180,
     "totalRounds": 29700,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 155,
@@ -2787,7 +3095,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 156,
@@ -2805,7 +3115,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 175,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 157,
@@ -2823,7 +3135,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 158,
@@ -2841,7 +3155,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 159,
@@ -2859,7 +3175,9 @@
     "dailyRounds": 60,
     "totalRounds": 11700,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 160,
@@ -2877,7 +3195,9 @@
     "dailyRounds": 180,
     "totalRounds": 41400,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 8
   },
   {
     "rank": 161,
@@ -2895,7 +3215,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 162,
@@ -2913,7 +3235,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 163,
@@ -2931,7 +3255,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 164,
@@ -2949,7 +3275,9 @@
     "dailyRounds": 180,
     "totalRounds": 28800,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 4
   },
   {
     "rank": 165,
@@ -2967,7 +3295,9 @@
     "dailyRounds": 180,
     "totalRounds": 38340,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 3
   },
   {
     "rank": 166,
@@ -2985,7 +3315,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 167,
@@ -3003,7 +3335,9 @@
     "dailyRounds": 180,
     "totalRounds": 42120,
     "additionalSpend": 200,
-    "lodgingRate": 950
+    "lodgingRate": 950,
+    "buildCost": 7,
+    "operateCost": 8
   },
   {
     "rank": 168,
@@ -3021,7 +3355,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 169,
@@ -3039,7 +3375,9 @@
     "dailyRounds": 180,
     "totalRounds": 62460,
     "additionalSpend": 225,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 170,
@@ -3057,7 +3395,9 @@
     "dailyRounds": 180,
     "totalRounds": 51120,
     "additionalSpend": 200,
-    "lodgingRate": 875
+    "lodgingRate": 875,
+    "buildCost": 8,
+    "operateCost": 4
   },
   {
     "rank": 171,
@@ -3075,7 +3415,9 @@
     "dailyRounds": 60,
     "totalRounds": 12000,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 3
   },
   {
     "rank": 172,
@@ -3093,7 +3435,9 @@
     "dailyRounds": 120,
     "totalRounds": 22080,
     "additionalSpend": 120,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 173,
@@ -3111,7 +3455,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 174,
@@ -3129,7 +3475,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 130,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 175,
@@ -3147,7 +3495,9 @@
     "dailyRounds": 60,
     "totalRounds": 13500,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 176,
@@ -3165,7 +3515,9 @@
     "dailyRounds": 60,
     "totalRounds": 6840,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 7
   },
   {
     "rank": 177,
@@ -3183,7 +3535,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 178,
@@ -3201,7 +3555,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 179,
@@ -3219,7 +3575,9 @@
     "dailyRounds": 60,
     "totalRounds": 9060,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 2,
+    "operateCost": 3
   },
   {
     "rank": 180,
@@ -3237,7 +3595,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 80,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 181,
@@ -3255,7 +3615,9 @@
     "dailyRounds": 60,
     "totalRounds": 9600,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 4
   },
   {
     "rank": 182,
@@ -3273,7 +3635,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 183,
@@ -3291,7 +3655,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 10,
+    "operateCost": 9
   },
   {
     "rank": 184,
@@ -3309,7 +3675,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 3,
+    "operateCost": 3
   },
   {
     "rank": 185,
@@ -3327,7 +3695,9 @@
     "dailyRounds": 60,
     "totalRounds": 7200,
     "additionalSpend": 155,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 5,
+    "operateCost": 4
   },
   {
     "rank": 186,
@@ -3345,7 +3715,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 187,
@@ -3363,7 +3735,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 188,
@@ -3381,7 +3755,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 189,
@@ -3399,7 +3775,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 9
   },
   {
     "rank": 190,
@@ -3417,7 +3795,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 175,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 191,
@@ -3435,7 +3815,9 @@
     "dailyRounds": 180,
     "totalRounds": 58320,
     "additionalSpend": 125,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 192,
@@ -3453,7 +3835,9 @@
     "dailyRounds": 60,
     "totalRounds": 7800,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 193,
@@ -3471,7 +3855,9 @@
     "dailyRounds": 60,
     "totalRounds": 9900,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 10,
+    "operateCost": 5
   },
   {
     "rank": 194,
@@ -3489,7 +3875,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 195,
@@ -3507,7 +3895,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 196,
@@ -3525,7 +3915,9 @@
     "dailyRounds": 60,
     "totalRounds": 13020,
     "additionalSpend": 130,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 8
   },
   {
     "rank": 197,
@@ -3543,7 +3935,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 155,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 198,
@@ -3561,7 +3955,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 180,
-    "lodgingRate": 525
+    "lodgingRate": 525,
+    "buildCost": 8,
+    "operateCost": 4
   },
   {
     "rank": 199,
@@ -3579,7 +3975,9 @@
     "dailyRounds": 60,
     "totalRounds": 14040,
     "additionalSpend": 80,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 3
   },
   {
     "rank": 200,
@@ -3597,7 +3995,9 @@
     "dailyRounds": 60,
     "totalRounds": 10200,
     "additionalSpend": 180,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 201,
@@ -3615,7 +4015,9 @@
     "dailyRounds": 200,
     "totalRounds": 28000,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 2,
+    "operateCost": 5
   },
   {
     "rank": 202,
@@ -3633,7 +4035,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 203,
@@ -3651,7 +4055,9 @@
     "dailyRounds": 120,
     "totalRounds": 29760,
     "additionalSpend": 45,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 3,
+    "operateCost": 3
   },
   {
     "rank": 204,
@@ -3669,7 +4075,9 @@
     "dailyRounds": 60,
     "totalRounds": 10200,
     "additionalSpend": 175,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 205,
@@ -3687,7 +4095,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 1,
+    "operateCost": 3
   },
   {
     "rank": 206,
@@ -3705,7 +4115,9 @@
     "dailyRounds": 180,
     "totalRounds": 52740,
     "additionalSpend": 170,
-    "lodgingRate": 700
+    "lodgingRate": 700,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 207,
@@ -3723,7 +4135,9 @@
     "dailyRounds": 180,
     "totalRounds": 31680,
     "additionalSpend": 170,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 208,
@@ -3741,7 +4155,9 @@
     "dailyRounds": 120,
     "totalRounds": 22080,
     "additionalSpend": 45,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 9
   },
   {
     "rank": 209,
@@ -3759,7 +4175,9 @@
     "dailyRounds": 180,
     "totalRounds": 62460,
     "additionalSpend": 220,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 210,
@@ -3777,7 +4195,9 @@
     "dailyRounds": 180,
     "totalRounds": 38340,
     "additionalSpend": 120,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 4,
+    "operateCost": 3
   },
   {
     "rank": 211,
@@ -3795,7 +4215,9 @@
     "dailyRounds": 180,
     "totalRounds": 43020,
     "additionalSpend": 120,
-    "lodgingRate": 425
+    "lodgingRate": 425,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 212,
@@ -3813,7 +4235,9 @@
     "dailyRounds": 180,
     "totalRounds": 28440,
     "additionalSpend": 195,
-    "lodgingRate": 950
+    "lodgingRate": 950,
+    "buildCost": 7,
+    "operateCost": 4
   },
   {
     "rank": 213,
@@ -3831,7 +4255,9 @@
     "dailyRounds": 60,
     "totalRounds": 14040,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 3
   },
   {
     "rank": 214,
@@ -3849,7 +4275,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 215,
@@ -3867,7 +4295,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 4
   },
   {
     "rank": 216,
@@ -3885,7 +4315,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 175,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 10,
+    "operateCost": 10
   },
   {
     "rank": 217,
@@ -3903,7 +4335,9 @@
     "dailyRounds": 60,
     "totalRounds": 10680,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 218,
@@ -3921,7 +4355,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 6,
+    "operateCost": 9
   },
   {
     "rank": 219,
@@ -3939,7 +4375,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 220,
@@ -3957,7 +4395,9 @@
     "dailyRounds": 60,
     "totalRounds": 6840,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 221,
@@ -3975,7 +4415,9 @@
     "dailyRounds": 200,
     "totalRounds": 64600,
     "additionalSpend": 125,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 222,
@@ -3993,7 +4435,9 @@
     "dailyRounds": 200,
     "totalRounds": 28000,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 223,
@@ -4011,7 +4455,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 224,
@@ -4029,7 +4475,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 4
   },
   {
     "rank": 225,
@@ -4047,7 +4495,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 7
   },
   {
     "rank": 226,
@@ -4065,7 +4515,9 @@
     "dailyRounds": 60,
     "totalRounds": 7800,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 227,
@@ -4083,7 +4535,9 @@
     "dailyRounds": 60,
     "totalRounds": 11880,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 228,
@@ -4101,7 +4555,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 10
   },
   {
     "rank": 229,
@@ -4119,7 +4575,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 230,
@@ -4137,7 +4595,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 170,
-    "lodgingRate": 700
+    "lodgingRate": 700,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 231,
@@ -4155,7 +4615,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 3,
+    "operateCost": 4
   },
   {
     "rank": 232,
@@ -4173,7 +4635,9 @@
     "dailyRounds": 60,
     "totalRounds": 14040,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 8
   },
   {
     "rank": 233,
@@ -4191,7 +4655,9 @@
     "dailyRounds": 60,
     "totalRounds": 13020,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 8
   },
   {
     "rank": 234,
@@ -4209,7 +4675,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 6
   },
   {
     "rank": 235,
@@ -4227,7 +4695,9 @@
     "dailyRounds": 60,
     "totalRounds": 12000,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 7
   },
   {
     "rank": 236,
@@ -4245,7 +4715,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 9
   },
   {
     "rank": 237,
@@ -4263,7 +4735,9 @@
     "dailyRounds": 60,
     "totalRounds": 10800,
     "additionalSpend": 175,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 238,
@@ -4281,7 +4755,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 7,
+    "operateCost": 10
   },
   {
     "rank": 239,
@@ -4299,7 +4775,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 9
   },
   {
     "rank": 240,
@@ -4317,7 +4795,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 9
   },
   {
     "rank": 241,
@@ -4335,7 +4815,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 9
   },
   {
     "rank": 242,
@@ -4353,7 +4835,9 @@
     "dailyRounds": 60,
     "totalRounds": 11520,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 9
   },
   {
     "rank": 243,
@@ -4371,7 +4855,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 10
   },
   {
     "rank": 244,
@@ -4389,7 +4875,9 @@
     "dailyRounds": 60,
     "totalRounds": 9660,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 245,
@@ -4407,7 +4895,9 @@
     "dailyRounds": 180,
     "totalRounds": 54360,
     "additionalSpend": 195,
-    "lodgingRate": 875
+    "lodgingRate": 875,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 246,
@@ -4425,7 +4915,9 @@
     "dailyRounds": 60,
     "totalRounds": 11880,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 247,
@@ -4443,7 +4935,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 248,
@@ -4461,7 +4955,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 9,
+    "operateCost": 6
   },
   {
     "rank": 249,
@@ -4479,7 +4975,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 6
   },
   {
     "rank": 250,
@@ -4497,7 +4995,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 6
   },
   {
     "rank": 251,
@@ -4515,7 +5015,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 6
   },
   {
     "rank": 252,
@@ -4533,7 +5035,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 150,
-    "lodgingRate": 375
+    "lodgingRate": 375,
+    "buildCost": 9,
+    "operateCost": 9
   },
   {
     "rank": 253,
@@ -4551,7 +5055,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 9,
+    "operateCost": 9
   },
   {
     "rank": 254,
@@ -4569,7 +5075,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 6,
+    "operateCost": 9
   },
   {
     "rank": 255,
@@ -4587,7 +5095,9 @@
     "dailyRounds": 60,
     "totalRounds": 9240,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 9
   },
   {
     "rank": 256,
@@ -4605,7 +5115,9 @@
     "dailyRounds": 60,
     "totalRounds": 7800,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 257,
@@ -4623,7 +5135,9 @@
     "dailyRounds": 60,
     "totalRounds": 7800,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 258,
@@ -4641,7 +5155,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 259,
@@ -4659,7 +5175,9 @@
     "dailyRounds": 60,
     "totalRounds": 9480,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 260,
@@ -4677,7 +5195,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 261,
@@ -4695,7 +5215,9 @@
     "dailyRounds": 180,
     "totalRounds": 50220,
     "additionalSpend": 195,
-    "lodgingRate": 950
+    "lodgingRate": 950,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 262,
@@ -4713,7 +5235,9 @@
     "dailyRounds": 180,
     "totalRounds": 50220,
     "additionalSpend": 195,
-    "lodgingRate": 950
+    "lodgingRate": 950,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 263,
@@ -4731,7 +5255,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 150,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 9,
+    "operateCost": 5
   },
   {
     "rank": 264,
@@ -4749,7 +5275,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 7,
+    "operateCost": 5
   },
   {
     "rank": 265,
@@ -4767,7 +5295,9 @@
     "dailyRounds": 180,
     "totalRounds": 50220,
     "additionalSpend": 120,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 266,
@@ -4785,7 +5315,9 @@
     "dailyRounds": 60,
     "totalRounds": 16740,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 267,
@@ -4803,7 +5335,9 @@
     "dailyRounds": 180,
     "totalRounds": 51120,
     "additionalSpend": 220,
-    "lodgingRate": 1125
+    "lodgingRate": 1125,
+    "buildCost": 9,
+    "operateCost": 4
   },
   {
     "rank": 268,
@@ -4821,7 +5355,9 @@
     "dailyRounds": 200,
     "totalRounds": 56800,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 6,
+    "operateCost": 4
   },
   {
     "rank": 269,
@@ -4839,7 +5375,9 @@
     "dailyRounds": 200,
     "totalRounds": 56800,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 6,
+    "operateCost": 4
   },
   {
     "rank": 270,
@@ -4857,7 +5395,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 4
   },
   {
     "rank": 271,
@@ -4875,7 +5415,9 @@
     "dailyRounds": 60,
     "totalRounds": 17040,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 4
   },
   {
     "rank": 272,
@@ -4893,7 +5435,9 @@
     "dailyRounds": 180,
     "totalRounds": 36000,
     "additionalSpend": 170,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 4,
+    "operateCost": 2
   },
   {
     "rank": 273,
@@ -4911,7 +5455,9 @@
     "dailyRounds": 180,
     "totalRounds": 36000,
     "additionalSpend": 170,
-    "lodgingRate": 850
+    "lodgingRate": 850,
+    "buildCost": 4,
+    "operateCost": 2
   },
   {
     "rank": 274,
@@ -4929,7 +5475,9 @@
     "dailyRounds": 120,
     "totalRounds": 34080,
     "additionalSpend": 45,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 5,
+    "operateCost": 4
   },
   {
     "rank": 275,
@@ -4947,7 +5495,9 @@
     "dailyRounds": 180,
     "totalRounds": 51120,
     "additionalSpend": 120,
-    "lodgingRate": 350
+    "lodgingRate": 350,
+    "buildCost": 5,
+    "operateCost": 4
   },
   {
     "rank": 276,
@@ -4965,7 +5515,9 @@
     "dailyRounds": 180,
     "totalRounds": 51120,
     "additionalSpend": 120,
-    "lodgingRate": 350
+    "lodgingRate": 350,
+    "buildCost": 5,
+    "operateCost": 4
   },
   {
     "rank": 277,
@@ -4983,7 +5535,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 170,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 278,
@@ -5001,7 +5555,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 170,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 279,
@@ -5019,7 +5575,9 @@
     "dailyRounds": 200,
     "totalRounds": 51400,
     "additionalSpend": 25,
-    "lodgingRate": 125
+    "lodgingRate": 125,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 280,
@@ -5037,7 +5595,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 281,
@@ -5055,7 +5615,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 170,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 282,
@@ -5073,7 +5635,9 @@
     "dailyRounds": 180,
     "totalRounds": 46260,
     "additionalSpend": 170,
-    "lodgingRate": 775
+    "lodgingRate": 775,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 283,
@@ -5091,7 +5655,9 @@
     "dailyRounds": 60,
     "totalRounds": 15420,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 4,
+    "operateCost": 5
   },
   {
     "rank": 284,
@@ -5109,7 +5675,9 @@
     "dailyRounds": 180,
     "totalRounds": 25200,
     "additionalSpend": 120,
-    "lodgingRate": 500
+    "lodgingRate": 500,
+    "buildCost": 6,
+    "operateCost": 5
   },
   {
     "rank": 285,
@@ -5127,7 +5695,9 @@
     "dailyRounds": 200,
     "totalRounds": 28000,
     "additionalSpend": 25,
-    "lodgingRate": 275
+    "lodgingRate": 275,
+    "buildCost": 3,
+    "operateCost": 5
   },
   {
     "rank": 286,
@@ -5145,7 +5715,9 @@
     "dailyRounds": 200,
     "totalRounds": 55800,
     "additionalSpend": 25,
-    "lodgingRate": 125
+    "lodgingRate": 125,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 287,
@@ -5163,7 +5735,9 @@
     "dailyRounds": 180,
     "totalRounds": 32400,
     "additionalSpend": 170,
-    "lodgingRate": 700
+    "lodgingRate": 700,
+    "buildCost": 6,
+    "operateCost": 7
   },
   {
     "rank": 288,
@@ -5181,7 +5755,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 289,
@@ -5199,7 +5775,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 125,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 8,
+    "operateCost": 5
   },
   {
     "rank": 290,
@@ -5217,7 +5795,9 @@
     "dailyRounds": 60,
     "totalRounds": 17580,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 5,
+    "operateCost": 5
   },
   {
     "rank": 291,
@@ -5235,7 +5815,9 @@
     "dailyRounds": 60,
     "totalRounds": 8820,
     "additionalSpend": 75,
-    "lodgingRate": 300
+    "lodgingRate": 300,
+    "buildCost": 6,
+    "operateCost": 4
   },
   {
     "rank": 292,
@@ -5253,7 +5835,9 @@
     "dailyRounds": 180,
     "totalRounds": 28440,
     "additionalSpend": 195,
-    "lodgingRate": 950
+    "lodgingRate": 950,
+    "buildCost": 7,
+    "operateCost": 4
   },
   {
     "rank": 293,
@@ -5271,7 +5855,9 @@
     "dailyRounds": 60,
     "totalRounds": 19380,
     "additionalSpend": 150,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 294,
@@ -5289,7 +5875,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 170,
-    "lodgingRate": 700
+    "lodgingRate": 700,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 295,
@@ -5307,7 +5895,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 220,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 296,
@@ -5325,7 +5915,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 220,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 297,
@@ -5343,7 +5935,9 @@
     "dailyRounds": 180,
     "totalRounds": 58140,
     "additionalSpend": 220,
-    "lodgingRate": 1050
+    "lodgingRate": 1050,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 298,
@@ -5361,7 +5955,9 @@
     "dailyRounds": 60,
     "totalRounds": 10200,
     "additionalSpend": 175,
-    "lodgingRate": 450
+    "lodgingRate": 450,
+    "buildCost": 8,
+    "operateCost": 10
   },
   {
     "rank": 299,
@@ -5379,7 +5975,9 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   },
   {
     "rank": 300,
@@ -5397,6 +5995,8 @@
     "dailyRounds": 60,
     "totalRounds": 10380,
     "additionalSpend": 75,
-    "lodgingRate": 150
+    "lodgingRate": 150,
+    "buildCost": 4,
+    "operateCost": 6
   }
 ]
