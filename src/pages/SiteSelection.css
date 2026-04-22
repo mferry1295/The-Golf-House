@@ -216,15 +216,15 @@
 /* Regions grid */
 .regions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
 }
 
 .region-card {
   background: rgba(245, 240, 232, 0.05);
   border: 1px solid rgba(196, 169, 125, 0.2);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.1rem 1.2rem;
   cursor: pointer;
   transition: transform 0.2s, border-color 0.2s, background 0.2s;
 }
@@ -773,8 +773,8 @@
 
 /* Score breakdown inside each region card */
 .score-breakdown {
-  margin-top: 1rem;
-  padding-top: 0.9rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
   border-top: 1px solid rgba(196, 169, 125, 0.15);
 }
 .score-breakdown__title {

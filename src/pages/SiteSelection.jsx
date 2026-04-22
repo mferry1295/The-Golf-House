@@ -231,31 +231,6 @@ export default function SiteSelection() {
                 </div>
                 <h3 className="region-card__name">{r.name}</h3>
                 <div className="region-card__state">{STATE_NAMES[r.state]}</div>
-                <div className="region-card__metrics">
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.courses.length}</div>
-                    <div className="region-metric__label">Top-300 Courses</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{fmt(r.totalRounds)}</div>
-                    <div className="region-metric__label">Rounds / Yr</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">${r.avgLodging}</div>
-                    <div className="region-metric__label">Avg ADR / Night</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.avgBuildCost.toFixed(1)}<span className="region-metric__suffix">/10</span></div>
-                    <div className="region-metric__label">Build Cost</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.avgOperateCost.toFixed(1)}<span className="region-metric__suffix">/10</span></div>
-                    <div className="region-metric__label">Operate Cost</div>
-                  </div>
-                </div>
-                <div className="region-card__bar">
-                  <div className="region-card__bar-fill" style={{ width: `${r.siteScore}%` }} />
-                </div>
 
                 {/* Score breakdown aligned to the 5 model inputs */}
                 <div className="score-breakdown">
@@ -285,9 +260,6 @@ export default function SiteSelection() {
                   })}
                 </div>
 
-                <div className="region-card__cities">
-                  {r.cities.slice(0, 4).map(c => <span key={c} className="city-chip">{c}</span>)}
-                </div>
               </div>
             ))}
           </div>
