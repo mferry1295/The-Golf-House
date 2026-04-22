@@ -1,21 +1,11 @@
 import { useState, useMemo } from 'react'
 import coursesData from '../data/courses.json'
+import usStates from '../data/us-states.json'
 import './SiteSelection.css'
 
-// Approximate lat/lng for major cities + state centers (for map positioning)
-// Using simple albers-like projection converted to SVG coordinates (viewBox 0 0 960 600)
-const STATE_COORDS = {
-  AL: [650, 415], AK: [150, 560], AZ: [260, 410], AR: [570, 395], CA: [130, 310],
-  CO: [365, 300], CT: [835, 210], DE: [800, 280], FL: [730, 495], GA: [695, 410],
-  HI: [350, 560], ID: [255, 185], IL: [605, 275], IN: [640, 280], IA: [560, 245],
-  KS: [500, 315], KY: [655, 325], LA: [575, 465], ME: [870, 150], MD: [790, 280],
-  MA: [845, 200], MI: [650, 215], MN: [545, 175], MS: [605, 430], MO: [565, 320],
-  MT: [315, 160], NE: [490, 255], NV: [205, 275], NH: [850, 185], NJ: [805, 255],
-  NM: [355, 400], NY: [780, 210], NC: [755, 355], ND: [480, 155], OH: [680, 265],
-  OK: [510, 390], OR: [165, 175], PA: [760, 250], RI: [850, 215], SC: [735, 390],
-  SD: [485, 210], TN: [645, 360], TX: [495, 465], UT: [280, 290], VT: [830, 175],
-  VA: [770, 310], WA: [195, 130], WV: [725, 290], WI: [590, 205], WY: [355, 225]
-}
+// Real state centroids from d3 Albers USA projection (960x600 viewBox)
+const STATE_COORDS = usStates.centroids
+const STATE_PATHS = usStates.paths
 
 const STATE_NAMES = {
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
@@ -31,28 +21,32 @@ const STATE_NAMES = {
 }
 
 // Major golf regions / metropolitan clusters for site analysis
+// Coordinates derived from d3 Albers USA projection (960x600) with small city-specific offsets from state centroids
 const REGIONS = [
-  { name: 'Sandhills / Pinehurst', state: 'NC', cities: ['Pinehurst', 'Southern Pines', 'Aberdeen'], lat: 755, lng: 360 },
-  { name: 'Monterey Peninsula', state: 'CA', cities: ['Pebble Beach', 'Carmel', 'Monterey'], lat: 115, lng: 315 },
-  { name: 'Long Island', state: 'NY', cities: ['Southampton', 'East Hampton', 'Fishers Island', 'Baiting Hollow'], lat: 830, lng: 225 },
-  { name: 'Philadelphia Main Line', state: 'PA', cities: ['Ardmore', 'Gladwyne', 'Haverford', 'Bryn Mawr'], lat: 780, lng: 265 },
-  { name: 'Chicago North Shore', state: 'IL', cities: ['Wheaton', 'Lake Forest', 'Glenview', 'Highland Park'], lat: 610, lng: 265 },
-  { name: 'Pittsburgh Metro', state: 'PA', cities: ['Oakmont', 'Pittsburgh', 'Fox Chapel'], lat: 735, lng: 260 },
-  { name: 'Palm Beach / Jupiter', state: 'FL', cities: ['Juno Beach', 'Hobe Sound', 'Jupiter', 'West Palm Beach'], lat: 755, lng: 490 },
-  { name: 'Bandon Coast', state: 'OR', cities: ['Bandon'], lat: 155, lng: 180 },
-  { name: 'Scottsdale / Phoenix', state: 'AZ', cities: ['Scottsdale', 'Phoenix', 'Paradise Valley'], lat: 265, lng: 415 },
-  { name: 'Coachella Valley', state: 'CA', cities: ['La Quinta', 'Palm Springs', 'Rancho Mirage', 'Indian Wells'], lat: 200, lng: 380 },
-  { name: 'Hilton Head / Lowcountry', state: 'SC', cities: ['Hilton Head Island', 'Bluffton', 'Kiawah Island'], lat: 745, lng: 410 },
-  { name: 'Napa / Sonoma', state: 'CA', cities: ['Napa', 'Sonoma', 'Santa Rosa'], lat: 115, lng: 290 },
-  { name: 'Boston North Shore', state: 'MA', cities: ['Brookline', 'Newton', 'Manchester-by-the-Sea'], lat: 845, lng: 205 },
-  { name: 'Westchester', state: 'NY', cities: ['Mamaroneck', 'Scarsdale', 'Rye', 'Purchase'], lat: 815, lng: 225 },
-  { name: 'Hamptons East End', state: 'NY', cities: ['Montauk', 'Bridgehampton', 'Sagaponack'], lat: 860, lng: 220 },
-  { name: 'Traverse City', state: 'MI', cities: ['Frankfort', 'Traverse City', 'Bellaire'], lat: 640, lng: 205 },
-  { name: 'Austin / Hill Country', state: 'TX', cities: ['Austin', 'Horseshoe Bay', 'Spicewood'], lat: 490, lng: 455 },
-  { name: 'Dallas–Fort Worth', state: 'TX', cities: ['Dallas', 'Fort Worth', 'Frisco'], lat: 510, lng: 435 },
-  { name: 'Naples / Bonita Springs', state: 'FL', cities: ['Naples', 'Bonita Springs', 'Estero'], lat: 725, lng: 510 },
-  { name: 'Atlanta Metro', state: 'GA', cities: ['Atlanta', 'Duluth', 'Johns Creek', 'Alpharetta'], lat: 680, lng: 405 }
-]
+  { name: 'Sandhills / Pinehurst', state: 'NC', cities: ['Pinehurst', 'Southern Pines', 'Aberdeen'] },
+  { name: 'Monterey Peninsula', state: 'CA', cities: ['Pebble Beach', 'Carmel', 'Monterey'], dx: 20, dy: 40 },
+  { name: 'Long Island', state: 'NY', cities: ['Southampton', 'East Hampton', 'Fishers Island', 'Baiting Hollow'], dx: 40, dy: 40 },
+  { name: 'Philadelphia Main Line', state: 'PA', cities: ['Ardmore', 'Gladwyne', 'Haverford', 'Bryn Mawr'], dx: 30, dy: 15 },
+  { name: 'Chicago North Shore', state: 'IL', cities: ['Wheaton', 'Lake Forest', 'Glenview', 'Highland Park'], dx: -15, dy: -25 },
+  { name: 'Pittsburgh Metro', state: 'PA', cities: ['Oakmont', 'Pittsburgh', 'Fox Chapel'], dx: -25, dy: 0 },
+  { name: 'Palm Beach / Jupiter', state: 'FL', cities: ['Juno Beach', 'Hobe Sound', 'Jupiter', 'West Palm Beach'], dx: 10, dy: 0 },
+  { name: 'Bandon Coast', state: 'OR', cities: ['Bandon'], dx: -30, dy: 20 },
+  { name: 'Scottsdale / Phoenix', state: 'AZ', cities: ['Scottsdale', 'Phoenix', 'Paradise Valley'] },
+  { name: 'Coachella Valley', state: 'CA', cities: ['La Quinta', 'Palm Springs', 'Rancho Mirage', 'Indian Wells'], dx: 50, dy: 70 },
+  { name: 'Hilton Head / Lowcountry', state: 'SC', cities: ['Hilton Head Island', 'Bluffton', 'Kiawah Island'], dx: 20, dy: 20 },
+  { name: 'Napa / Sonoma', state: 'CA', cities: ['Napa', 'Sonoma', 'Santa Rosa'], dx: -15, dy: -30 },
+  { name: 'Boston North Shore', state: 'MA', cities: ['Brookline', 'Newton', 'Manchester-by-the-Sea'] },
+  { name: 'Westchester', state: 'NY', cities: ['Mamaroneck', 'Scarsdale', 'Rye', 'Purchase'], dx: 30, dy: 30 },
+  { name: 'Hamptons East End', state: 'NY', cities: ['Montauk', 'Bridgehampton', 'Sagaponack'], dx: 55, dy: 35 },
+  { name: 'Traverse City', state: 'MI', cities: ['Frankfort', 'Traverse City', 'Bellaire'], dx: -10, dy: -30 },
+  { name: 'Austin / Hill Country', state: 'TX', cities: ['Austin', 'Horseshoe Bay', 'Spicewood'], dx: 15, dy: 30 },
+  { name: 'Dallas–Fort Worth', state: 'TX', cities: ['Dallas', 'Fort Worth', 'Frisco'], dx: 20, dy: -10 },
+  { name: 'Naples / Bonita Springs', state: 'FL', cities: ['Naples', 'Bonita Springs', 'Estero'], dx: -10, dy: 20 },
+  { name: 'Atlanta Metro', state: 'GA', cities: ['Atlanta', 'Duluth', 'Johns Creek', 'Alpharetta'], dx: -5, dy: -10 }
+].map(r => {
+  const c = STATE_COORDS[r.state] || [480, 300]
+  return { ...r, lat: c[0] + (r.dx || 0), lng: c[1] + (r.dy || 0) }
+})
 
 function fmt(n) {
   if (n == null) return '—'
@@ -200,6 +194,27 @@ export default function SiteSelection() {
                   <stop offset="100%" stopColor="#C4A97D" stopOpacity="0" />
                 </radialGradient>
               </defs>
+
+              {/* US state outlines */}
+              <g className="us-map__states">
+                {Object.entries(STATE_PATHS).map(([abbr, d]) => {
+                  const hasData = stateStats[abbr]
+                  const isSelected = selectedState === abbr
+                  const fill = hasData ? getStateColor(abbr) : '#3a473a'
+                  return (
+                    <path
+                      key={abbr}
+                      d={d}
+                      fill={fill}
+                      fillOpacity={isSelected ? 0.85 : 0.55}
+                      stroke="#5a6b54"
+                      strokeWidth={isSelected ? 1.5 : 0.6}
+                      style={{ cursor: hasData ? 'pointer' : 'default', transition: 'fill-opacity 0.2s' }}
+                      onClick={() => hasData && setSelectedState(selectedState === abbr ? null : abbr)}
+                    />
+                  )
+                })}
+              </g>
 
               {/* State bubbles */}
               {Object.entries(stateStats).map(([state, s]) => {
