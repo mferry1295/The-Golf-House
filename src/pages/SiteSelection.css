@@ -903,17 +903,17 @@
 
 /* Inline variant — compact row on cream section bg */
 .weight-panel--inline {
-  background: var(--deep-forest);
-  border: 1px solid rgba(43, 53, 41, 0.2);
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(43, 53, 41, 0.08);
+  background: transparent;
+  border: none;
+  padding: 0 0 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0;
+  box-shadow: none;
 }
 .weight-panel__label {
   font-size: 0.65rem;
   letter-spacing: 0.22em;
-  color: var(--warm-gold);
+  color: var(--tobacco);
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
@@ -927,18 +927,19 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  background: rgba(245, 240, 232, 0.06);
-  border: 1px solid rgba(196, 169, 125, 0.2);
+  background: #fff;
+  border: 1px solid rgba(43, 53, 41, 0.1);
   border-radius: 8px;
   padding: 0.55rem 0.75rem;
   flex: 1 1 140px;
   min-width: 140px;
+  box-shadow: 0 1px 3px rgba(43, 53, 41, 0.05);
 }
 .weight-chip__label {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  color: rgba(245, 240, 232, 0.7);
-  font-weight: 500;
+  color: var(--tobacco);
+  font-weight: 600;
   text-transform: uppercase;
 }
 .weight-chip__stepper {
@@ -950,29 +951,29 @@
 .weight-chip__stepper .weight-stepper__btn {
   width: 24px;
   height: 24px;
-  border: 1px solid rgba(196, 169, 125, 0.3);
+  border: 1px solid rgba(43, 53, 41, 0.15);
   background: transparent;
-  color: var(--warm-gold);
+  color: var(--carolina-green);
   border-radius: 5px;
   font-size: 0.5rem;
 }
 .weight-chip__stepper .weight-stepper__btn:hover:not(:disabled) {
-  background: var(--warm-gold);
-  color: var(--deep-forest);
+  background: var(--carolina-green);
+  color: var(--cream);
 }
 .weight-chip__value {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--cream);
+  color: var(--deep-forest);
   text-align: center;
   flex: 1;
   font-variant-numeric: tabular-nums;
 }
 .weight-reset--compact {
   background: transparent;
-  color: var(--warm-gold);
-  border: 1px solid rgba(196, 169, 125, 0.3);
+  color: var(--carolina-green);
+  border: 1px solid var(--carolina-green);
   padding: 0.55rem 1rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -981,8 +982,8 @@
   transition: all 0.15s;
 }
 .weight-reset--compact:hover {
-  background: var(--warm-gold);
-  color: var(--deep-forest);
+  background: var(--carolina-green);
+  color: var(--cream);
 }
 .weight-grid {
   display: grid;
