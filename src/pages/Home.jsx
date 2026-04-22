@@ -9,7 +9,7 @@ export default function Home() {
         <div className="hero__overlay" />
         <div className="hero__content">
           <div className="hero__rule" />
-          <h1 className="hero__title">THE GOLF HOUSE</h1>
+          <h1 className="hero__title">THE ALBATROSS CLUB</h1>
           <p className="hero__tagline">Where the game comes home</p>
           <div className="hero__rule" />
           <p className="hero__location">PINEHURST, NORTH CAROLINA</p>
@@ -35,7 +35,7 @@ export default function Home() {
               <div className="gold-line" />
               <p className="section-subtitle">Where the spirit of Carolina golf tradition meets luxury experiential hospitality</p>
               <p className="intro__body">
-                The Golf House is a luxury golf and hospitality experience rooted in the Sandhills
+                The Albatross Club is a luxury golf and hospitality experience rooted in the Sandhills
                 of North Carolina. The first property in Pinehurst features 8 architect-designed group
                 cabins organized around a communal clubhouse inspired by old Carolina architecture.
               </p>
@@ -110,7 +110,7 @@ export default function Home() {
         <div className="cta__content">
           <div className="cta__rule" />
           <h2 className="cta__title">Begin Planning Your Property</h2>
-          <p className="cta__sub">Use our interactive Property Planner to design the layout of your Golf House</p>
+          <p className="cta__sub">Use our interactive Property Planner to design the layout of your Albatross Club</p>
           <Link to="/property-planner" className="btn btn--gold">Open Property Planner</Link>
         </div>
       </section>

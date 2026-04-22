@@ -13,7 +13,7 @@ export default function Navbar() {
         <Link to="/" className="navbar__logo">
           <span className="navbar__logo-mark">&#9830;</span>
           <div className="navbar__logo-text">
-            <span className="navbar__logo-title">THE GOLF HOUSE</span>
+            <span className="navbar__logo-title">THE ALBATROSS CLUB</span>
             <span className="navbar__logo-sub">PINEHURST, NC</span>
           </div>
         </Link>

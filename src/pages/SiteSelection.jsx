@@ -142,9 +142,9 @@ export default function SiteSelection() {
       <div className="site-selection__hero">
         <div className="site-selection__hero-inner">
           <span className="site-selection__label">SITE SELECTION ANALYSIS</span>
-          <h1 className="site-selection__title">Where Will The Next Golf House Open?</h1>
+          <h1 className="site-selection__title">Where Will The Next Albatross Club Open?</h1>
           <p className="site-selection__subtitle">
-            Rounds concentration analysis across America's top 300 courses — identifying the strongest metropolitan clusters for the next Golf House property.
+            Rounds concentration analysis across America's top 300 courses — identifying the strongest metropolitan clusters for the next Albatross Club property.
           </p>
 
           <div className="site-selection__stats">

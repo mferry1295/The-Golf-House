@@ -858,16 +858,16 @@ export default function PropertyPlanner() {
 
   // Save/Load
   const saveDesign = useCallback((name) => {
-    const designs = JSON.parse(localStorage.getItem('golfhouse-designs') || '{}')
+    const designs = JSON.parse(localStorage.getItem('albatross-designs') || '{}')
     designs[name] = { elements, savedAt: new Date().toISOString() }
-    localStorage.setItem('golfhouse-designs', JSON.stringify(designs))
+    localStorage.setItem('albatross-designs', JSON.stringify(designs))
     setSavedDesigns(Object.keys(designs))
     setSaveMessage('Saved!')
     setTimeout(() => setSaveMessage(null), 2000)
   }, [elements])
 
   const loadDesign = useCallback((name) => {
-    const designs = JSON.parse(localStorage.getItem('golfhouse-designs') || '{}')
+    const designs = JSON.parse(localStorage.getItem('albatross-designs') || '{}')
     if (designs[name]) {
       setElements(designs[name].elements)
       setSelectedId(null)
@@ -880,18 +880,18 @@ export default function PropertyPlanner() {
   }, [])
 
   const deleteDesign = useCallback((name) => {
-    const designs = JSON.parse(localStorage.getItem('golfhouse-designs') || '{}')
+    const designs = JSON.parse(localStorage.getItem('albatross-designs') || '{}')
     delete designs[name]
-    localStorage.setItem('golfhouse-designs', JSON.stringify(designs))
+    localStorage.setItem('albatross-designs', JSON.stringify(designs))
     setSavedDesigns(Object.keys(designs))
   }, [])
 
   const exportDesign = useCallback(() => {
-    const data = JSON.stringify({ name: 'Golf House Property', elements, exportedAt: new Date().toISOString() }, null, 2)
+    const data = JSON.stringify({ name: 'Albatross Club Property', elements, exportedAt: new Date().toISOString() }, null, 2)
     const blob = new Blob([data], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = url; a.download = 'golf-house-layout.json'; a.click()
+    a.href = url; a.download = 'albatross-club-layout.json'; a.click()
     URL.revokeObjectURL(url)
   }, [elements])
 
@@ -924,7 +924,7 @@ export default function PropertyPlanner() {
 
   // Load saved design list on mount
   useEffect(() => {
-    const designs = JSON.parse(localStorage.getItem('golfhouse-designs') || '{}')
+    const designs = JSON.parse(localStorage.getItem('albatross-designs') || '{}')
     setSavedDesigns(Object.keys(designs))
     // Auto-load last autosave
     if (designs['__autosave__']) {
@@ -938,9 +938,9 @@ export default function PropertyPlanner() {
   useEffect(() => {
     if (elements.length === 0) return
     const timer = setTimeout(() => {
-      const designs = JSON.parse(localStorage.getItem('golfhouse-designs') || '{}')
+      const designs = JSON.parse(localStorage.getItem('albatross-designs') || '{}')
       designs['__autosave__'] = { elements, savedAt: new Date().toISOString() }
-      localStorage.setItem('golfhouse-designs', JSON.stringify(designs))
+      localStorage.setItem('albatross-designs', JSON.stringify(designs))
     }, 30000)
     return () => clearTimeout(timer)
   }, [elements])

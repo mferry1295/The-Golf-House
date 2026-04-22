@@ -120,7 +120,7 @@ export default function FinancialModel() {
           <span className="fin-model__label">FINANCIAL MODELING TOOL</span>
           <h1 className="fin-model__title">Underwrite The Investment</h1>
           <p className="fin-model__subtitle">
-            Interactive pro forma for a Golf House property — adjust cabins, rates, occupancy, and event mix to stress-test the business plan.
+            Interactive pro forma for an Albatross Club property — adjust cabins, rates, occupancy, and event mix to stress-test the business plan.
           </p>
         </div>
       </div>

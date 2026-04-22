@@ -84,7 +84,7 @@ export default function Dining() {
               <div className="gold-line" />
               <p className="section-subtitle">Southern tradition meets modern sophistication</p>
               <p className="dining-body">
-                The dining room anchors the communal experience at The Golf House.
+                The dining room anchors the communal experience at The Albatross Club.
                 With arched doorways opening to views of the short game greens,
                 every meal feels connected to the property's golf heritage.
                 Seasonal menus celebrate North Carolina's rich culinary traditions.
@@ -99,7 +99,7 @@ export default function Dining() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p className="section-label">Sample Menu</p>
-            <h2 className="section-title" style={{ color: 'var(--cream)' }}>A Taste of The Golf House</h2>
+            <h2 className="section-title" style={{ color: 'var(--cream)' }}>A Taste of The Albatross Club</h2>
             <div className="gold-line" style={{ margin: '1rem auto' }} />
           </div>
           <div className="menu-grid">

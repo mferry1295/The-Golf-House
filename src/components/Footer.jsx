@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="footer__inner">
         <div className="footer__brand">
           <span className="footer__mark">&#9830;</span>
-          <h3 className="footer__title">THE GOLF HOUSE</h3>
+          <h3 className="footer__title">THE ALBATROSS CLUB</h3>
           <p className="footer__tagline">Where the game comes home</p>
           <p className="footer__location">Pinehurst, North Carolina</p>
         </div>
@@ -28,14 +28,14 @@ export default function Footer() {
           </div>
           <div className="footer__col">
             <h4>Connect</h4>
-            <a href="mailto:info@thegolfhouse.com">info@thegolfhouse.com</a>
+            <a href="mailto:info@albatrossclub.com">info@albatrossclub.com</a>
             <p>Pinehurst, NC 28374</p>
           </div>
         </div>
       </div>
 
       <div className="footer__bottom">
-        <p>&copy; 2026 The Golf House. All rights reserved.</p>
+        <p>&copy; 2026 The Albatross Club. All rights reserved.</p>
       </div>
     </footer>
   )

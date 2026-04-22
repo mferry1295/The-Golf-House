@@ -65,7 +65,7 @@ export default function Wellness() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p className="section-label">Daily Ritual</p>
-            <h2 className="section-title" style={{ color: 'var(--cream)' }}>A Day at The Golf House</h2>
+            <h2 className="section-title" style={{ color: 'var(--cream)' }}>A Day at The Albatross Club</h2>
             <div className="gold-line" style={{ margin: '1rem auto' }} />
           </div>
           <div className="journey-grid">
