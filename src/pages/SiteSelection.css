@@ -1148,6 +1148,51 @@
   background: var(--carolina-green);
   color: var(--cream);
 }
+
+.weight-total {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  min-width: 80px;
+  align-self: stretch;
+  transition: all 0.2s;
+  cursor: default;
+}
+.weight-total__label {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.75;
+}
+.weight-total__value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.weight-total__check {
+  font-size: 0.9rem;
+  font-family: system-ui, sans-serif;
+}
+.weight-total--ok {
+  background: rgba(74, 103, 65, 0.12);
+  border: 1px solid var(--carolina-green);
+  color: var(--carolina-green);
+}
+.weight-total--warn {
+  background: rgba(139, 111, 78, 0.12);
+  border: 1px solid var(--tobacco);
+  color: var(--tobacco);
+}
+
 .weight-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

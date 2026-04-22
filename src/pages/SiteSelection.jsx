@@ -692,6 +692,13 @@ function WeightPanel({ weights, setWeights, defaults }) {
             </div>
           )
         })}
+        <div className={`weight-total ${sum === 100 ? 'weight-total--ok' : 'weight-total--warn'}`} title={sum === 100 ? 'Weights sum to 100%' : `Weights sum to ${sum}% — scores are normalized`}>
+          <div className="weight-total__label">Total</div>
+          <div className="weight-total__value">
+            {sum === 100 ? <span className="weight-total__check">✓</span> : null}
+            {sum}%
+          </div>
+        </div>
         <button className="weight-reset weight-reset--compact" onClick={reset}>Reset</button>
       </div>
     </div>
