@@ -624,6 +624,201 @@
   line-height: 1.5;
 }
 
+/* Map zoom-out button */
+.map-zoomout {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 5;
+  background: var(--deep-forest);
+  color: var(--cream);
+  border: 1px solid var(--warm-gold);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+}
+.map-zoomout:hover {
+  background: var(--warm-gold);
+  color: var(--deep-forest);
+}
+
+/* Zoom in / out controls */
+.map-zoom-controls {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: rgba(43, 53, 41, 0.92);
+  border: 1px solid rgba(196, 169, 125, 0.35);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+.map-zoom-controls button {
+  width: 40px;
+  height: 36px;
+  background: transparent;
+  color: var(--cream);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(196, 169, 125, 0.15);
+  font-family: 'Raleway', sans-serif;
+}
+.map-zoom-controls button:last-child { border-bottom: none; }
+.map-zoom-controls button:hover {
+  background: var(--carolina-green);
+}
+.map-zoom-controls button:nth-child(2) {
+  font-size: 0.75rem;
+  color: var(--warm-gold);
+}
+
+/* Course detail popup on map */
+.course-popup {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--deep-forest);
+  color: var(--cream);
+  padding: 1.25rem 1.4rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  max-width: 320px;
+  z-index: 10;
+  border: 1px solid rgba(196, 169, 125, 0.35);
+}
+.course-popup__close {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.7rem;
+  background: none;
+  border: none;
+  color: var(--cream);
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0.6;
+  line-height: 1;
+}
+.course-popup__close:hover { opacity: 1; }
+.course-popup__rank {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  color: var(--warm-gold);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.2rem;
+}
+.course-popup__name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.course-popup__loc {
+  font-size: 0.8rem;
+  color: rgba(245, 240, 232, 0.7);
+  margin-bottom: 1rem;
+  letter-spacing: 0.03em;
+}
+.course-popup__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+.course-popup__grid > div {
+  display: flex;
+  flex-direction: column;
+}
+.course-popup__grid span {
+  color: rgba(245, 240, 232, 0.55);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.1rem;
+}
+.course-popup__grid strong {
+  color: var(--cream);
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+.course-popup__grid strong.gold { color: var(--warm-gold); font-weight: 600; }
+
+.legend-row--hint {
+  font-style: italic;
+  opacity: 0.75;
+  font-size: 0.78rem;
+}
+
+/* Score breakdown inside each region card */
+.score-breakdown {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(196, 169, 125, 0.15);
+}
+.score-breakdown__title {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--warm-gold);
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+.score-row {
+  display: grid;
+  grid-template-columns: 80px 28px 1fr 20px 28px;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.2rem 0;
+  font-size: 0.72rem;
+}
+.score-row__label {
+  color: rgba(245, 240, 232, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.score-row__weight {
+  color: var(--sage);
+  font-size: 0.66rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.score-row__bar {
+  height: 5px;
+  background: rgba(245, 240, 232, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.score-row__bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sage), var(--warm-gold));
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.score-row__value {
+  color: var(--cream);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.score-row__contrib {
+  color: var(--warm-gold);
+  font-size: 0.68rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
 /* Highlighted metric (Avg ADR) on region cards */
 .region-metric--highlight {
   background: rgba(196, 169, 125, 0.15);

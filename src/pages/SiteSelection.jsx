@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react'
 import coursesData from '../data/courses.json'
 import usStates from '../data/us-states.json'
+import zipCoords from '../data/zip-coords.json'
 import './SiteSelection.css'
 
 // Real state centroids from d3 Albers USA projection (960x600 viewBox)
 const STATE_COORDS = usStates.centroids
 const STATE_PATHS = usStates.paths
+const STATE_BBOXES = usStates.bboxes || {}
 
 const STATE_NAMES = {
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
@@ -61,7 +63,10 @@ export default function SiteSelection() {
   const [sortBy, setSortBy] = useState('totalRounds')
   const [selectedState, setSelectedState] = useState(null)
   const [selectedRegion, setSelectedRegion] = useState(null)
+  const [selectedCourse, setSelectedCourse] = useState(null)
   const [weights, setWeights] = useState(DEFAULT_WEIGHTS)
+  const [mapZoom, setMapZoom] = useState(1)
+  const [mapPan, setMapPan] = useState({ x: 0, y: 0 })
 
   const courses = coursesData
 
@@ -257,6 +262,35 @@ export default function SiteSelection() {
                 <div className="region-card__bar">
                   <div className="region-card__bar-fill" style={{ width: `${r.siteScore}%` }} />
                 </div>
+
+                {/* Score breakdown aligned to the 5 model inputs */}
+                <div className="score-breakdown">
+                  <div className="score-breakdown__title">SCORE BREAKDOWN</div>
+                  {[
+                    { key: 'rounds', label: 'Rounds', weight: weights.rounds },
+                    { key: 'top100', label: 'Top-100', weight: weights.top100 },
+                    { key: 'top10', label: 'Elite Anchors', weight: weights.top10 },
+                    { key: 'count', label: 'Course Density', weight: weights.count },
+                    { key: 'lodging', label: 'Lodging ADR', weight: weights.lodging },
+                  ].map(f => {
+                    const sub = r.subScores[f.key]
+                    const wSum = weights.rounds + weights.top100 + weights.top10 + weights.count + weights.lodging
+                    const wPct = wSum ? Math.round((f.weight / wSum) * 100) : 0
+                    const contribution = Math.round((sub * f.weight) / (wSum || 1))
+                    return (
+                      <div key={f.key} className="score-row">
+                        <span className="score-row__label">{f.label}</span>
+                        <span className="score-row__weight">{wPct}%</span>
+                        <div className="score-row__bar">
+                          <div className="score-row__bar-fill" style={{ width: `${sub}%` }} />
+                        </div>
+                        <span className="score-row__value">{sub}</span>
+                        <span className="score-row__contrib">+{contribution}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+
                 <div className="region-card__cities">
                   {r.cities.slice(0, 4).map(c => <span key={c} className="city-chip">{c}</span>)}
                 </div>
@@ -279,77 +313,204 @@ export default function SiteSelection() {
             </p>
           </div>
 
-          <div className="map-wrap">
-            <svg viewBox="0 0 960 600" className="us-map" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <radialGradient id="bubbleGlow" cx="50%" cy="50%">
-                  <stop offset="0%" stopColor="#C4A97D" stopOpacity="0.8" />
-                  <stop offset="70%" stopColor="#C4A97D" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#C4A97D" stopOpacity="0" />
-                </radialGradient>
-                <radialGradient id="topRegionGlow" cx="50%" cy="50%">
-                  <stop offset="0%" stopColor="#C4A97D" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#C4A97D" stopOpacity="0" />
-                </radialGradient>
-              </defs>
+          {(() => {
+            // Dynamic viewBox - state bbox + user manual zoom + user pan
+            let baseX = 0, baseY = 0, baseW = 960, baseH = 600
+            if (selectedState && STATE_BBOXES[selectedState]) {
+              const bb = STATE_BBOXES[selectedState]
+              const pad = Math.max(bb.w, bb.h) * 0.15
+              baseX = Math.max(0, bb.x - pad)
+              baseY = Math.max(0, bb.y - pad)
+              baseW = Math.min(960 - baseX, bb.w + pad * 2)
+              baseH = Math.min(600 - baseY, bb.h + pad * 2)
+            }
+            const zoomedW = baseW / mapZoom
+            const zoomedH = baseH / mapZoom
+            const cx = baseX + baseW / 2 + mapPan.x
+            const cy = baseY + baseH / 2 + mapPan.y
+            const vbX = cx - zoomedW / 2
+            const vbY = cy - zoomedH / 2
+            const vb = `${vbX} ${vbY} ${zoomedW} ${zoomedH}`
+            const zoomScale = zoomedW / 960
 
-              {/* US state outlines */}
-              <g className="us-map__states">
-                {Object.entries(STATE_PATHS).map(([abbr, d]) => {
-                  const hasData = stateStats[abbr]
-                  const isSelected = selectedState === abbr
-                  const fill = hasData ? getStateColor(abbr) : '#3a473a'
-                  return (
-                    <path
-                      key={abbr}
-                      d={d}
-                      fill={fill}
-                      fillOpacity={isSelected ? 0.85 : 0.55}
-                      stroke="#5a6b54"
-                      strokeWidth={isSelected ? 1.5 : 0.6}
-                      style={{ cursor: hasData ? 'pointer' : 'default', transition: 'fill-opacity 0.2s' }}
-                      onClick={() => hasData && setSelectedState(selectedState === abbr ? null : abbr)}
-                    />
-                  )
-                })}
-              </g>
+            const coursesInState = selectedState
+              ? courses.filter(c => c.state === selectedState && zipCoords[c.zipCode])
+              : []
 
-              {/* State bubbles */}
-              {Object.entries(stateStats).map(([state, s]) => {
-                const coord = STATE_COORDS[state]
-                if (!coord) return null
-                const size = 5 + (s.totalRounds / maxStateRounds) * 35
-                const isSelected = selectedState === state
-                return (
-                  <g key={state} className="map-state" onClick={() => setSelectedState(selectedState === state ? null : state)} style={{ cursor: 'pointer' }}>
-                    <circle cx={coord[0]} cy={coord[1]} r={size + 8} fill="url(#bubbleGlow)" opacity={isSelected ? 1 : 0.6} />
-                    <circle cx={coord[0]} cy={coord[1]} r={size} fill={isSelected ? '#C4A97D' : '#6B7F6A'} stroke="#C4A97D" strokeWidth={isSelected ? 2 : 1} opacity="0.85" />
-                    <text x={coord[0]} y={coord[1]} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight="600" fill="#F5F0E8" style={{ pointerEvents: 'none' }}>{state}</text>
-                    <text x={coord[0]} y={coord[1] + size + 12} textAnchor="middle" fontSize="9" fill="#C4A97D" style={{ pointerEvents: 'none' }}>{s.count}</text>
+            // Cluster overlapping pins. Group pins within proximity threshold,
+            // then spread them in a spiral so nothing overlaps.
+            const clusterThreshold = Math.max(3, 7 * zoomScale)
+            const pinRadius = Math.max(4, 6 * zoomScale)
+            const clusters = []
+            for (const c of coursesInState) {
+              const [x, y] = zipCoords[c.zipCode]
+              const existing = clusters.find(g => Math.hypot(g.anchorX - x, g.anchorY - y) < clusterThreshold)
+              if (existing) {
+                existing.items.push({ c, baseX: x, baseY: y })
+              } else {
+                clusters.push({ anchorX: x, anchorY: y, items: [{ c, baseX: x, baseY: y }] })
+              }
+            }
+            // Compute final pin positions with spiral offset for multi-pin clusters
+            const placedPins = []
+            for (const cluster of clusters) {
+              const n = cluster.items.length
+              cluster.items.forEach((item, i) => {
+                let px = item.baseX, py = item.baseY
+                if (n > 1) {
+                  const ringSpacing = pinRadius * 2.2
+                  // Place in concentric rings, 6 per ring
+                  const ring = Math.ceil((Math.sqrt(1 + 8 * (i + 1)) - 1) / 2) || 1
+                  const perRing = ring * 6
+                  const ringStart = ring === 1 ? 0 : 3 * ring * (ring - 1)
+                  const posInRing = i - ringStart
+                  const angle = (posInRing / perRing) * Math.PI * 2
+                  const r = ring * ringSpacing
+                  px = cluster.anchorX + Math.cos(angle) * r
+                  py = cluster.anchorY + Math.sin(angle) * r
+                }
+                placedPins.push({ c: item.c, x: px, y: py, anchor: { x: cluster.anchorX, y: cluster.anchorY }, clustered: n > 1 })
+              })
+            }
+
+            return (
+              <div className="map-wrap">
+                <svg viewBox={vb} className="us-map" preserveAspectRatio="xMidYMid meet" style={{ transition: 'all 0.5s ease' }}>
+                  <defs>
+                    <radialGradient id="bubbleGlow" cx="50%" cy="50%">
+                      <stop offset="0%" stopColor="#C4A97D" stopOpacity="0.8" />
+                      <stop offset="70%" stopColor="#C4A97D" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#C4A97D" stopOpacity="0" />
+                    </radialGradient>
+                    <radialGradient id="topRegionGlow" cx="50%" cy="50%">
+                      <stop offset="0%" stopColor="#C4A97D" stopOpacity="1" />
+                      <stop offset="100%" stopColor="#C4A97D" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+
+                  {/* US state outlines */}
+                  <g className="us-map__states">
+                    {Object.entries(STATE_PATHS).map(([abbr, d]) => {
+                      const hasData = stateStats[abbr]
+                      const isSelected = selectedState === abbr
+                      const fill = hasData ? getStateColor(abbr) : '#3a473a'
+                      return (
+                        <path
+                          key={abbr}
+                          d={d}
+                          fill={fill}
+                          fillOpacity={isSelected ? 0.95 : selectedState ? 0.3 : 0.55}
+                          stroke={isSelected ? '#C4A97D' : '#5a6b54'}
+                          strokeWidth={(isSelected ? 1.5 : 0.6) * zoomScale}
+                          style={{ cursor: hasData ? 'pointer' : 'default', transition: 'fill-opacity 0.3s' }}
+                          onClick={() => {
+                            if (!hasData) return
+                            setSelectedState(selectedState === abbr ? null : abbr)
+                            setSelectedCourse(null)
+                            setMapZoom(1); setMapPan({ x: 0, y: 0 })
+                          }}
+                        />
+                      )
+                    })}
                   </g>
-                )
-              })}
 
-              {/* Top regions overlay (diamond markers) */}
-              {regionStats.slice(0, 5).map((r, i) => (
-                <g key={r.name} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)} style={{ cursor: 'pointer' }}>
-                  <circle cx={r.lat} cy={r.lng} r="14" fill="url(#topRegionGlow)" />
-                  <polygon points={`${r.lat},${r.lng - 8} ${r.lat + 8},${r.lng} ${r.lat},${r.lng + 8} ${r.lat - 8},${r.lng}`} fill="#C4A97D" stroke="#2B3529" strokeWidth="1.5" />
-                  <text x={r.lat} y={r.lng - 14} textAnchor="middle" fontSize="10" fontWeight="700" fill="#C4A97D">#{i + 1}</text>
-                </g>
-              ))}
-            </svg>
+                  {/* State-level bubbles + top-5 diamonds (hidden when zoomed in) */}
+                  {!selectedState && Object.entries(stateStats).map(([state, s]) => {
+                    const coord = STATE_COORDS[state]
+                    if (!coord) return null
+                    const size = 5 + (s.totalRounds / maxStateRounds) * 35
+                    return (
+                      <g key={state} className="map-state" onClick={() => { setSelectedState(state); setSelectedCourse(null); setMapZoom(1); setMapPan({ x: 0, y: 0 }) }} style={{ cursor: 'pointer' }}>
+                        <circle cx={coord[0]} cy={coord[1]} r={size + 8} fill="url(#bubbleGlow)" opacity="0.6" />
+                        <circle cx={coord[0]} cy={coord[1]} r={size} fill="#6B7F6A" stroke="#C4A97D" strokeWidth="1" opacity="0.85" />
+                        <text x={coord[0]} y={coord[1]} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight="600" fill="#F5F0E8" style={{ pointerEvents: 'none' }}>{state}</text>
+                        <text x={coord[0]} y={coord[1] + size + 12} textAnchor="middle" fontSize="9" fill="#C4A97D" style={{ pointerEvents: 'none' }}>{s.count}</text>
+                      </g>
+                    )
+                  })}
+                  {!selectedState && regionStats.slice(0, 5).map((r, i) => (
+                    <g key={r.name} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)} style={{ cursor: 'pointer' }}>
+                      <circle cx={r.lat} cy={r.lng} r="14" fill="url(#topRegionGlow)" />
+                      <polygon points={`${r.lat},${r.lng - 8} ${r.lat + 8},${r.lng} ${r.lat},${r.lng + 8} ${r.lat - 8},${r.lng}`} fill="#C4A97D" stroke="#2B3529" strokeWidth="1.5" />
+                      <text x={r.lat} y={r.lng - 14} textAnchor="middle" fontSize="10" fontWeight="700" fill="#C4A97D">#{i + 1}</text>
+                    </g>
+                  ))}
 
-            <div className="map-legend">
-              <div className="legend-row"><span className="legend-dot" style={{ background: '#6B7F6A' }} /> State Course Cluster</div>
-              <div className="legend-row"><span className="legend-diamond" /> Top 5 Target Regions</div>
-              <div className="legend-scale">
-                <span>Fewer rounds</span>
-                <div className="scale-gradient" />
-                <span>More rounds</span>
+                  {/* Connector lines from cluster anchor to each spread pin */}
+                  {selectedState && placedPins.filter(p => p.clustered).map(p => (
+                    <line
+                      key={`line-${p.c.rank}`}
+                      x1={p.anchor.x} y1={p.anchor.y}
+                      x2={p.x} y2={p.y}
+                      stroke="#C4A97D" strokeWidth={Math.max(0.4, 0.6 * zoomScale)}
+                      opacity="0.25"
+                    />
+                  ))}
+
+                  {/* Course pins */}
+                  {selectedState && placedPins.map(p => {
+                    const isSel = selectedCourse?.rank === p.c.rank
+                    const r = isSel ? pinRadius * 1.4 : pinRadius
+                    const glowR = r + Math.max(2, 3 * zoomScale)
+                    return (
+                      <g key={p.c.rank} onClick={(e) => { e.stopPropagation(); setSelectedCourse(isSel ? null : p.c) }} style={{ cursor: 'pointer' }}>
+                        <circle cx={p.x} cy={p.y} r={glowR} fill="#C4A97D" opacity={isSel ? 0.5 : 0.22} />
+                        <circle cx={p.x} cy={p.y} r={r} fill={isSel ? '#C4A97D' : '#4A6741'} stroke="#F5F0E8" strokeWidth={Math.max(1, 1.4 * zoomScale)} />
+                      </g>
+                    )
+                  })}
+                </svg>
+
+                {/* Zoom-out button when a state is selected */}
+                {selectedState && (
+                  <button className="map-zoomout" onClick={() => {
+                    setSelectedState(null); setSelectedCourse(null)
+                    setMapZoom(1); setMapPan({ x: 0, y: 0 })
+                  }}>
+                    &#8592; Back to USA
+                  </button>
+                )}
+
+                {/* Zoom in / out controls */}
+                <div className="map-zoom-controls">
+                  <button aria-label="Zoom in" onClick={() => setMapZoom(z => Math.min(8, z * 1.35))}>+</button>
+                  <button aria-label="Reset zoom" onClick={() => { setMapZoom(1); setMapPan({ x: 0, y: 0 }) }}>
+                    {mapZoom.toFixed(1)}×
+                  </button>
+                  <button aria-label="Zoom out" onClick={() => setMapZoom(z => Math.max(1, z / 1.35))}>−</button>
+                </div>
+
+                {/* Course detail popup */}
+                {selectedCourse && (
+                  <div className="course-popup">
+                    <button className="course-popup__close" onClick={() => setSelectedCourse(null)}>&times;</button>
+                    <div className="course-popup__rank">#{selectedCourse.rank}</div>
+                    <h3 className="course-popup__name">{selectedCourse.course}</h3>
+                    <div className="course-popup__loc">{selectedCourse.city}, {selectedCourse.state} {selectedCourse.zipCode}</div>
+                    <div className="course-popup__grid">
+                      <div><span>Access</span><strong>{selectedCourse.access}</strong></div>
+                      <div><span>Designer</span><strong>{selectedCourse.designer || '—'}</strong></div>
+                      <div><span>Year Opened</span><strong>{selectedCourse.yearOpened}</strong></div>
+                      <div><span>Playable Days</span><strong>{selectedCourse.playableDays}</strong></div>
+                      <div><span>Rounds / Yr</span><strong>{fmt(selectedCourse.totalRounds)}</strong></div>
+                      <div><span>Lodging / Night</span><strong className="gold">${selectedCourse.lodgingRate}</strong></div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="map-legend">
+                  {!selectedState && (<>
+                    <div className="legend-row"><span className="legend-dot" style={{ background: '#6B7F6A' }} /> State Course Cluster</div>
+                    <div className="legend-row"><span className="legend-diamond" /> Top 5 Target Regions</div>
+                  </>)}
+                  {selectedState && (<>
+                    <div className="legend-row"><span className="legend-dot" style={{ background: '#4A6741' }} /> Top Course ({coursesInState.length} in {STATE_NAMES[selectedState]})</div>
+                    <div className="legend-row legend-row--hint">Click a pin for course details</div>
+                  </>)}
+                </div>
               </div>
-            </div>
-          </div>
+            )
+          })()}
         </div>
       </section>
 
