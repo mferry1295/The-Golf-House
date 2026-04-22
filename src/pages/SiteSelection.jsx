@@ -361,27 +361,43 @@ export default function SiteSelection() {
                     })}
                   </g>
 
-                  {/* State-level bubbles + top-5 diamonds (hidden when zoomed in) */}
-                  {!selectedState && Object.entries(stateStats).map(([state, s]) => {
-                    const coord = STATE_COORDS[state]
-                    if (!coord) return null
-                    const size = 5 + (s.totalRounds / maxStateRounds) * 35
+                  {/* Top-region rank pins (hidden when zoomed into a state) */}
+                  {!selectedState && regionStats.slice(0, 10).map(r => {
+                    const isSel = selectedRegion?.name === r.name
+                    // First word of region name (e.g. "Sandhills / Pinehurst" -> "Sandhills")
+                    const shortName = r.name.split(/[\/,–-]/)[0].trim()
+                    const pinR = isSel ? 14 : 12
+                    const top3 = r.rank <= 3
                     return (
-                      <g key={state} className="map-state" onClick={() => { setSelectedState(state); setSelectedCourse(null); setMapZoom(1); setMapPan({ x: 0, y: 0 }) }} style={{ cursor: 'pointer' }}>
-                        <circle cx={coord[0]} cy={coord[1]} r={size + 8} fill="url(#bubbleGlow)" opacity="0.6" />
-                        <circle cx={coord[0]} cy={coord[1]} r={size} fill="#6B7F6A" stroke="#C4A97D" strokeWidth="1" opacity="0.85" />
-                        <text x={coord[0]} y={coord[1]} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight="600" fill="#F5F0E8" style={{ pointerEvents: 'none' }}>{state}</text>
-                        <text x={coord[0]} y={coord[1] + size + 12} textAnchor="middle" fontSize="9" fill="#C4A97D" style={{ pointerEvents: 'none' }}>{s.count}</text>
+                      <g key={r.name} onClick={() => setSelectedRegion(isSel ? null : r)} style={{ cursor: 'pointer' }}>
+                        <circle cx={r.lat} cy={r.lng} r={pinR + 8} fill="url(#topRegionGlow)" opacity={top3 ? 0.9 : 0.5} />
+                        <circle
+                          cx={r.lat} cy={r.lng} r={pinR}
+                          fill={top3 ? '#C4A97D' : '#4A6741'}
+                          stroke={top3 ? '#F5F0E8' : '#C4A97D'}
+                          strokeWidth="1.5"
+                        />
+                        <text
+                          x={r.lat} y={r.lng}
+                          textAnchor="middle" dominantBaseline="central"
+                          fontSize="10" fontWeight="700"
+                          fill={top3 ? '#2B3529' : '#F5F0E8'}
+                          style={{ pointerEvents: 'none' }}
+                        >
+                          {r.rank}
+                        </text>
+                        <text
+                          x={r.lat} y={r.lng + pinR + 11}
+                          textAnchor="middle"
+                          fontSize="9.5" fontWeight="600"
+                          fill="#F5F0E8"
+                          style={{ pointerEvents: 'none', paintOrder: 'stroke', stroke: '#2B3529', strokeWidth: 2.5, strokeLinejoin: 'round' }}
+                        >
+                          {shortName}
+                        </text>
                       </g>
                     )
                   })}
-                  {!selectedState && regionStats.slice(0, 5).map((r, i) => (
-                    <g key={r.name} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)} style={{ cursor: 'pointer' }}>
-                      <circle cx={r.lat} cy={r.lng} r="14" fill="url(#topRegionGlow)" />
-                      <polygon points={`${r.lat},${r.lng - 8} ${r.lat + 8},${r.lng} ${r.lat},${r.lng + 8} ${r.lat - 8},${r.lng}`} fill="#C4A97D" stroke="#2B3529" strokeWidth="1.5" />
-                      <text x={r.lat} y={r.lng - 14} textAnchor="middle" fontSize="10" fontWeight="700" fill="#C4A97D">#{i + 1}</text>
-                    </g>
-                  ))}
 
                   {/* Connector lines from cluster anchor to each spread pin */}
                   {selectedState && placedPins.filter(p => p.clustered).map(p => (
@@ -449,8 +465,9 @@ export default function SiteSelection() {
 
                 <div className="map-legend">
                   {!selectedState && (<>
-                    <div className="legend-row"><span className="legend-dot" style={{ background: '#6B7F6A' }} /> State Course Cluster</div>
-                    <div className="legend-row"><span className="legend-diamond" /> Top 5 Target Regions</div>
+                    <div className="legend-row"><span className="legend-dot legend-dot--gold" /> Top 3 Regions</div>
+                    <div className="legend-row"><span className="legend-dot" style={{ background: '#4A6741', border: '1.5px solid #C4A97D' }} /> #4–#10 Regions</div>
+                    <div className="legend-row legend-row--hint">Click a state to drop course pins</div>
                   </>)}
                   {selectedState && (<>
                     <div className="legend-row"><span className="legend-dot" style={{ background: '#4A6741' }} /> Top Course ({coursesInState.length} in {STATE_NAMES[selectedState]})</div>

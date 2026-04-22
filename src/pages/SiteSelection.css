@@ -178,6 +178,10 @@
   margin-bottom: 0.5rem;
 }
 
+.legend-dot--gold {
+  background: var(--warm-gold) !important;
+  border: 1.5px solid var(--cream) !important;
+}
 .legend-dot {
   width: 12px;
   height: 12px;
