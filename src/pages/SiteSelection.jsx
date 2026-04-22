@@ -215,8 +215,10 @@ export default function SiteSelection() {
           <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
 
           <div className="regions-grid">
-            {filteredRegions.slice(0, 12).map(r => (
-              <div key={r.name} className={`region-card ${r.rank <= 3 ? 'region-card--top' : ''}`} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)}>
+            {filteredRegions.slice(0, 12).map(r => {
+              const isExpanded = selectedRegion?.name === r.name
+              return (
+              <div key={r.name} className={`region-card ${r.rank <= 3 ? 'region-card--top' : ''} ${isExpanded ? 'region-card--expanded' : ''}`} onClick={() => setSelectedRegion(isExpanded ? null : r)}>
                 <div className="region-card__head">
                   <div className="region-card__rank">#{r.rank}</div>
                   <div className="region-card__score">
@@ -255,8 +257,78 @@ export default function SiteSelection() {
                   })}
                 </div>
 
+                {isExpanded && (
+                  <div className="region-card__expanded" onClick={e => e.stopPropagation()}>
+                    <div className="region-card__metrics">
+                      <div className="region-metric">
+                        <div className="region-metric__label">Total Rounds</div>
+                        <div className="region-metric__value">{fmt(r.totalRounds)}</div>
+                        <div className="region-metric__sub">/ year</div>
+                      </div>
+                      <div className="region-metric">
+                        <div className="region-metric__label">Courses</div>
+                        <div className="region-metric__value">{r.courses.length}</div>
+                        <div className="region-metric__sub">in top 300</div>
+                      </div>
+                      <div className="region-metric">
+                        <div className="region-metric__label">Top 100</div>
+                        <div className="region-metric__value">{r.top100}</div>
+                        <div className="region-metric__sub">ranked courses</div>
+                      </div>
+                      <div className="region-metric">
+                        <div className="region-metric__label">Avg Lodging</div>
+                        <div className="region-metric__value">${fmt(r.avgLodging)}</div>
+                        <div className="region-metric__sub">nightly ADR</div>
+                      </div>
+                      <div className="region-metric">
+                        <div className="region-metric__label">Build Cost</div>
+                        <div className="region-metric__value">${(r.avgBuildCost || 0).toFixed(1)}M</div>
+                        <div className="region-metric__sub">per cabin</div>
+                      </div>
+                      <div className="region-metric">
+                        <div className="region-metric__label">Operate Cost</div>
+                        <div className="region-metric__value">{r.avgOperateCost}%</div>
+                        <div className="region-metric__sub">of revenue</div>
+                      </div>
+                    </div>
+
+                    <div className="region-card__courses">
+                      <div className="region-card__courses-title">
+                        CONTRIBUTING COURSES <span className="region-card__courses-count">({r.courses.length})</span>
+                      </div>
+                      <div className="region-card__course-list">
+                        {r.courses
+                          .slice()
+                          .sort((a, b) => (a.rank || 9999) - (b.rank || 9999))
+                          .map(c => (
+                            <div key={c.course} className="region-course-row">
+                              <span className="region-course-row__rank">#{c.rank || '—'}</span>
+                              <div className="region-course-row__name-col">
+                                <div className="region-course-row__name">{c.course}</div>
+                                <div className="region-course-row__designer">
+                                  {[c.resort, c.designer].filter(Boolean).join(' · ')}
+                                </div>
+                              </div>
+                              <div className="region-course-row__meta">
+                                <span className={`region-course-row__access region-course-row__access--${(c.access || '').toLowerCase().replace(/\s+/g, '-')}`}>
+                                  {c.access || '—'}
+                                </span>
+                                <span className="region-course-row__rounds">{fmt(c.totalRounds)} rds/yr</span>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+
+                    <button className="region-card__close" onClick={() => setSelectedRegion(null)}>
+                      Collapse ×
+                    </button>
+                  </div>
+                )}
+
               </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* Heatmap follows directly below the cards */}

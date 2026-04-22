@@ -245,6 +245,169 @@
 .regions-grid > .region-card {
   flex: 0 0 260px;
   scroll-snap-align: start;
+  transition: flex-basis 0.3s ease;
+}
+
+.regions-grid > .region-card--expanded {
+  flex: 0 0 560px;
+  scroll-snap-align: start;
+  box-shadow: 0 10px 32px rgba(43, 53, 41, 0.28), 0 0 0 2px var(--warm-gold) inset !important;
+  transform: translateY(-3px);
+}
+
+.region-card__expanded {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(196, 169, 125, 0.25);
+  animation: fadeInExpand 0.25s ease-out;
+}
+
+@keyframes fadeInExpand {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.region-card__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.region-metric {
+  background: rgba(245, 240, 232, 0.05);
+  border: 1px solid rgba(196, 169, 125, 0.15);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+.region-metric__label {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: rgba(245, 240, 232, 0.55);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.region-metric__value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+.region-metric__sub {
+  font-size: 0.6rem;
+  color: rgba(245, 240, 232, 0.4);
+  margin-top: 0.15rem;
+}
+
+.region-card__courses-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--warm-gold);
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.region-card__courses-count {
+  color: rgba(245, 240, 232, 0.5);
+  font-weight: 500;
+}
+
+.region-card__course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.region-card__course-list::-webkit-scrollbar { width: 5px; }
+.region-card__course-list::-webkit-scrollbar-thumb {
+  background: rgba(196, 169, 125, 0.3);
+  border-radius: 3px;
+}
+
+.region-course-row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.4rem 0.55rem;
+  background: rgba(245, 240, 232, 0.04);
+  border: 1px solid rgba(196, 169, 125, 0.08);
+  border-radius: 5px;
+}
+
+.region-course-row__rank {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--warm-gold);
+  text-align: right;
+}
+
+.region-course-row__name {
+  font-size: 0.82rem;
+  color: var(--cream);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.region-course-row__designer {
+  font-size: 0.67rem;
+  color: rgba(245, 240, 232, 0.5);
+  margin-top: 0.05rem;
+}
+
+.region-course-row__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.region-course-row__access {
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  color: var(--cream);
+  background: rgba(107, 127, 106, 0.35);
+}
+.region-course-row__access--private { background: rgba(196, 169, 125, 0.35); }
+.region-course-row__access--resort { background: rgba(74, 103, 65, 0.5); }
+.region-course-row__access--public { background: rgba(139, 111, 78, 0.35); }
+.region-course-row__access--semi-private { background: rgba(107, 127, 106, 0.35); }
+
+.region-course-row__rounds {
+  font-size: 0.65rem;
+  color: rgba(245, 240, 232, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.region-card__close {
+  margin-top: 1rem;
+  width: 100%;
+  background: transparent;
+  color: var(--warm-gold);
+  border: 1px solid rgba(196, 169, 125, 0.35);
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.region-card__close:hover {
+  background: var(--warm-gold);
+  color: var(--deep-forest);
 }
 
 .region-card {
