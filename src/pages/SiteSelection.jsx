@@ -212,11 +212,6 @@ export default function SiteSelection() {
       {/* Top Target Regions — with inline weight tuner */}
       <section className="site-section site-section--dark">
         <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">TOP OPPORTUNITIES</span>
-            <h2 className="section-title">Ranked Target Regions</h2>
-            <div className="gold-line" />
-          </div>
           <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
 
           <div className="regions-grid">
@@ -269,16 +264,6 @@ export default function SiteSelection() {
       {/* Heatmap — second */}
       <section className="site-section">
         <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">ROUNDS CONCENTRATION MAP</span>
-            <h2 className="section-title">The Heatmap</h2>
-            <div className="gold-line" />
-            <p className="section-desc">
-              Bubble size reflects total rounds per year at top-ranked courses in each state.
-              Click a state on the map to filter the course list below.
-            </p>
-          </div>
-
           {(() => {
             // Dynamic viewBox - state bbox + user manual zoom + user pan
             let baseX = 0, baseY = 0, baseW = 960, baseH = 600
