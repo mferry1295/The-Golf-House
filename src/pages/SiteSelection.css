@@ -871,6 +871,90 @@
   box-shadow: 0 2px 12px rgba(43, 53, 41, 0.06);
   border: 1px solid rgba(43, 53, 41, 0.08);
 }
+
+/* Inline variant — compact row sitting above the regions grid */
+.weight-panel--inline {
+  background: rgba(245, 240, 232, 0.05);
+  border: 1px solid rgba(196, 169, 125, 0.2);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: none;
+}
+.weight-panel__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  color: var(--warm-gold);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.weight-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+.weight-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: rgba(245, 240, 232, 0.06);
+  border: 1px solid rgba(196, 169, 125, 0.18);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  flex: 1 1 140px;
+  min-width: 140px;
+}
+.weight-chip__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(245, 240, 232, 0.7);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.weight-chip__stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+.weight-chip__stepper .weight-stepper__btn {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(196, 169, 125, 0.3);
+  background: transparent;
+  color: var(--warm-gold);
+  border-radius: 5px;
+  font-size: 0.5rem;
+}
+.weight-chip__stepper .weight-stepper__btn:hover:not(:disabled) {
+  background: var(--warm-gold);
+  color: var(--deep-forest);
+}
+.weight-chip__value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cream);
+  text-align: center;
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+}
+.weight-reset--compact {
+  background: transparent;
+  color: var(--warm-gold);
+  border: 1px solid rgba(196, 169, 125, 0.3);
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  align-self: stretch;
+  transition: all 0.15s;
+}
+.weight-reset--compact:hover {
+  background: var(--warm-gold);
+  color: var(--deep-forest);
+}
 .weight-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

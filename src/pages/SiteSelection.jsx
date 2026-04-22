@@ -214,32 +214,15 @@ export default function SiteSelection() {
         </div>
       </div>
 
-      {/* Model Inputs — adjust weights to re-run scoring */}
-      <section className="site-section">
-        <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">MODEL INPUTS</span>
-            <h2 className="section-title">Tune The Scoring Model</h2>
-            <div className="gold-line" />
-            <p className="section-desc">
-              Adjust the weight of each factor below to re-rank target regions based on your investment thesis.
-            </p>
-          </div>
-          <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
-        </div>
-      </section>
-
-      {/* Top Target Regions — reacts to weight changes */}
+      {/* Top Target Regions — with inline weight tuner */}
       <section className="site-section site-section--dark">
         <div className="site-section__inner">
           <div className="site-section__head">
             <span className="section-label">TOP OPPORTUNITIES</span>
             <h2 className="section-title">Ranked Target Regions</h2>
             <div className="gold-line" />
-            <p className="section-desc">
-              Live ranking based on your weights above. Higher score = stronger fit for the next Albatross Club.
-            </p>
           </div>
+          <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
 
           <div className="regions-grid">
             {filteredRegions.slice(0, 12).map(r => (
@@ -648,48 +631,37 @@ export default function SiteSelection() {
 function WeightPanel({ weights, setWeights, defaults }) {
   const sum = weights.rounds + weights.top100 + weights.count + weights.lodging + weights.build + weights.operate
   const factors = [
-    { key: 'rounds', label: 'Rounds Concentration', desc: 'Annual rounds played across the metro. Higher rounds = more demand to capture.' },
-    { key: 'top100', label: 'Top-100 Presence', desc: 'Number of top-100 courses. Flagship courses drive destination travel.' },
-    { key: 'count', label: 'Course Density', desc: 'Total top-300 courses. Richer cluster supports longer stays.' },
-    { key: 'lodging', label: 'Lodging ADR Benchmark', desc: 'Avg nightly lodging rate at existing top-course properties. Proxies pricing power.' },
-    { key: 'build', label: 'Build Cost Efficiency', desc: 'Land + construction cost tier (lower = better). Inverted so cheaper markets score higher.' },
-    { key: 'operate', label: 'Operate Cost Efficiency', desc: 'Labor + state-level operating cost tier (lower = better). Inverted so cheaper markets score higher.' }
+    { key: 'rounds', label: 'Rounds', tip: 'Annual rounds played across the metro. Higher rounds = more demand.' },
+    { key: 'top100', label: 'Top-100', tip: 'Number of top-100 courses. Flagship courses drive destination travel.' },
+    { key: 'count', label: 'Density', tip: 'Total top-300 courses. Richer cluster supports longer stays.' },
+    { key: 'lodging', label: 'Lodging ADR', tip: 'Avg nightly lodging rate. Proxies pricing power.' },
+    { key: 'build', label: 'Build Cost', tip: 'City-tier build cost — inverted so cheaper markets score higher.' },
+    { key: 'operate', label: 'Op. Cost', tip: 'State-tier operating cost — inverted so cheaper markets score higher.' }
   ]
 
   const update = (key, value) => setWeights(prev => ({ ...prev, [key]: value }))
   const reset = () => setWeights(defaults)
 
   return (
-    <div className="weight-panel">
-      <div className="weight-grid">
+    <div className="weight-panel weight-panel--inline">
+      <div className="weight-panel__label">SCORING WEIGHTS</div>
+      <div className="weight-row">
         {factors.map(f => {
           const val = weights[f.key]
           const dec = () => update(f.key, Math.max(0, val - 5))
           const inc = () => update(f.key, Math.min(100, val + 5))
           return (
-            <div key={f.key} className="weight-card">
-              <div className="weight-card__head">
-                <div>
-                  <div className="weight-card__label">{f.label}</div>
-                  <p className="weight-card__desc">{f.desc}</p>
-                </div>
-                <div className="weight-stepper">
-                  <button className="weight-stepper__btn" onClick={dec} disabled={val <= 0} aria-label="Decrease">&#9660;</button>
-                  <div className="weight-stepper__value">{val}%</div>
-                  <button className="weight-stepper__btn" onClick={inc} disabled={val >= 100} aria-label="Increase">&#9650;</button>
-                </div>
+            <div key={f.key} className="weight-chip" title={f.tip}>
+              <div className="weight-chip__label">{f.label}</div>
+              <div className="weight-chip__stepper">
+                <button className="weight-stepper__btn" onClick={dec} disabled={val <= 0} aria-label="Decrease">&#9660;</button>
+                <span className="weight-chip__value">{val}%</span>
+                <button className="weight-stepper__btn" onClick={inc} disabled={val >= 100} aria-label="Increase">&#9650;</button>
               </div>
             </div>
           )
         })}
-      </div>
-
-      <div className="weight-footer">
-        <div className="weight-footer__total">
-          Raw total: <strong>{sum}</strong>
-          <span className="weight-footer__note">{sum === 100 ? 'Balanced' : 'Auto-normalized to 100%'}</span>
-        </div>
-        <button className="weight-reset" onClick={reset}>Reset to defaults</button>
+        <button className="weight-reset weight-reset--compact" onClick={reset}>Reset</button>
       </div>
     </div>
   )
