@@ -123,7 +123,7 @@ export default function SiteSelection() {
     const buildRange = Math.max(0.1, maxBuild - minBuild)
     const operateRange = Math.max(0.1, maxOperate - minOperate)
 
-    const regions = rawRegions.map(r => {
+    const scored = rawRegions.map(r => {
       const roundsScore = (r.totalRounds / maxRounds) * 100
       const top100Score = (r.top100 / maxTop100) * 100
       const countScore = (r.courses.length / maxCount) * 100
@@ -152,7 +152,11 @@ export default function SiteSelection() {
           operate: Math.round(operateScore),
         }
       }
-    }).sort((a, b) => b.siteScore - a.siteScore)
+    })
+    // Sort by site score and attach a stable rank
+    const regions = scored
+      .sort((a, b) => b.siteScore - a.siteScore)
+      .map((r, i) => ({ ...r, rank: i + 1 }))
 
     const top = Object.values(byState).sort((a, b) => b.totalRounds - a.totalRounds).slice(0, 10)
 
@@ -242,10 +246,10 @@ export default function SiteSelection() {
           </div>
 
           <div className="regions-grid">
-            {filteredRegions.slice(0, 12).map((r, i) => (
-              <div key={r.name} className={`region-card ${i < 3 ? 'region-card--top' : ''}`} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)}>
+            {filteredRegions.slice(0, 12).map(r => (
+              <div key={r.name} className={`region-card ${r.rank <= 3 ? 'region-card--top' : ''}`} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)}>
                 <div className="region-card__head">
-                  <div className="region-card__rank">#{i + 1}</div>
+                  <div className="region-card__rank">#{r.rank}</div>
                   <div className="region-card__score">
                     <div className="region-card__score-value">{r.siteScore}</div>
                     <div className="region-card__score-label">SITE SCORE</div>
@@ -266,7 +270,7 @@ export default function SiteSelection() {
                     <div className="region-metric__value">{r.top100}</div>
                     <div className="region-metric__label">Top 100</div>
                   </div>
-                  <div className="region-metric region-metric--highlight">
+                  <div className="region-metric">
                     <div className="region-metric__value">${r.avgLodging}</div>
                     <div className="region-metric__label">Avg ADR / Night</div>
                   </div>
