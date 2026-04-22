@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { LogoMark } from '../components/Logo'
 import './Home.css'
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <section className="hero">
         <div className="hero__overlay" />
         <div className="hero__content">
+          <LogoMark className="hero__logo" />
           <div className="hero__rule" />
           <h1 className="hero__title">THE ALBATROSS CLUB</h1>
           <p className="hero__tagline">Where the game comes home</p>

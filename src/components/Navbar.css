@@ -37,8 +37,13 @@
 }
 
 .navbar__logo-mark {
-  color: var(--warm-gold);
-  font-size: 1.5rem;
+  height: 42px;
+  width: auto;
+  color: var(--deep-forest);
+  transition: color 0.2s;
+}
+.navbar--dark .navbar__logo-mark {
+  color: var(--cream);
 }
 
 .navbar__logo-text {

@@ -26,6 +26,15 @@
   color: var(--cream);
 }
 
+.hero__logo {
+  height: 140px;
+  width: auto;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  display: inline-block;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+}
+
 .hero__rule {
   width: 120px;
   height: 2px;

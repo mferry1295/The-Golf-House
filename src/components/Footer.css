@@ -15,8 +15,9 @@
 }
 
 .footer__mark {
+  height: 64px;
+  width: auto;
   color: var(--warm-gold);
-  font-size: 1.5rem;
   display: block;
   margin-bottom: 1rem;
 }

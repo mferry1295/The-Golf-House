@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { LogoMark } from './Logo'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -11,7 +12,7 @@ export default function Navbar() {
     <nav className={`navbar ${isPlanner ? 'navbar--dark' : ''}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-mark">&#9830;</span>
+          <LogoMark className="navbar__logo-mark" />
           <div className="navbar__logo-text">
             <span className="navbar__logo-title">THE ALBATROSS CLUB</span>
             <span className="navbar__logo-sub">PINEHURST, NC</span>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { LogoMark } from './Logo'
 import './Footer.css'
 
 export default function Footer() {
@@ -6,7 +7,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <span className="footer__mark">&#9830;</span>
+          <LogoMark className="footer__mark" />
           <h3 className="footer__title">THE ALBATROSS CLUB</h3>
           <p className="footer__tagline">Where the game comes home</p>
           <p className="footer__location">Pinehurst, North Carolina</p>
