@@ -366,28 +366,28 @@ export default function SiteSelection() {
                     const isSel = selectedRegion?.name === r.name
                     // First word of region name (e.g. "Sandhills / Pinehurst" -> "Sandhills")
                     const shortName = r.name.split(/[\/,–-]/)[0].trim()
-                    const pinR = isSel ? 14 : 12
+                    const pinR = isSel ? 19 : 17
                     const top3 = r.rank <= 3
                     return (
                       <g key={r.name} onClick={() => setSelectedRegion(isSel ? null : r)} style={{ cursor: 'pointer' }}>
-                        <circle cx={r.lat} cy={r.lng} r={pinR + 8} fill="url(#topRegionGlow)" opacity={top3 ? 0.9 : 0.5} />
+                        <circle cx={r.lat} cy={r.lng} r={pinR + 9} fill="url(#topRegionGlow)" opacity={top3 ? 0.9 : 0.5} />
                         <circle
                           cx={r.lat} cy={r.lng} r={pinR}
                           fill={top3 ? '#C4A97D' : '#4A6741'}
                           stroke={top3 ? '#F5F0E8' : '#C4A97D'}
-                          strokeWidth="1.5"
+                          strokeWidth="1.75"
                         />
                         <text
                           x={r.lat} y={r.lng}
                           textAnchor="middle" dominantBaseline="central"
-                          fontSize="10" fontWeight="700"
+                          fontSize="15" fontWeight="700"
                           fill={top3 ? '#2B3529' : '#F5F0E8'}
                           style={{ pointerEvents: 'none' }}
                         >
                           {r.rank}
                         </text>
                         <text
-                          x={r.lat} y={r.lng + pinR + 11}
+                          x={r.lat} y={r.lng + pinR + 12}
                           textAnchor="middle"
                           fontSize="9.5" fontWeight="600"
                           fill="#F5F0E8"
