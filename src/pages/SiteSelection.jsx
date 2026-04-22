@@ -635,7 +635,9 @@ function WeightPanel({ weights, setWeights, defaults }) {
     <div className="weight-panel">
       <div className="weight-grid">
         {factors.map(f => {
-          const pct = sum > 0 ? Math.round((weights[f.key] / sum) * 100) : 0
+          const val = weights[f.key]
+          const dec = () => update(f.key, Math.max(0, val - 5))
+          const inc = () => update(f.key, Math.min(100, val + 5))
           return (
             <div key={f.key} className="weight-card">
               <div className="weight-card__head">
@@ -643,18 +645,12 @@ function WeightPanel({ weights, setWeights, defaults }) {
                   <div className="weight-card__label">{f.label}</div>
                   <p className="weight-card__desc">{f.desc}</p>
                 </div>
-                <div className="weight-card__value">{pct}%</div>
+                <div className="weight-stepper">
+                  <button className="weight-stepper__btn" onClick={dec} disabled={val <= 0} aria-label="Decrease">&#9660;</button>
+                  <div className="weight-stepper__value">{val}%</div>
+                  <button className="weight-stepper__btn" onClick={inc} disabled={val >= 100} aria-label="Increase">&#9650;</button>
+                </div>
               </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                value={weights[f.key]}
-                onChange={e => update(f.key, parseInt(e.target.value))}
-                className="weight-slider"
-                style={{ '--pct': `${weights[f.key]}%` }}
-              />
             </div>
           )
         })}

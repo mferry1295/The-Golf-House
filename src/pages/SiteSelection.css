@@ -883,51 +883,48 @@
   line-height: 1.4;
   margin: 0;
 }
-.weight-card__value {
+/* Stepper: up/down arrows flanking the % value */
+.weight-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #fff;
+  border: 1px solid rgba(43, 53, 41, 0.12);
+  border-radius: 10px;
+  padding: 0.25rem;
+  box-shadow: 0 1px 3px rgba(43, 53, 41, 0.05);
+}
+.weight-stepper__btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--carolina-green);
+  border-radius: 7px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+.weight-stepper__btn:hover:not(:disabled) {
+  background: var(--carolina-green);
+  color: #fff;
+}
+.weight-stepper__btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.weight-stepper__value {
   font-family: 'Playfair Display', serif;
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--carolina-green);
   min-width: 3.5rem;
-  text-align: right;
+  text-align: center;
   line-height: 1;
-}
-
-.weight-slider {
-  width: 100%;
-  height: 6px;
-  -webkit-appearance: none;
-  appearance: none;
-  background: linear-gradient(to right,
-    var(--carolina-green) 0%,
-    var(--carolina-green) var(--pct, 50%),
-    rgba(43, 53, 41, 0.12) var(--pct, 50%),
-    rgba(43, 53, 41, 0.12) 100%);
-  border-radius: 3px;
-  outline: none;
-  cursor: pointer;
-}
-.weight-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--carolina-green);
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(43, 53, 41, 0.18);
-  transition: transform 0.15s;
-}
-.weight-slider::-webkit-slider-thumb:hover { transform: scale(1.12); }
-.weight-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--carolina-green);
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(43, 53, 41, 0.18);
+  font-variant-numeric: tabular-nums;
 }
 
 .weight-footer {
