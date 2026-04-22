@@ -29,6 +29,7 @@ export default function Navbar() {
           <li><Link to="/dining" onClick={() => setMenuOpen(false)}>Dining & Bar</Link></li>
           <li><Link to="/wellness" onClick={() => setMenuOpen(false)}>Wellness</Link></li>
           <li><Link to="/site-selection" onClick={() => setMenuOpen(false)}>Site Selection</Link></li>
+          <li><Link to="/financial-model" onClick={() => setMenuOpen(false)}>Financial Model</Link></li>
           <li>
             <Link to="/property-planner" className="navbar__cta" onClick={() => setMenuOpen(false)}>
               Property Planner

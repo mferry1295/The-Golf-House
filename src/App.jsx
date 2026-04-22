@@ -7,6 +7,7 @@ import Dining from './pages/Dining'
 import Wellness from './pages/Wellness'
 import PropertyPlanner from './pages/PropertyPlanner'
 import SiteSelection from './pages/SiteSelection'
+import FinancialModel from './pages/FinancialModel'
 import Footer from './components/Footer'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/wellness" element={<Wellness />} />
         <Route path="/property-planner" element={<PropertyPlanner />} />
         <Route path="/site-selection" element={<SiteSelection />} />
+        <Route path="/financial-model" element={<FinancialModel />} />
       </Routes>
       <Footer />
     </div>
