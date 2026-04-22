@@ -209,8 +209,8 @@ export default function SiteSelection() {
         </div>
       </div>
 
-      {/* Top Target Regions — with inline weight tuner */}
-      <section className="site-section site-section--dark">
+      {/* Combined: weights → cards → map, all on cream bg */}
+      <section className="site-section">
         <div className="site-section__inner">
           <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
 
@@ -258,12 +258,8 @@ export default function SiteSelection() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Heatmap — second */}
-      <section className="site-section">
-        <div className="site-section__inner">
+          {/* Heatmap follows directly below the cards */}
           {(() => {
             // Dynamic viewBox - state bbox + user manual zoom + user pan
             let baseX = 0, baseY = 0, baseW = 960, baseH = 600
