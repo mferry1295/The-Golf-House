@@ -168,7 +168,61 @@ export default function SiteSelection() {
         </div>
       </div>
 
-      {/* Map + Top Regions */}
+      {/* Top Target Regions — moved to top */}
+      <section className="site-section site-section--dark">
+        <div className="site-section__inner">
+          <div className="site-section__head">
+            <span className="section-label">TOP OPPORTUNITIES</span>
+            <h2 className="section-title">Ranked Target Regions</h2>
+            <div className="gold-line" />
+            <p className="section-desc">
+              Each region scored on rounds density, top-100 course count, flagship presence, and overall course count.
+            </p>
+          </div>
+
+          <div className="regions-grid">
+            {filteredRegions.slice(0, 12).map((r, i) => (
+              <div key={r.name} className={`region-card ${i < 3 ? 'region-card--top' : ''}`} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)}>
+                <div className="region-card__head">
+                  <div className="region-card__rank">#{i + 1}</div>
+                  <div className="region-card__score">
+                    <div className="region-card__score-value">{r.siteScore}</div>
+                    <div className="region-card__score-label">SITE SCORE</div>
+                  </div>
+                </div>
+                <h3 className="region-card__name">{r.name}</h3>
+                <div className="region-card__state">{STATE_NAMES[r.state]}</div>
+                <div className="region-card__metrics">
+                  <div className="region-metric">
+                    <div className="region-metric__value">{r.courses.length}</div>
+                    <div className="region-metric__label">Top Courses</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__value">{fmt(r.totalRounds)}</div>
+                    <div className="region-metric__label">Rounds / Yr</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__value">{r.top100}</div>
+                    <div className="region-metric__label">Top 100</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__value">{r.top10}</div>
+                    <div className="region-metric__label">Top 10</div>
+                  </div>
+                </div>
+                <div className="region-card__bar">
+                  <div className="region-card__bar-fill" style={{ width: `${r.siteScore}%` }} />
+                </div>
+                <div className="region-card__cities">
+                  {r.cities.slice(0, 4).map(c => <span key={c} className="city-chip">{c}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Heatmap — second */}
       <section className="site-section">
         <div className="site-section__inner">
           <div className="site-section__head">
@@ -177,7 +231,7 @@ export default function SiteSelection() {
             <div className="gold-line" />
             <p className="section-desc">
               Bubble size reflects total rounds per year at top-ranked courses in each state.
-              Hover over a state to see details. Click to filter courses.
+              Click a state on the map to filter the course list below.
             </p>
           </div>
 
@@ -255,102 +309,18 @@ export default function SiteSelection() {
         </div>
       </section>
 
-      {/* Top Target Regions */}
-      <section className="site-section site-section--dark">
-        <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">TOP OPPORTUNITIES</span>
-            <h2 className="section-title">Ranked Target Regions</h2>
-            <div className="gold-line" />
-            <p className="section-desc">
-              Each region scored on rounds density, top-100 course count, flagship presence, and overall course count.
-            </p>
-          </div>
-
-          <div className="regions-grid">
-            {filteredRegions.slice(0, 12).map((r, i) => (
-              <div key={r.name} className={`region-card ${i < 3 ? 'region-card--top' : ''}`} onClick={() => setSelectedRegion(selectedRegion?.name === r.name ? null : r)}>
-                <div className="region-card__head">
-                  <div className="region-card__rank">#{i + 1}</div>
-                  <div className="region-card__score">
-                    <div className="region-card__score-value">{r.siteScore}</div>
-                    <div className="region-card__score-label">SITE SCORE</div>
-                  </div>
-                </div>
-                <h3 className="region-card__name">{r.name}</h3>
-                <div className="region-card__state">{STATE_NAMES[r.state]}</div>
-                <div className="region-card__metrics">
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.courses.length}</div>
-                    <div className="region-metric__label">Top Courses</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{fmt(r.totalRounds)}</div>
-                    <div className="region-metric__label">Rounds / Yr</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.top100}</div>
-                    <div className="region-metric__label">Top 100</div>
-                  </div>
-                  <div className="region-metric">
-                    <div className="region-metric__value">{r.top10}</div>
-                    <div className="region-metric__label">Top 10</div>
-                  </div>
-                </div>
-                <div className="region-card__bar">
-                  <div className="region-card__bar-fill" style={{ width: `${r.siteScore}%` }} />
-                </div>
-                <div className="region-card__cities">
-                  {r.cities.slice(0, 4).map(c => <span key={c} className="city-chip">{c}</span>)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* State Rankings */}
-      <section className="site-section">
-        <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">BY STATE</span>
-            <h2 className="section-title">Rounds Concentration by State</h2>
-            <div className="gold-line" />
-          </div>
-
-          <div className="state-bars">
-            {topStates.map((s, i) => (
-              <div key={s.state} className="state-bar" onClick={() => setSelectedState(selectedState === s.state ? null : s.state)}>
-                <div className="state-bar__rank">{i + 1}</div>
-                <div className="state-bar__name">{STATE_NAMES[s.state]} <span className="state-bar__abbr">{s.state}</span></div>
-                <div className="state-bar__track">
-                  <div className="state-bar__fill" style={{ width: `${(s.totalRounds / topStates[0].totalRounds) * 100}%` }}>
-                    <span className="state-bar__value">{fmt(s.totalRounds)} rounds/yr</span>
-                  </div>
-                </div>
-                <div className="state-bar__meta">
-                  <span>{s.count} courses</span>
-                  <span className="state-bar__access">
-                    <span title="Private" style={{ color: '#8B6F4E' }}>{s.private}P</span>
-                    {' · '}
-                    <span title="Resort" style={{ color: '#C4A97D' }}>{s.resort}R</span>
-                    {' · '}
-                    <span title="Public" style={{ color: '#6B7F6A' }}>{s.public + s.semi}Pb</span>
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Course Table */}
+      {/* Filter & Explore — driven by map selection */}
       <section className="site-section site-section--dark">
         <div className="site-section__inner">
           <div className="site-section__head">
             <span className="section-label">COURSE EXPLORER</span>
             <h2 className="section-title">Filter & Explore</h2>
             <div className="gold-line" />
+            <p className="section-desc">
+              {selectedState
+                ? `Showing top courses in ${STATE_NAMES[selectedState]}.`
+                : 'Click a state on the map above to narrow the list, or filter manually below.'}
+            </p>
           </div>
 
           <div className="filters">
