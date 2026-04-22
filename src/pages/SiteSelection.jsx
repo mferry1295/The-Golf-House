@@ -53,12 +53,15 @@ function fmt(n) {
   return n.toLocaleString()
 }
 
+const DEFAULT_WEIGHTS = { rounds: 40, top100: 25, top10: 20, count: 15 }
+
 export default function SiteSelection() {
   const [accessFilter, setAccessFilter] = useState('All')
   const [stateFilter, setStateFilter] = useState('All')
   const [sortBy, setSortBy] = useState('totalRounds')
   const [selectedState, setSelectedState] = useState(null)
   const [selectedRegion, setSelectedRegion] = useState(null)
+  const [weights, setWeights] = useState(DEFAULT_WEIGHTS)
 
   const courses = coursesData
 
@@ -76,20 +79,26 @@ export default function SiteSelection() {
       else byState[c.state].semi++
     })
 
+    // Normalize weights so they sum to 1 (handles user-entered values that don't total 100)
+    const wSum = Math.max(1, weights.rounds + weights.top100 + weights.top10 + weights.count)
+    const wRounds = weights.rounds / wSum
+    const wTop100 = weights.top100 / wSum
+    const wTop10 = weights.top10 / wSum
+    const wCount = weights.count / wSum
+
     const regions = REGIONS.map(r => {
       const matching = courses.filter(c => c.state === r.state && r.cities.some(city => c.city && c.city.toLowerCase().includes(city.toLowerCase())))
       const totalRounds = matching.reduce((s, c) => s + (c.totalRounds || 0), 0)
       const top10 = matching.filter(c => c.rank <= 10).length
       const top50 = matching.filter(c => c.rank <= 50).length
       const top100 = matching.filter(c => c.rank <= 100).length
-      // Site score: weighted formula
-      // 40% rounds concentration, 25% top-100 count, 20% top-10 presence, 15% course count
+      // Each sub-score normalized to 0-100
       const roundsScore = Math.min(100, totalRounds / 800)
       const top100Score = Math.min(100, top100 * 12)
       const top10Score = Math.min(100, top10 * 25)
       const countScore = Math.min(100, matching.length * 10)
-      const siteScore = Math.round(roundsScore * 0.4 + top100Score * 0.25 + top10Score * 0.2 + countScore * 0.15)
-      return { ...r, courses: matching, totalRounds, top10, top50, top100, siteScore }
+      const siteScore = Math.round(roundsScore * wRounds + top100Score * wTop100 + top10Score * wTop10 + countScore * wCount)
+      return { ...r, courses: matching, totalRounds, top10, top50, top100, siteScore, subScores: { rounds: Math.round(roundsScore), top100: Math.round(top100Score), top10: Math.round(top10Score), count: Math.round(countScore) } }
     }).sort((a, b) => b.siteScore - a.siteScore)
 
     const top = Object.values(byState).sort((a, b) => b.totalRounds - a.totalRounds).slice(0, 10)
@@ -105,7 +114,7 @@ export default function SiteSelection() {
     }
 
     return { stateStats: byState, regionStats: regions, topStates: top, globalStats: global }
-  }, [courses])
+  }, [courses, weights])
 
   // Filtered + sorted table
   const displayCourses = useMemo(() => {
@@ -146,29 +155,25 @@ export default function SiteSelection() {
           <p className="site-selection__subtitle">
             Rounds concentration analysis across America's top 300 courses — identifying the strongest metropolitan clusters for the next Albatross Club property.
           </p>
-
-          <div className="site-selection__stats">
-            <div className="stat-card">
-              <div className="stat-card__value">{fmt(globalStats.totalCourses)}</div>
-              <div className="stat-card__label">Top Courses Analyzed</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-card__value">{fmt(globalStats.totalRounds)}</div>
-              <div className="stat-card__label">Total Rounds / Year</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-card__value">{globalStats.states}</div>
-              <div className="stat-card__label">States Represented</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-card__value">{fmt(globalStats.avgRounds)}</div>
-              <div className="stat-card__label">Avg Rounds / Course</div>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Top Target Regions — moved to top */}
+      {/* Model Inputs — adjust weights to re-run scoring */}
+      <section className="site-section">
+        <div className="site-section__inner">
+          <div className="site-section__head">
+            <span className="section-label">MODEL INPUTS</span>
+            <h2 className="section-title">Tune The Scoring Model</h2>
+            <div className="gold-line" />
+            <p className="section-desc">
+              Adjust the weight of each factor below to re-rank target regions based on your investment thesis.
+            </p>
+          </div>
+          <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
+        </div>
+      </section>
+
+      {/* Top Target Regions — reacts to weight changes */}
       <section className="site-section site-section--dark">
         <div className="site-section__inner">
           <div className="site-section__head">
@@ -176,7 +181,7 @@ export default function SiteSelection() {
             <h2 className="section-title">Ranked Target Regions</h2>
             <div className="gold-line" />
             <p className="section-desc">
-              Each region scored on rounds density, top-100 course count, flagship presence, and overall course count.
+              Live ranking based on your weights above. Higher score = stronger fit for the next Albatross Club.
             </p>
           </div>
 
@@ -400,36 +405,58 @@ export default function SiteSelection() {
         </div>
       </section>
 
-      {/* Methodology */}
-      <section className="site-section">
-        <div className="site-section__inner methodology">
-          <span className="section-label">METHODOLOGY</span>
-          <h2 className="section-title">How Site Score Is Calculated</h2>
-          <div className="gold-line" />
-          <div className="methodology-grid">
-            <div className="methodology-item">
-              <div className="methodology-item__weight">40%</div>
-              <h4>Rounds Concentration</h4>
-              <p>Total annual rounds played across all top-300 courses in the metro cluster. Higher rounds = more golf demand to capture.</p>
+    </div>
+  )
+}
+
+function WeightPanel({ weights, setWeights, defaults }) {
+  const sum = weights.rounds + weights.top100 + weights.top10 + weights.count
+  const factors = [
+    { key: 'rounds', label: 'Rounds Concentration', desc: 'Annual rounds played across the metro. Higher rounds = more demand to capture.' },
+    { key: 'top100', label: 'Top-100 Presence', desc: 'Number of top-100 courses. Flagship courses drive destination travel.' },
+    { key: 'top10', label: 'Elite Anchors', desc: 'Top-10 course presence. Signals a pilgrimage destination.' },
+    { key: 'count', label: 'Course Density', desc: 'Total top-300 courses. Richer cluster supports longer stays.' }
+  ]
+
+  const update = (key, value) => setWeights(prev => ({ ...prev, [key]: value }))
+  const reset = () => setWeights(defaults)
+
+  return (
+    <div className="weight-panel">
+      <div className="weight-grid">
+        {factors.map(f => {
+          const pct = sum > 0 ? Math.round((weights[f.key] / sum) * 100) : 0
+          return (
+            <div key={f.key} className="weight-card">
+              <div className="weight-card__head">
+                <div>
+                  <div className="weight-card__label">{f.label}</div>
+                  <p className="weight-card__desc">{f.desc}</p>
+                </div>
+                <div className="weight-card__value">{pct}%</div>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value={weights[f.key]}
+                onChange={e => update(f.key, parseInt(e.target.value))}
+                className="weight-slider"
+                style={{ '--pct': `${weights[f.key]}%` }}
+              />
             </div>
-            <div className="methodology-item">
-              <div className="methodology-item__weight">25%</div>
-              <h4>Top-100 Presence</h4>
-              <p>Number of top-100 ranked courses in the region. Flagship courses drive destination travel.</p>
-            </div>
-            <div className="methodology-item">
-              <div className="methodology-item__weight">20%</div>
-              <h4>Elite Anchors</h4>
-              <p>Top-10 course presence signals that the region is a pilgrimage destination for serious golfers.</p>
-            </div>
-            <div className="methodology-item">
-              <div className="methodology-item__weight">15%</div>
-              <h4>Course Density</h4>
-              <p>Total number of top-300 courses — a richer cluster supports longer stays and multi-course itineraries.</p>
-            </div>
-          </div>
+          )
+        })}
+      </div>
+
+      <div className="weight-footer">
+        <div className="weight-footer__total">
+          Raw total: <strong>{sum}</strong>
+          <span className="weight-footer__note">{sum === 100 ? 'Balanced' : 'Auto-normalized to 100%'}</span>
         </div>
-      </section>
+        <button className="weight-reset" onClick={reset}>Reset to defaults</button>
+      </div>
     </div>
   )
 }
