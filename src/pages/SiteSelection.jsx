@@ -92,7 +92,8 @@ export default function SiteSelection() {
     const wCount = weights.count / wSum
     const wLodging = weights.lodging / wSum
 
-    const regions = REGIONS.map(r => {
+    // Pass 1: compute raw metrics for every region
+    const rawRegions = REGIONS.map(r => {
       const matching = courses.filter(c => c.state === r.state && r.cities.some(city => c.city && c.city.toLowerCase().includes(city.toLowerCase())))
       const totalRounds = matching.reduce((s, c) => s + (c.totalRounds || 0), 0)
       const top10 = matching.filter(c => c.rank <= 10).length
@@ -102,14 +103,23 @@ export default function SiteSelection() {
       const avgSeasonality = matching.length ? matching.reduce((s, c) => s + (c.seasonality || 0), 0) / matching.length : 0
       const avgYearOpened = matching.length ? Math.round(matching.reduce((s, c) => s + (c.yearOpened || 0), 0) / matching.length) : 0
       const avgAdditionalSpend = matching.length ? Math.round(matching.reduce((s, c) => s + (c.additionalSpend || 0), 0) / matching.length) : 0
+      return { ...r, courses: matching, totalRounds, top10, top50, top100, avgLodging, avgSeasonality, avgYearOpened, avgAdditionalSpend }
+    })
 
-      // Each sub-score normalized to 0-100
-      const roundsScore = Math.min(100, totalRounds / 800)
-      const top100Score = Math.min(100, top100 * 12)
-      const top10Score = Math.min(100, top10 * 25)
-      const countScore = Math.min(100, matching.length * 10)
-      // Lodging ADR benchmark: $150 → 0, $550 → 50, $950+ → 100
-      const lodgingScore = Math.max(0, Math.min(100, (avgLodging - 150) / 8))
+    // Pass 2: normalize each sub-score to 0–100 relative to the top region on that factor
+    // (min-max with floor at 0 — "best in class" always = 100)
+    const maxRounds = Math.max(1, ...rawRegions.map(r => r.totalRounds))
+    const maxTop100 = Math.max(1, ...rawRegions.map(r => r.top100))
+    const maxTop10 = Math.max(1, ...rawRegions.map(r => r.top10))
+    const maxCount = Math.max(1, ...rawRegions.map(r => r.courses.length))
+    const maxLodging = Math.max(1, ...rawRegions.map(r => r.avgLodging))
+
+    const regions = rawRegions.map(r => {
+      const roundsScore = (r.totalRounds / maxRounds) * 100
+      const top100Score = (r.top100 / maxTop100) * 100
+      const top10Score = maxTop10 > 0 ? (r.top10 / maxTop10) * 100 : 0
+      const countScore = (r.courses.length / maxCount) * 100
+      const lodgingScore = (r.avgLodging / maxLodging) * 100
 
       const siteScore = Math.round(
         roundsScore * wRounds +
@@ -120,9 +130,6 @@ export default function SiteSelection() {
       )
       return {
         ...r,
-        courses: matching,
-        totalRounds, top10, top50, top100,
-        avgLodging, avgSeasonality, avgYearOpened, avgAdditionalSpend,
         siteScore,
         subScores: {
           rounds: Math.round(roundsScore),
