@@ -12,7 +12,8 @@ export default function Navbar() {
     <nav className={`navbar ${isPlanner ? 'navbar--dark' : ''}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
-          <LogoMark className="navbar__logo-mark" />
+          <LogoMark variant="green" className="navbar__logo-mark navbar__logo-mark--light" />
+          <LogoMark variant="white" className="navbar__logo-mark navbar__logo-mark--dark" />
           <div className="navbar__logo-text">
             <span className="navbar__logo-title">THE ALBATROSS CLUB</span>
             <span className="navbar__logo-sub">PINEHURST, NC</span>

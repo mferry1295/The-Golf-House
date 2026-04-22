@@ -39,12 +39,10 @@
 .navbar__logo-mark {
   height: 42px;
   width: auto;
-  color: var(--deep-forest);
-  transition: color 0.2s;
 }
-.navbar--dark .navbar__logo-mark {
-  color: var(--cream);
-}
+.navbar__logo-mark--dark { display: none; }
+.navbar--dark .navbar__logo-mark--light { display: none; }
+.navbar--dark .navbar__logo-mark--dark { display: inline-block; }
 
 .navbar__logo-text {
   display: flex;

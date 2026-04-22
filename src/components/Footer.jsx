@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <LogoMark className="footer__mark" />
+          <LogoMark variant="white" className="footer__mark" />
           <h3 className="footer__title">THE ALBATROSS CLUB</h3>
           <p className="footer__tagline">Where the game comes home</p>
           <p className="footer__location">Pinehurst, North Carolina</p>

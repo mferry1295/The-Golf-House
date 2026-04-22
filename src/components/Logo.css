@@ -2,8 +2,9 @@
   display: inline-block;
   width: auto;
   height: 100%;
-  color: currentColor;
-  overflow: visible;
+  user-select: none;
+  -webkit-user-drag: none;
+  object-fit: contain;
 }
 
 .albatross-lockup {
@@ -11,7 +12,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  color: currentColor;
 }
 
 .albatross-lockup__mark {
