@@ -301,7 +301,7 @@ export default function SiteSelection() {
                           .slice()
                           .sort((a, b) => (a.rank || 9999) - (b.rank || 9999))
                           .map(c => (
-                            <div key={c.course} className="region-course-row">
+                            <div key={`${c.rank}-${c.course}`} className="region-course-row">
                               <span className="region-course-row__rank">#{c.rank || '—'}</span>
                               <div className="region-course-row__name-col">
                                 <div className="region-course-row__name">{c.course}</div>
