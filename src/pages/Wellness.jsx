@@ -2,15 +2,45 @@ import { Link } from 'react-router-dom'
 import './Wellness.css'
 
 export default function Wellness() {
+  const base = import.meta.env.BASE_URL
   return (
     <div className="wellness">
-      <section className="well-hero">
+      <section className="well-hero" style={{ backgroundImage: `url(${base}renderings/spa-cold-tubs.png)` }}>
         <div className="well-hero__overlay" />
         <div className="well-hero__content">
           <p className="section-label">06 &middot; Wellness & Recovery</p>
           <h1 className="well-hero__title">Wellness & Recovery</h1>
           <div className="gold-line" style={{ margin: '1rem auto' }} />
           <p className="well-hero__sub">Cold plunge, sauna, and fitness designed for the active traveler</p>
+        </div>
+      </section>
+
+      {/* Image showcase */}
+      <section className="well-showcase">
+        <div className="container">
+          <div className="well-showcase__grid">
+            <figure className="well-showcase__item">
+              <img src={`${base}renderings/spa-cold-tubs.png`} alt="Spa with cold tubs" loading="lazy" />
+              <figcaption>
+                <span className="well-showcase__label">Spa &amp; Cold Tubs</span>
+                <span className="well-showcase__sub">Cold plunge and hot soak ritual after 36 holes</span>
+              </figcaption>
+            </figure>
+            <figure className="well-showcase__item">
+              <img src={`${base}renderings/workout-room.png`} alt="Workout room" loading="lazy" />
+              <figcaption>
+                <span className="well-showcase__label">Fitness Studio</span>
+                <span className="well-showcase__sub">Peloton, free weights, and stretch space under vaulted ceilings</span>
+              </figcaption>
+            </figure>
+            <figure className="well-showcase__item well-showcase__item--wide">
+              <img src={`${base}renderings/locker-room.png`} alt="Locker room" loading="lazy" />
+              <figcaption>
+                <span className="well-showcase__label">Members Locker Room</span>
+                <span className="well-showcase__sub">Walnut cabinetry, shoeshine station, and cigar humidor</span>
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -41,17 +71,14 @@ export default function Wellness() {
             </div>
             <div className="well-grid__cards">
               <div className="well-card well-card--plunge">
-                <span className="well-card__icon">&#10052;</span>
                 <h3>Cold Plunge</h3>
                 <p>Indoor and outdoor cold plunge pools for post-round recovery and morning ritual</p>
               </div>
               <div className="well-card well-card--sauna">
-                <span className="well-card__icon">&#9832;</span>
                 <h3>Finnish Sauna</h3>
                 <p>Dry sauna with views of the longleaf pine forest through floor-to-ceiling glass</p>
               </div>
               <div className="well-card well-card--fitness">
-                <span className="well-card__icon">&#127947;</span>
                 <h3>Fitness Center</h3>
                 <p>Full gym with Peloton bikes, free weights, and stretch zones under vaulted ceilings</p>
               </div>
@@ -97,7 +124,7 @@ export default function Wellness() {
           <div className="gold-line" style={{ margin: '1rem auto 2rem' }} />
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/experience" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>The Experience</Link>
-            <Link to="/suites" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>Suites</Link>
+            <Link to="/cabins" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>Cabins</Link>
             <Link to="/property-planner" className="btn btn--gold">Property Planner</Link>
           </div>
         </div>

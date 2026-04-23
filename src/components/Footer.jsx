@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="footer__col">
             <h4>Explore</h4>
             <Link to="/experience">The Experience</Link>
-            <Link to="/suites">Suites</Link>
+            <Link to="/cabins">Cabins</Link>
             <Link to="/dining">Dining & Bar</Link>
             <Link to="/wellness">Wellness</Link>
           </div>

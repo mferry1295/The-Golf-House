@@ -2,15 +2,38 @@ import { Link } from 'react-router-dom'
 import './Dining.css'
 
 export default function Dining() {
+  const base = import.meta.env.BASE_URL
   return (
     <div className="dining">
-      <section className="dining-hero">
+      <section className="dining-hero" style={{ backgroundImage: `url(${base}renderings/lobby-bar.png)` }}>
         <div className="dining-hero__overlay" />
         <div className="dining-hero__content">
-          <p className="section-label">05 &middot; The Bar</p>
+          <p className="section-label">05 &middot; Dining &amp; Bar</p>
           <h1 className="dining-hero__title">The 19th Hole</h1>
           <div className="gold-line" style={{ margin: '1rem auto' }} />
           <p className="dining-hero__sub">Where the round lives on</p>
+        </div>
+      </section>
+
+      {/* Image showcase */}
+      <section className="dining-showcase">
+        <div className="container">
+          <div className="dining-showcase__grid">
+            <figure className="dining-showcase__item">
+              <img src={`${base}renderings/lobby-bar.png`} alt="Lobby bar" loading="lazy" />
+              <figcaption>
+                <span className="dining-showcase__label">The Lobby Bar</span>
+                <span className="dining-showcase__sub">Craft cocktails, curated spirits, and Carolina charm</span>
+              </figcaption>
+            </figure>
+            <figure className="dining-showcase__item">
+              <img src={`${base}renderings/sports-bar.png`} alt="Sports bar" loading="lazy" />
+              <figcaption>
+                <span className="dining-showcase__label">The Sports Bar</span>
+                <span className="dining-showcase__sub">Live golf, whiskey tastings, and a fireplace lounge</span>
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -68,12 +91,10 @@ export default function Dining() {
           <div className="dining-grid dining-grid--reverse">
             <div className="dining-grid__cards">
               <div className="dining-visual">
-                <span className="dining-visual__icon">&#127860;</span>
                 <h3>The Dining Room</h3>
                 <p>Elegant yet relaxed dining experience with views of the grounds and putting greens through floor-to-ceiling windows</p>
               </div>
               <div className="dining-visual dining-visual--sage">
-                <span className="dining-visual__icon">&#127815;</span>
                 <h3>Farm to Table</h3>
                 <p>Seasonal menus featuring locally sourced ingredients from North Carolina farms and purveyors</p>
               </div>
@@ -157,7 +178,7 @@ export default function Dining() {
           <h2 className="section-title" style={{ color: 'var(--cream)' }}>Continue Exploring</h2>
           <div className="gold-line" style={{ margin: '1rem auto 2rem' }} />
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/suites" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>The Suites</Link>
+            <Link to="/cabins" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>The Cabins</Link>
             <Link to="/wellness" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>Wellness</Link>
             <Link to="/property-planner" className="btn btn--gold">Property Planner</Link>
           </div>

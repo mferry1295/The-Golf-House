@@ -1147,7 +1147,6 @@ export default function PropertyPlanner() {
       {/* Path mode bar */}
       {pathMode && (
         <div className="planner-path-mode"><div className="planner-path-mode__content">
-          <span className="planner-path-mode__icon">&#9998;</span>
           <span>Drawing: <strong>{pathMode.catalogItem.name}</strong></span>
           <span className="planner-path-mode__hint">Click on canvas to add points</span>
           <div className="planner-path-mode__actions">

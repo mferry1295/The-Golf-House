@@ -2,16 +2,45 @@ import { Link } from 'react-router-dom'
 import './Experience.css'
 
 export default function Experience() {
+  const base = import.meta.env.BASE_URL
   return (
     <div className="experience">
       {/* Hero */}
-      <section className="exp-hero">
+      <section className="exp-hero" style={{ backgroundImage: `url(${base}renderings/locker-room.png)` }}>
         <div className="exp-hero__overlay" />
         <div className="exp-hero__content">
           <p className="section-label">02 &middot; The Experience</p>
-          <h1 className="exp-hero__title">The Patio</h1>
+          <h1 className="exp-hero__title">The Experience</h1>
           <div className="gold-line" style={{ margin: '1rem auto' }} />
-          <p className="exp-hero__sub">Communal short game grounds anchoring the social heart of the property</p>
+          <p className="exp-hero__sub">From short game grounds to the members' locker room &mdash; every corner of the clubhouse</p>
+        </div>
+      </section>
+
+      {/* Amenities Gallery */}
+      <section className="exp-gallery">
+        <div className="container">
+          <p className="section-label" style={{ textAlign: 'center' }}>Six Pillars</p>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>The Albatross Club Amenities</h2>
+          <div className="gold-line" style={{ margin: '0 auto 3rem' }} />
+          <div className="exp-gallery__grid">
+            {[
+              { img: 'cabin-front-porch.png', title: 'The Cabins', sub: 'Plantation-inspired retreats', link: '/cabins' },
+              { img: 'cabin-hitting-bay.png', title: 'Private Hitting Bays', sub: 'Simulator-equipped practice', link: '/cabins' },
+              { img: 'locker-room.png', title: 'Members Locker Room', sub: 'Old-world luxury ritual', link: '#locker-room' },
+              { img: 'lobby-bar.png', title: 'The Lobby Bar', sub: 'Craft cocktail program', link: '/dining' },
+              { img: 'sports-bar.png', title: 'The Sports Bar', sub: 'Live music + whiskey tastings', link: '/dining' },
+              { img: 'workout-room.png', title: 'Fitness Studio', sub: 'Peloton + free weights', link: '/wellness' },
+              { img: 'spa-cold-tubs.png', title: 'Spa & Cold Tubs', sub: 'Recovery after 36 holes', link: '/wellness' },
+            ].map(a => (
+              <Link to={a.link} key={a.title} className="exp-gallery__item">
+                <img src={`${base}renderings/${a.img}`} alt={a.title} loading="lazy" />
+                <div className="exp-gallery__caption">
+                  <span className="exp-gallery__title">{a.title}</span>
+                  <span className="exp-gallery__sub">{a.sub}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -44,12 +73,10 @@ export default function Experience() {
             </div>
             <div className="exp-section__visual">
               <div className="exp-visual-card exp-visual-card--green">
-                <span className="exp-visual-card__icon">&#9971;</span>
                 <h3>Short Game Area</h3>
                 <p>Practice greens, bunkers, and chipping areas steps from your cabin</p>
               </div>
               <div className="exp-visual-card exp-visual-card--gold">
-                <span className="exp-visual-card__icon">&#9832;</span>
                 <h3>Fire Pit Lounges</h3>
                 <p>Gather under the Sandhills stars for evening cocktails</p>
               </div>
@@ -64,12 +91,10 @@ export default function Experience() {
           <div className="exp-section__grid exp-section__grid--reverse">
             <div className="exp-section__visual">
               <div className="exp-visual-card exp-visual-card--tobacco">
-                <span className="exp-visual-card__icon">&#128084;</span>
                 <h3>Members-Style Lockers</h3>
                 <p>Walnut cabinetry, brass hardware, and your name on the door</p>
               </div>
               <div className="exp-visual-card exp-visual-card--forest">
-                <span className="exp-visual-card__icon">&#127942;</span>
                 <h3>Cigar Humidor</h3>
                 <p>Shoeshine station and curated cigar selection</p>
               </div>
@@ -107,7 +132,7 @@ export default function Experience() {
           <h2 className="section-title" style={{ color: 'var(--cream)' }}>Explore More</h2>
           <div className="gold-line" style={{ margin: '1rem auto 2rem' }} />
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/suites" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>The Suites</Link>
+            <Link to="/cabins" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>The Cabins</Link>
             <Link to="/dining" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>Dining & Bar</Link>
             <Link to="/wellness" className="btn btn--outline" style={{ color: 'var(--warm-gold)', borderColor: 'var(--warm-gold)' }}>Wellness</Link>
             <Link to="/property-planner" className="btn btn--gold">Property Planner</Link>

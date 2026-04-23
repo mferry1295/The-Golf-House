@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import './Suites.css'
+import './Cabins.css'
 
 const cabinTypes = [
   {
@@ -28,14 +28,17 @@ const cabinTypes = [
   },
 ]
 
-export default function Suites() {
+export default function Cabins() {
   return (
     <div className="suites">
-      <section className="suites-hero">
+      <section
+        className="suites-hero"
+        style={{ backgroundImage: `url(${import.meta.env.BASE_URL}renderings/cabin-front-porch.png)` }}
+      >
         <div className="suites-hero__overlay" />
         <div className="suites-hero__content">
-          <p className="section-label">03 &middot; Suite Experience</p>
-          <h1 className="suites-hero__title">The Suite Experience</h1>
+          <p className="section-label">03 &middot; The Cabins</p>
+          <h1 className="suites-hero__title">The Cabin Experience</h1>
           <div className="gold-line" style={{ margin: '1rem auto' }} />
           <p className="suites-hero__sub">Eight luxury group cabins designed for the modern golfer's retreat</p>
         </div>
@@ -68,8 +71,26 @@ export default function Suites() {
         </div>
       </section>
 
+      <section className="cabin-gallery">
+        <div className="container">
+          <div className="cabin-gallery__grid">
+            <figure className="cabin-gallery__item">
+              <img src={`${import.meta.env.BASE_URL}renderings/cabin-front-porch.png`} alt="Cabin front porch and exterior" loading="lazy" />
+              <figcaption>The Front Porch &mdash; plantation-inspired verandas with ceiling fans and rocking chairs</figcaption>
+            </figure>
+            <figure className="cabin-gallery__item">
+              <img src={`${import.meta.env.BASE_URL}renderings/cabin-hitting-bay.png`} alt="Private hitting bay inside cabin" loading="lazy" />
+              <figcaption>The Private Hitting Bay &mdash; each cabin includes a simulator-equipped practice space</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
       <section className="suites-cards">
         <div className="container">
+          <p className="section-label" style={{ textAlign: 'center' }}>Choose Your Cabin</p>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>Three Floor Plans</h2>
+          <div className="gold-line" style={{ margin: '1rem auto 3rem' }} />
           <div className="suites-cards__grid">
             {cabinTypes.map(cabin => (
               <div key={cabin.name} className="cabin-card">

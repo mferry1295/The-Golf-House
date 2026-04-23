@@ -3,10 +3,11 @@ import { LogoMark } from '../components/Logo'
 import './Home.css'
 
 export default function Home() {
+  const base = import.meta.env.BASE_URL
   return (
     <div className="home">
       {/* Hero */}
-      <section className="hero">
+      <section className="hero" style={{ backgroundImage: `url(${base}renderings/cabin-front-porch.png)` }}>
         <div className="hero__overlay" />
         <div className="hero__content">
           <LogoMark variant="white" className="hero__logo" />
@@ -69,20 +70,79 @@ export default function Home() {
 
           <div className="features__grid">
             {[
-              { title: 'The Patio', desc: 'Communal short game grounds anchoring the social heart of the property', icon: '&#9971;', link: '/experience' },
-              { title: 'The Suites', desc: 'Eight luxury group cabins designed for the modern golfer\'s retreat', icon: '&#9962;', link: '/suites' },
-              { title: 'The Bar', desc: 'The 19th Hole \u2014 where the round lives on over craft cocktails', icon: '&#127863;', link: '/dining' },
-              { title: 'The Dining Room', desc: 'Carolina-inspired gastropub with seasonal menus and Southern charm', icon: '&#127860;', link: '/dining' },
-              { title: 'The Locker Room', desc: 'A private members-style retreat within the clubhouse', icon: '&#128084;', link: '/experience' },
-              { title: 'Wellness & Recovery', desc: 'Cold plunge, sauna, and fitness designed for the active traveler', icon: '&#10052;', link: '/wellness' },
+              { title: 'The Patio', desc: 'Communal short game grounds anchoring the social heart of the property', link: '/experience' },
+              { title: 'The Cabins', desc: 'Eight luxury group cabins designed for the modern golfer\'s retreat', link: '/cabins' },
+              { title: 'The Bar', desc: 'The 19th Hole \u2014 where the round lives on over craft cocktails', link: '/dining' },
+              { title: 'The Dining Room', desc: 'Carolina-inspired gastropub with seasonal menus and Southern charm', link: '/dining' },
+              { title: 'The Locker Room', desc: 'A private members-style retreat within the clubhouse', link: '/experience' },
+              { title: 'Wellness & Recovery', desc: 'Cold plunge, sauna, and fitness designed for the active traveler', link: '/wellness' },
             ].map(f => (
               <Link to={f.link} key={f.title} className="feature-card">
-                <span className="feature-card__icon" dangerouslySetInnerHTML={{ __html: f.icon }} />
                 <h3 className="feature-card__title">{f.title}</h3>
                 <p className="feature-card__desc">{f.desc}</p>
                 <span className="feature-card__arrow">&rarr;</span>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery - property renderings */}
+      <section className="home-gallery">
+        <div className="container">
+          <p className="section-label" style={{ textAlign: 'center' }}>A First Look</p>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>Inside The Albatross Club</h2>
+          <div className="gold-line" style={{ margin: '0 auto 3rem' }} />
+          <div className="home-gallery__grid">
+            <Link to="/cabins" className="home-gallery__item home-gallery__item--tall">
+              <img src={`${base}renderings/cabin-front-porch.png`} alt="Cabin front porch" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">The Cabins</span>
+                <span className="home-gallery__name">Cabin Front Porch</span>
+              </div>
+            </Link>
+            <Link to="/cabins" className="home-gallery__item">
+              <img src={`${base}renderings/cabin-hitting-bay.png`} alt="Cabin hitting bay" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">The Cabins</span>
+                <span className="home-gallery__name">Private Hitting Bay</span>
+              </div>
+            </Link>
+            <Link to="/dining" className="home-gallery__item">
+              <img src={`${base}renderings/lobby-bar.png`} alt="Lobby bar" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">Dining &amp; Bar</span>
+                <span className="home-gallery__name">The Lobby Bar</span>
+              </div>
+            </Link>
+            <Link to="/dining" className="home-gallery__item">
+              <img src={`${base}renderings/sports-bar.png`} alt="Sports bar" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">Dining &amp; Bar</span>
+                <span className="home-gallery__name">The Sports Bar</span>
+              </div>
+            </Link>
+            <Link to="/wellness" className="home-gallery__item">
+              <img src={`${base}renderings/spa-cold-tubs.png`} alt="Spa cold tubs" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">Wellness</span>
+                <span className="home-gallery__name">Spa &amp; Cold Tubs</span>
+              </div>
+            </Link>
+            <Link to="/wellness" className="home-gallery__item">
+              <img src={`${base}renderings/workout-room.png`} alt="Workout room" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">Wellness</span>
+                <span className="home-gallery__name">Fitness Studio</span>
+              </div>
+            </Link>
+            <Link to="/experience" className="home-gallery__item home-gallery__item--wide">
+              <img src={`${base}renderings/locker-room.png`} alt="Locker room" loading="lazy" />
+              <div className="home-gallery__caption">
+                <span className="home-gallery__label">The Experience</span>
+                <span className="home-gallery__name">Members Locker Room</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

@@ -6,13 +6,60 @@
   align-items: center;
   justify-content: center;
   background: var(--deep-forest);
+  background-size: cover;
+  background-position: center;
   text-align: center;
 }
 
 .dining-hero__overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(139, 111, 78, 0.25) 0%, transparent 70%);
+  background: linear-gradient(180deg, rgba(43, 53, 41, 0.55) 0%, rgba(43, 53, 41, 0.75) 100%);
+}
+
+.dining-showcase {
+  padding: 4rem 0;
+  background: var(--cream);
+}
+.dining-showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+.dining-showcase__item {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(43, 53, 41, 0.14);
+}
+.dining-showcase__item img {
+  display: block;
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+.dining-showcase__item figcaption {
+  padding: 1rem 1.25rem;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.dining-showcase__label {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--deep-forest);
+}
+.dining-showcase__sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--tobacco);
+}
+@media (max-width: 900px) {
+  .dining-showcase__grid { grid-template-columns: 1fr; }
+  .dining-showcase__item img { height: 260px; }
 }
 
 .dining-hero__content {
