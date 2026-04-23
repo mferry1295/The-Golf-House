@@ -196,6 +196,19 @@ export default function FinancialModel() {
           </div>
         </div>
 
+        {/* Financial Assumptions */}
+        <div className="fin-card">
+          <div className="fin-card__header">FINANCIAL ASSUMPTIONS</div>
+          <div className="slider-grid">
+            <Slider label="Nightly rate / cabin" min={1500} max={8000} step={50} value={m.nightlyRate} onChange={v => update('nightlyRate', v)} format={fmt$} />
+            <Slider label="Occupancy" min={30} max={90} step={1} value={m.occupancy} onChange={v => update('occupancy', v)} format={v => `${v}%`} />
+            <Slider label="F&B / spa per guest night" min={100} max={1000} step={25} value={m.fbPerGuest} onChange={v => update('fbPerGuest', v)} format={fmt$} />
+            <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
+            <Slider label="Build cost / cabin ($M)" min={1.5} max={5} step={0.1} value={m.buildCostPerCabin} onChange={v => update('buildCostPerCabin', parseFloat(v))} format={v => `$${v.toFixed(1)}M`} />
+            <Slider label="Equity invested" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
+          </div>
+        </div>
+
         {/* Wedding & Event Venue */}
         <div className="fin-card">
           <div className="fin-card__header">WEDDING & EVENT VENUE</div>
@@ -230,19 +243,6 @@ export default function FinancialModel() {
                 </div>
               </>
             )}
-          </div>
-        </div>
-
-        {/* Financial Assumptions */}
-        <div className="fin-card">
-          <div className="fin-card__header">FINANCIAL ASSUMPTIONS</div>
-          <div className="slider-grid">
-            <Slider label="Nightly rate / cabin" min={1500} max={8000} step={50} value={m.nightlyRate} onChange={v => update('nightlyRate', v)} format={fmt$} />
-            <Slider label="Occupancy" min={30} max={90} step={1} value={m.occupancy} onChange={v => update('occupancy', v)} format={v => `${v}%`} />
-            <Slider label="F&B / spa per guest night" min={100} max={1000} step={25} value={m.fbPerGuest} onChange={v => update('fbPerGuest', v)} format={fmt$} />
-            <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
-            <Slider label="Build cost / cabin ($M)" min={1.5} max={5} step={0.1} value={m.buildCostPerCabin} onChange={v => update('buildCostPerCabin', parseFloat(v))} format={v => `$${v.toFixed(1)}M`} />
-            <Slider label="Equity invested" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
           </div>
         </div>
 
