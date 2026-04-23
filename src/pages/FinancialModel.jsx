@@ -171,7 +171,13 @@ export default function FinancialModel() {
             Overall Inputs
           </button>
           <button className={`view-switcher__btn ${view === 'income' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('income')}>
-            Detailed Income Statement
+            Income Statement
+          </button>
+          <button className={`view-switcher__btn ${view === 'cashflow' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('cashflow')}>
+            Cash Flow & Returns
+          </button>
+          <button className={`view-switcher__btn ${view === 'exit' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('exit')}>
+            Exit Scenarios
           </button>
         </div>
 
@@ -378,95 +384,86 @@ export default function FinancialModel() {
           </div>
         </div>
 
-        {/* Revenue Breakdown */}
-        <div className="fin-card">
-          <div className="fin-card__header">REVENUE BREAKDOWN</div>
-          <RevenueBar label="Cabin revenue" value={calc.cabinRev} max={revMax} color="var(--carolina-green)" />
-          <RevenueBar label="F&B / spa" value={calc.fbRev} max={revMax} color="var(--sage)" />
-          <RevenueBar label="Events & weddings" value={calc.eventsRev} max={revMax} color="var(--tobacco)" />
-        </div>
-
-        {/* P&L Summary */}
-        <div className="fin-card">
-          <div className="fin-card__header">P&L SUMMARY</div>
-          <div className="pl-table">
-            <PLRow label="Golf & lodging revenue" value={calc.cabinRev + calc.fbRev} />
-            <PLRow label={`Event / wedding revenue (${m.eventsEnabled ? m.eventsPerYear : 0} events)`} value={calc.eventsRev} />
-            <PLRow label="Gross revenue" value={calc.grossRev} bold divider />
-            <PLRow label={`Operating expenses (${m.opCostPct}%)`} value={-calc.opex} />
-            <PLRow label={`Mgmt / brand fee (${m.mgmtFeePct}%)`} value={-calc.mgmtFee} />
-            <PLRow label="EBITDA" value={calc.ebitda} bold highlight="green" />
-            <PLRow label={`Debt service (${m.ltv}% LTV @ ${m.debtRate}%)`} value={-calc.annualDebtService} />
-            <PLRow label="Cash flow to equity" value={calc.cashFlow} bold highlight={calc.cashFlow > 0 ? 'green' : 'red'} />
-          </div>
-
-          <div className={`insight-box insight-box--${calc.cashOnCash > 15 ? 'positive' : calc.cashOnCash > 0 ? 'neutral' : 'negative'}`}>
-            {calc.cashOnCash > 20 && (
-              <>Pencils well. {fmtPct(calc.cashOnCash)} cash-on-cash and {fmtPct(calc.ebitdaMargin)} EBITDA margin clears most institutional hurdles.
-              {m.eventsEnabled && ` Wedding / event venue adds ${fmtM(calc.eventsRev)} in annual revenue at near-zero incremental fixed cost.`}</>
-            )}
-            {calc.cashOnCash > 10 && calc.cashOnCash <= 20 && (
-              <>Solid returns. {fmtPct(calc.cashOnCash)} cash-on-cash meets typical hospitality underwriting minimums. Consider tightening operating cost or raising ADR to improve margin.</>
-            )}
-            {calc.cashOnCash > 0 && calc.cashOnCash <= 10 && (
-              <>Tight. {fmtPct(calc.cashOnCash)} cash-on-cash likely below institutional hurdle. Review occupancy assumptions and event mix to lift returns.</>
-            )}
-            {calc.cashOnCash <= 0 && (
-              <>Negative cash-on-cash. Property would not service debt under current assumptions. Increase rate, occupancy, or reduce build cost.</>
-            )}
-          </div>
-        </div>
-
-        {/* 5-Year Cumulative Cash Flow */}
-        <div className="fin-card">
-          <div className="fin-card__header">5-YEAR CUMULATIVE CASH FLOW</div>
-          <div className="cash-chart">
-            <div className="cash-chart__ylabels">
-              {[cumMax, cumMax * 0.5, 0, cumMin * 0.5, cumMin].map((v, i) => (
-                <div key={i} className="cash-chart__ylabel">{fmtM(v)}</div>
-              ))}
-            </div>
-            <div className="cash-chart__plot">
-              <div className="cash-chart__zero" style={{ top: `${(cumMax / (cumMax - cumMin)) * 100}%` }} />
-              {calc.yearlyCum.map((v, i) => {
-                const range = cumMax - cumMin
-                const zeroPct = (cumMax / range) * 100
-                const barPct = Math.abs(v / range) * 100
-                const top = v >= 0 ? zeroPct - barPct : zeroPct
-                return (
-                  <div key={i} className="cash-chart__bar-wrap">
-                    <div
-                      className={`cash-chart__bar ${v >= 0 ? 'cash-chart__bar--pos' : 'cash-chart__bar--neg'}`}
-                      style={{ top: `${top}%`, height: `${barPct}%` }}
-                    >
-                      <span className="cash-chart__bar-label">{fmtM(v)}</span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-          <div className="cash-chart__xlabels">
-            {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map(y => (
-              <div key={y} className="cash-chart__xlabel">{y}</div>
-            ))}
-          </div>
-        </div>
-
-        {/* Capital Stack */}
-        <div className="fin-card">
-          <div className="fin-card__header">CAPITAL STACK</div>
-          <div className="capital-stack">
-            <div className="capital-row"><span>Total build cost</span><strong>{fmtM(calc.totalBuild)}</strong></div>
-            <div className="capital-row"><span>Sponsor + LP equity ({m.equityPct}%)</span><strong>{fmtM(calc.equity)}</strong></div>
-            <div className="capital-row"><span>Senior debt ({100 - m.equityPct}%)</span><strong>{fmtM(calc.debt)}</strong></div>
-            <div className="capital-row capital-row--highlight"><span>Year-1 cash flow to equity</span><strong>{fmtM(calc.cashFlow)}</strong></div>
-          </div>
-        </div>
-
         </>}
 
         {view === 'income' && <IncomeStatement calc={calc} m={m} />}
+
+        {view === 'cashflow' && <>
+          {/* Revenue Breakdown */}
+          <div className="fin-card">
+            <div className="fin-card__header">REVENUE BREAKDOWN</div>
+            <RevenueBar label="Cabin revenue" value={calc.cabinRev} max={revMax} color="var(--carolina-green)" />
+            <RevenueBar label="F&B / spa" value={calc.fbRev} max={revMax} color="var(--sage)" />
+            <RevenueBar label="Events & weddings" value={calc.eventsRev} max={revMax} color="var(--tobacco)" />
+          </div>
+
+          {/* 5-Year Cumulative Cash Flow */}
+          <div className="fin-card">
+            <div className="fin-card__header">5-YEAR CUMULATIVE CASH FLOW</div>
+            <div className="cash-chart">
+              <div className="cash-chart__ylabels">
+                {[cumMax, cumMax * 0.5, 0, cumMin * 0.5, cumMin].map((v, i) => (
+                  <div key={i} className="cash-chart__ylabel">{fmtM(v)}</div>
+                ))}
+              </div>
+              <div className="cash-chart__plot">
+                <div className="cash-chart__zero" style={{ top: `${(cumMax / (cumMax - cumMin)) * 100}%` }} />
+                {calc.yearlyCum.map((v, i) => {
+                  const range = cumMax - cumMin
+                  const zeroPct = (cumMax / range) * 100
+                  const barPct = Math.abs(v / range) * 100
+                  const top = v >= 0 ? zeroPct - barPct : zeroPct
+                  return (
+                    <div key={i} className="cash-chart__bar-wrap">
+                      <div
+                        className={`cash-chart__bar ${v >= 0 ? 'cash-chart__bar--pos' : 'cash-chart__bar--neg'}`}
+                        style={{ top: `${top}%`, height: `${barPct}%` }}
+                      >
+                        <span className="cash-chart__bar-label">{fmtM(v)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="cash-chart__xlabels">
+              {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map(y => (
+                <div key={y} className="cash-chart__xlabel">{y}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Capital Stack + Returns */}
+          <div className="fin-card">
+            <div className="fin-card__header">CAPITAL STACK &amp; ANNUAL RETURNS</div>
+            <div className="capital-stack">
+              <div className="capital-row"><span>Total build cost</span><strong>{fmtM(calc.totalBuild)}</strong></div>
+              <div className="capital-row"><span>Sponsor + LP equity ({m.equityPct}%)</span><strong>{fmtM(calc.equity)}</strong></div>
+              <div className="capital-row"><span>Senior debt ({100 - m.equityPct}%)</span><strong>{fmtM(calc.debt)}</strong></div>
+              <div className="capital-row"><span>Annual EBITDA ({fmtPct(calc.ebitdaMargin)} margin)</span><strong>{fmtM(calc.ebitda)}</strong></div>
+              <div className="capital-row"><span>Debt service ({m.debtRate}% rate, {m.amortYears}-yr amort)</span><strong>{fmtM(calc.annualDebtService)}</strong></div>
+              <div className="capital-row capital-row--highlight"><span>Year-1 cash flow to equity ({fmtPct(calc.cashOnCash)} CoC)</span><strong>{fmtM(calc.cashFlow)}</strong></div>
+            </div>
+
+            <div className={`insight-box insight-box--${calc.cashOnCash > 15 ? 'positive' : calc.cashOnCash > 0 ? 'neutral' : 'negative'}`}>
+              {calc.cashOnCash > 20 && (
+                <>Pencils well. {fmtPct(calc.cashOnCash)} cash-on-cash and {fmtPct(calc.ebitdaMargin)} EBITDA margin clears most institutional hurdles.
+                {m.eventsEnabled && ` Wedding / event venue adds ${fmtM(calc.eventsRev)} in annual revenue at near-zero incremental fixed cost.`}</>
+              )}
+              {calc.cashOnCash > 10 && calc.cashOnCash <= 20 && (
+                <>Solid returns. {fmtPct(calc.cashOnCash)} cash-on-cash meets typical hospitality underwriting minimums. Consider tightening operating cost or raising ADR to improve margin.</>
+              )}
+              {calc.cashOnCash > 0 && calc.cashOnCash <= 10 && (
+                <>Tight. {fmtPct(calc.cashOnCash)} cash-on-cash likely below institutional hurdle. Review occupancy assumptions and event mix to lift returns.</>
+              )}
+              {calc.cashOnCash <= 0 && (
+                <>Negative cash-on-cash. Property would not service debt under current assumptions. Increase rate, occupancy, or reduce build cost.</>
+              )}
+            </div>
+          </div>
+        </>}
+
+        {view === 'exit' && <ExitScenarios calc={calc} m={m} />}
       </div>
     </div>
   )
@@ -619,6 +616,146 @@ function RevenueBar({ label, value, max, color }) {
         </div>
       </div>
       <span className="rev-bar__value">{fmtM(value)}</span>
+    </div>
+  )
+}
+
+function ExitScenarios({ calc, m }) {
+  // IRR solver (bisection) for a simple cash flow series
+  function irr(cfs) {
+    let lo = -0.5, hi = 1.5
+    const npv = rate => cfs.reduce((s, cf, t) => s + cf / Math.pow(1 + rate, t), 0)
+    if (npv(lo) * npv(hi) > 0) return null
+    for (let i = 0; i < 80; i++) {
+      const mid = (lo + hi) / 2
+      const v = npv(mid)
+      if (Math.abs(v) < 1) return mid
+      if (npv(lo) * v < 0) hi = mid; else lo = mid
+    }
+    return (lo + hi) / 2
+  }
+
+  // Build stabilized NOI (for exit valuation)
+  const stabilizedNOI = calc.ebitda
+
+  // Ramping annual cash flows to equity (years 1-10)
+  const rampFactors = [0.55, 0.75, 0.90, 1.00, 1.05, 1.08, 1.10, 1.12, 1.14, 1.16]
+  const annualCashFlows = rampFactors.map(r => calc.cashFlow * r)
+
+  const EXIT_SCENARIOS = [
+    { label: 'Year 5', hold: 5, capRate: 7.5 },
+    { label: 'Year 7', hold: 7, capRate: 7.0 },
+    { label: 'Year 10', hold: 10, capRate: 6.5 },
+  ]
+
+  const scenarios = EXIT_SCENARIOS.map(s => {
+    const exitYearNOI = calc.ebitda * rampFactors[s.hold - 1]
+    const grossSalePrice = exitYearNOI / (s.capRate / 100)
+    // Debt paydown: principal paid = principal × hold years (simplified)
+    const remainingDebt = Math.max(0, calc.debt - calc.principalPayment * s.hold)
+    const netExitProceeds = grossSalePrice - remainingDebt
+    // Cash flow series: -equity at t=0, yearly cash flow for hold years with exit on last year
+    const cfs = [-calc.equity]
+    for (let i = 0; i < s.hold; i++) {
+      const yrCf = annualCashFlows[i] || calc.cashFlow
+      cfs.push(i === s.hold - 1 ? yrCf + netExitProceeds : yrCf)
+    }
+    const totalDistributions = cfs.slice(1).reduce((a, b) => a + b, 0)
+    const equityMultiple = totalDistributions / calc.equity
+    const computedIrr = irr(cfs)
+    const lpPref = calc.lpPrefDollars * s.hold
+    const gpCarryDollars = Math.max(0, (totalDistributions - calc.equity - lpPref) * (m.gpCarry / 100))
+
+    return {
+      ...s,
+      exitYearNOI,
+      grossSalePrice,
+      remainingDebt,
+      netExitProceeds,
+      totalDistributions,
+      equityMultiple,
+      irr: computedIrr,
+      lpPref,
+      gpCarryDollars,
+      cfs,
+    }
+  })
+
+  return (
+    <div className="fin-card exit-scenarios">
+      <div className="fin-card__header">EXIT SCENARIOS &amp; INVESTOR RETURNS</div>
+      <div className="exit-scenarios__intro">
+        Simulated hold-and-sell outcomes at different cap rates. Assumes ramping NOI
+        (55% Year 1 &rarr; 116% Year 10 of stabilized) and that debt amortizes at the
+        selected {m.amortYears}-year schedule.
+      </div>
+
+      <div className="exit-grid">
+        {scenarios.map(s => (
+          <div key={s.label} className={`exit-card ${s.label === 'Year 7' ? 'exit-card--featured' : ''}`}>
+            <div className="exit-card__head">
+              <div className="exit-card__title">{s.label} Exit</div>
+              <div className="exit-card__cap">Cap rate {s.capRate}%</div>
+            </div>
+            <div className="exit-card__hero">
+              <div className="exit-card__hero-item">
+                <span>IRR</span>
+                <strong>{s.irr !== null ? `${(s.irr * 100).toFixed(1)}%` : '—'}</strong>
+              </div>
+              <div className="exit-card__hero-item">
+                <span>Equity Multiple</span>
+                <strong>{s.equityMultiple.toFixed(2)}x</strong>
+              </div>
+            </div>
+            <div className="exit-card__rows">
+              <div className="exit-row"><span>Exit year NOI</span><strong>{fmtM(s.exitYearNOI)}</strong></div>
+              <div className="exit-row"><span>Gross sale price</span><strong>{fmtM(s.grossSalePrice)}</strong></div>
+              <div className="exit-row"><span>Remaining debt</span><strong>({fmtM(s.remainingDebt)})</strong></div>
+              <div className="exit-row exit-row--total"><span>Net exit proceeds</span><strong>{fmtM(s.netExitProceeds)}</strong></div>
+              <div className="exit-row exit-row--divider"><span>Total distributions</span><strong>{fmtM(s.totalDistributions)}</strong></div>
+              <div className="exit-row"><span>LP pref owed ({m.lpPrefReturn}% × {s.hold}y)</span><strong>{fmtM(s.lpPref)}</strong></div>
+              <div className="exit-row"><span>Est. GP carry ({m.gpCarry}%)</span><strong>{fmtM(s.gpCarryDollars)}</strong></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="exit-cashflow-table">
+        <div className="exit-cashflow-table__title">CASH FLOW SCHEDULE — YEAR 7 EXIT</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th className="num">Cash Flow</th>
+              <th className="num">Cumulative</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(() => {
+              const sc = scenarios.find(s => s.label === 'Year 7')
+              let cum = 0
+              return sc.cfs.map((cf, i) => {
+                cum += cf
+                return (
+                  <tr key={i} className={cf >= 0 ? 'pos' : 'neg'}>
+                    <td>{i === 0 ? 'Close' : `Year ${i}`}</td>
+                    <td className="num">{cf < 0 ? `(${fmtM(Math.abs(cf))})` : fmtM(cf)}</td>
+                    <td className="num">{cum < 0 ? `(${fmtM(Math.abs(cum))})` : fmtM(cum)}</td>
+                    <td>{i === 0 ? 'Equity invested' : i === sc.hold ? 'Ops cash flow + exit proceeds' : 'Operating cash flow'}</td>
+                  </tr>
+                )
+              })
+            })()}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="insight-box insight-box--positive">
+        A Year 7 exit at a 7.0% cap rate targets approximately{' '}
+        <strong>{scenarios[1].irr !== null ? `${(scenarios[1].irr * 100).toFixed(1)}%` : '—'} IRR</strong>
+        {' '}and a <strong>{scenarios[1].equityMultiple.toFixed(2)}x equity multiple</strong> on {fmtM(calc.equity)} of LP equity &mdash; assuming NOI ramps to {fmtM(scenarios[1].exitYearNOI)} and cap rates compress into the mid-7s.
+      </div>
     </div>
   )
 }

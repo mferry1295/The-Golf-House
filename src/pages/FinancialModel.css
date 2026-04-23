@@ -355,6 +355,188 @@
   .capital-mini-grid { grid-template-columns: 1fr; }
 }
 
+/* Exit Scenarios */
+.exit-scenarios {
+  padding: 1.5rem 2rem;
+}
+.exit-scenarios__intro {
+  font-size: 0.9rem;
+  color: var(--tobacco);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.exit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.exit-card {
+  background: #fcfaf4;
+  border: 1px solid rgba(43, 53, 41, 0.1);
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+}
+.exit-card--featured {
+  background: var(--deep-forest);
+  color: var(--cream);
+  border-color: var(--warm-gold);
+  box-shadow: 0 4px 16px rgba(43, 53, 41, 0.2), 0 0 0 2px rgba(196, 169, 125, 0.3) inset;
+}
+.exit-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(43, 53, 41, 0.08);
+}
+.exit-card--featured .exit-card__head {
+  border-bottom-color: rgba(196, 169, 125, 0.3);
+}
+.exit-card__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--deep-forest);
+}
+.exit-card--featured .exit-card__title {
+  color: var(--cream);
+}
+.exit-card__cap {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tobacco);
+  font-weight: 600;
+}
+.exit-card--featured .exit-card__cap {
+  color: var(--warm-gold);
+}
+.exit-card__hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(43, 53, 41, 0.08);
+}
+.exit-card--featured .exit-card__hero {
+  border-bottom-color: rgba(196, 169, 125, 0.3);
+}
+.exit-card__hero-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.exit-card__hero-item span {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--tobacco);
+  font-weight: 600;
+}
+.exit-card--featured .exit-card__hero-item span {
+  color: var(--warm-gold);
+}
+.exit-card__hero-item strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--carolina-green);
+}
+.exit-card--featured .exit-card__hero-item strong {
+  color: var(--cream);
+}
+.exit-card__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.exit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.83rem;
+  color: var(--deep-forest);
+  font-variant-numeric: tabular-nums;
+  padding: 0.12rem 0;
+}
+.exit-card--featured .exit-row {
+  color: rgba(245, 240, 232, 0.85);
+}
+.exit-row strong {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.exit-card--featured .exit-row strong {
+  color: var(--cream);
+}
+.exit-row--total {
+  padding: 0.35rem 0;
+  margin-top: 0.2rem;
+  border-top: 1px solid rgba(43, 53, 41, 0.12);
+  font-weight: 600;
+}
+.exit-card--featured .exit-row--total {
+  border-top-color: rgba(196, 169, 125, 0.3);
+}
+.exit-row--divider {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(43, 53, 41, 0.15);
+}
+.exit-card--featured .exit-row--divider {
+  border-top-color: rgba(196, 169, 125, 0.25);
+}
+
+.exit-cashflow-table {
+  margin-top: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: #fcfaf4;
+  border: 1px solid rgba(43, 53, 41, 0.08);
+  border-radius: 10px;
+}
+.exit-cashflow-table__title {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warm-gold);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+.exit-cashflow-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.exit-cashflow-table th {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tobacco);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(43, 53, 41, 0.12);
+}
+.exit-cashflow-table th.num,
+.exit-cashflow-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.exit-cashflow-table td {
+  font-size: 0.88rem;
+  color: var(--deep-forest);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(43, 53, 41, 0.05);
+}
+.exit-cashflow-table tr.neg td.num { color: #c44d4d; }
+.exit-cashflow-table tr.pos td.num { color: var(--carolina-green); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .exit-grid { grid-template-columns: 1fr; }
+}
+
 /* Top bar (scenario + capacity) */
 .fin-top-bar {
   display: flex;
