@@ -6,21 +6,21 @@ const SCENARIOS = {
   base: {
     cabins: 8, guestsPerCabin: 6, nightlyRate: 4300, occupancy: 60,
     fbPerGuest: 450, opCostPct: 58, buildCostPerCabin: 2.5, equityPct: 35,
-    debtRate: 7.2, ltv: 65, mgmtFeePct: 6,
+    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
     eventsEnabled: true, venueRental: 15000, eventsPerYear: 20, cateringPerEvent: 8000,
     cabinBuyoutRate: 60, venueBuildCost: 1.5,
   },
   bear: {
     cabins: 8, guestsPerCabin: 6, nightlyRate: 3200, occupancy: 45,
     fbPerGuest: 325, opCostPct: 65, buildCostPerCabin: 2.8, equityPct: 35,
-    debtRate: 7.2, ltv: 65, mgmtFeePct: 6,
+    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
     eventsEnabled: true, venueRental: 10000, eventsPerYear: 10, cateringPerEvent: 6000,
     cabinBuyoutRate: 30, venueBuildCost: 1.5,
   },
   bull: {
     cabins: 8, guestsPerCabin: 6, nightlyRate: 5500, occupancy: 75,
     fbPerGuest: 575, opCostPct: 52, buildCostPerCabin: 2.5, equityPct: 35,
-    debtRate: 7.2, ltv: 65, mgmtFeePct: 6,
+    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
     eventsEnabled: true, venueRental: 22000, eventsPerYear: 30, cateringPerEvent: 10000,
     cabinBuyoutRate: 80, venueBuildCost: 1.5,
   }
@@ -43,6 +43,7 @@ function fmt$(n) { return `$${Math.round(n).toLocaleString()}` }
 export default function FinancialModel() {
   const [scenario, setScenario] = useState('base')
   const [m, setM] = useState(SCENARIOS.base)
+  const [view, setView] = useState('inputs')
 
   function applyScenario(key) {
     setScenario(key)
@@ -77,15 +78,47 @@ export default function FinancialModel() {
     const ebitda = grossRev - opex - mgmtFee
     const ebitdaMargin = (ebitda / grossRev) * 100
 
+    // --- Detailed P&L breakdown ---
+    // Cost of Sales (direct variable costs tied to revenue)
+    const fbCOGS = fbRev * 0.32              // 32% F&B direct food/beverage cost
+    const cateringCOGS = cateringRev * 3 * 0.55 / 3 // catering direct (55% of gross catering, we kept 25% margin earlier; full catering gross is cateringRev*4)
+    const lodgingConsumables = cabinRev * 0.06 // linens, toiletries, supplies
+    const totalCOGS = fbCOGS + cateringCOGS + lodgingConsumables
+    const grossProfit = grossRev - totalCOGS
+    const grossMargin = (grossProfit / grossRev) * 100
+
+    // Operating Expense breakdown (sums to opex)
+    const laborExp = grossRev * Math.min(0.35, m.opCostPct / 100 * 0.6) // labor dominates opex
+    const marketingExp = grossRev * 0.06
+    const utilitiesExp = grossRev * 0.03
+    const propertyTax = grossRev * 0.025
+    const insuranceExp = grossRev * 0.015
+    const maintenanceExp = grossRev * 0.025
+    const gaExp = grossRev * 0.02
+    const otherOpex = Math.max(0, opex - (laborExp + marketingExp + utilitiesExp + propertyTax + insuranceExp + maintenanceExp + gaExp))
+
+    // Below EBITDA
     // Capital stack
     const totalBuild = m.cabins * m.buildCostPerCabin * 1_000_000 + (m.eventsEnabled ? m.venueBuildCost * 1_000_000 : 0)
     const equity = totalBuild * (m.equityPct / 100)
     const debt = totalBuild * (1 - m.equityPct / 100)
-    // Debt service (interest-only approximation + principal amortization 25-yr)
-    const annualDebtService = debt * (m.debtRate / 100) + debt / 25
+
+    const depreciation = totalBuild * 0.04  // ~25-year straight-line building
+    const ebit = ebitda - depreciation
+    const interestExp = debt * (m.debtRate / 100)
+    const principalPayment = debt / (m.amortYears || 25)
+    const annualDebtService = interestExp + principalPayment
+    const preTaxIncome = ebit - interestExp
+    const taxExpense = Math.max(0, preTaxIncome * 0.25)
+    const netIncome = preTaxIncome - taxExpense
+
     const cashFlow = ebitda - annualDebtService
     const cashOnCash = (cashFlow / equity) * 100
     const paybackYears = cashFlow > 0 ? equity / cashFlow : 99
+
+    // Investor economics
+    const equityPerInvestor = equity / Math.max(1, m.numInvestors || 1)
+    const lpPrefDollars = equity * ((m.lpPrefReturn || 0) / 100)
 
     // 5-year cumulative (ramping)
     const rampFactors = [0.55, 0.75, 0.9, 1.0, 1.05]
@@ -101,9 +134,19 @@ export default function FinancialModel() {
       capacity, maxNightly,
       cabinRev, fbRev, eventsRev, grossRev,
       venueRentalRev, cateringRev, buyoutRev,
+      // cost of sales
+      fbCOGS, cateringCOGS, lodgingConsumables, totalCOGS, grossProfit, grossMargin,
+      // opex detail
+      laborExp, marketingExp, utilitiesExp, propertyTax, insuranceExp,
+      maintenanceExp, gaExp, otherOpex,
       opex, mgmtFee, ebitda, ebitdaMargin,
+      // below ebitda
+      depreciation, ebit, interestExp, principalPayment,
+      preTaxIncome, taxExpense, netIncome,
+      // capital
       totalBuild, equity, debt, annualDebtService, cashFlow,
       cashOnCash, paybackYears,
+      equityPerInvestor, lpPrefDollars,
       yearlyCum
     }
   }, [m])
@@ -122,6 +165,16 @@ export default function FinancialModel() {
       </div>
 
       <div className="fin-model__body">
+        {/* Primary view switcher */}
+        <div className="view-switcher">
+          <button className={`view-switcher__btn ${view === 'inputs' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('inputs')}>
+            Overall Inputs
+          </button>
+          <button className={`view-switcher__btn ${view === 'income' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('income')}>
+            Detailed Income Statement
+          </button>
+        </div>
+
         {/* Scenario + Summary bar */}
         <div className="fin-card fin-top-bar">
           <div className="scenario-toggle">
@@ -135,6 +188,8 @@ export default function FinancialModel() {
             <div className="top-bar__stat"><span>Max nightly:</span> <strong>{fmt$(calc.maxNightly)}</strong></div>
           </div>
         </div>
+
+        {view === 'inputs' && <>
 
         {/* KPI cards */}
         <div className="kpi-grid">
@@ -262,10 +317,63 @@ export default function FinancialModel() {
           <div className="fin-subgroup">
             <div className="fin-subgroup__title">
               <span>Capital Stack</span>
+              <span className="fin-subgroup__badge fin-subgroup__badge--green">
+                {m.equityPct}% equity &middot; {100 - m.equityPct}% debt
+              </span>
             </div>
             <div className="slider-grid">
-              <Slider label="Equity invested" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
+              <Slider label="Equity share" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
               <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
+            </div>
+            <div className="capital-mini-grid">
+              <div className="capital-mini">
+                <span>Equity raise</span>
+                <strong>{fmtM(calc.equity)}</strong>
+              </div>
+              <div className="capital-mini">
+                <span>Senior debt</span>
+                <strong>{fmtM(calc.debt)}</strong>
+              </div>
+              <div className="capital-mini">
+                <span>Equity / investor</span>
+                <strong>{fmtM(calc.equityPerInvestor)}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div className="fin-subgroup">
+            <div className="fin-subgroup__title">
+              <span>Financing Terms</span>
+              <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">
+                {fmtM(calc.annualDebtService)} / yr debt service
+              </span>
+            </div>
+            <div className="slider-grid">
+              <Slider label="Debt interest rate" min={4} max={12} step={0.1} value={m.debtRate} onChange={v => update('debtRate', parseFloat(v))} format={v => `${v.toFixed(1)}%`} />
+              <Slider label="Amortization period" min={10} max={30} step={1} value={m.amortYears} onChange={v => update('amortYears', v)} format={v => `${v} yrs`} />
+              <Slider label="Number of LP investors" min={1} max={20} step={1} value={m.numInvestors} onChange={v => update('numInvestors', v)} format={v => `${v}`} />
+              <Slider label="LP preferred return" min={0} max={15} step={0.5} value={m.lpPrefReturn} onChange={v => update('lpPrefReturn', parseFloat(v))} format={v => `${v.toFixed(1)}%`} />
+              <Slider label="GP promote / carry" min={0} max={30} step={1} value={m.gpCarry} onChange={v => update('gpCarry', v)} format={v => `${v}%`} />
+              <Slider label="Mgmt / brand fee" min={0} max={10} step={0.5} value={m.mgmtFeePct} onChange={v => update('mgmtFeePct', parseFloat(v))} format={v => `${v.toFixed(1)}%`} />
+            </div>
+            <div className="debt-schedule">
+              <div className="debt-schedule__title">Annual debt service breakdown</div>
+              <div className="debt-schedule__row">
+                <span>Interest ({m.debtRate}% on {fmtM(calc.debt)})</span>
+                <strong>{fmtM(calc.interestExp)}</strong>
+              </div>
+              <div className="debt-schedule__row">
+                <span>Principal ({m.amortYears}-year amortization)</span>
+                <strong>{fmtM(calc.principalPayment)}</strong>
+              </div>
+              <div className="debt-schedule__row debt-schedule__row--total">
+                <span>Total annual debt service</span>
+                <strong>{fmtM(calc.annualDebtService)}</strong>
+              </div>
+              <div className="debt-schedule__row debt-schedule__row--hint">
+                <span>LP preferred return target ({m.lpPrefReturn}% of equity)</span>
+                <strong>{fmtM(calc.lpPrefDollars)} / yr</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -355,6 +463,125 @@ export default function FinancialModel() {
             <div className="capital-row capital-row--highlight"><span>Year-1 cash flow to equity</span><strong>{fmtM(calc.cashFlow)}</strong></div>
           </div>
         </div>
+
+        </>}
+
+        {view === 'income' && <IncomeStatement calc={calc} m={m} />}
+      </div>
+    </div>
+  )
+}
+
+function IncomeStatement({ calc, m }) {
+  return (
+    <div className="fin-card income-statement">
+      <div className="income-statement__header">
+        <div>
+          <div className="fin-card__header">DETAILED INCOME STATEMENT</div>
+          <div className="income-statement__sub">Projected annual P&amp;L at stabilized operations (Year 3)</div>
+        </div>
+        <div className="income-statement__headline">
+          <div className="income-statement__headline-item">
+            <span>Revenue</span>
+            <strong>{fmtM(calc.grossRev)}</strong>
+          </div>
+          <div className="income-statement__headline-item">
+            <span>EBITDA</span>
+            <strong>{fmtM(calc.ebitda)}</strong>
+          </div>
+          <div className="income-statement__headline-item">
+            <span>Net Income</span>
+            <strong>{fmtM(calc.netIncome)}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="is-table">
+        {/* REVENUE */}
+        <ISSectionHead title="Revenue" />
+        <ISRow label="Cabin / lodging revenue" value={calc.cabinRev} />
+        <ISRow label="F&B, spa, pro shop (ancillary)" value={calc.fbRev} />
+        {m.eventsEnabled && <>
+          <ISRow label="Events — venue rental" value={calc.venueRentalRev} indent />
+          <ISRow label="Events — catering margin" value={calc.cateringRev} indent />
+          <ISRow label="Events — cabin buyouts" value={calc.buyoutRev} indent />
+        </>}
+        <ISRow label="Total revenue" value={calc.grossRev} bold divider />
+
+        {/* COGS */}
+        <ISSectionHead title="Cost of Sales" />
+        <ISRow label="F&B direct costs (32% of F&B rev)" value={-calc.fbCOGS} />
+        <ISRow label="Catering direct costs" value={-calc.cateringCOGS} />
+        <ISRow label="Lodging consumables & supplies" value={-calc.lodgingConsumables} />
+        <ISRow label="Total cost of sales" value={-calc.totalCOGS} bold />
+        <ISRow label={`Gross profit (${fmtPct(calc.grossMargin)} margin)`} value={calc.grossProfit} bold highlight="green" divider />
+
+        {/* OPERATING EXPENSES */}
+        <ISSectionHead title="Operating Expenses" />
+        <ISRow label="Labor & wages" value={-calc.laborExp} pct={-calc.laborExp / calc.grossRev * 100} />
+        <ISRow label="Marketing & sales" value={-calc.marketingExp} pct={-calc.marketingExp / calc.grossRev * 100} />
+        <ISRow label="Utilities" value={-calc.utilitiesExp} pct={-calc.utilitiesExp / calc.grossRev * 100} />
+        <ISRow label="Property tax" value={-calc.propertyTax} pct={-calc.propertyTax / calc.grossRev * 100} />
+        <ISRow label="Insurance" value={-calc.insuranceExp} pct={-calc.insuranceExp / calc.grossRev * 100} />
+        <ISRow label="Repairs & maintenance" value={-calc.maintenanceExp} pct={-calc.maintenanceExp / calc.grossRev * 100} />
+        <ISRow label="General & administrative" value={-calc.gaExp} pct={-calc.gaExp / calc.grossRev * 100} />
+        {calc.otherOpex > 1000 && <ISRow label="Other operating expense" value={-calc.otherOpex} pct={-calc.otherOpex / calc.grossRev * 100} />}
+        <ISRow label={`Total operating expenses (${m.opCostPct}%)`} value={-calc.opex} bold />
+        <ISRow label={`Mgmt / brand fee (${m.mgmtFeePct}%)`} value={-calc.mgmtFee} />
+        <ISRow label={`EBITDA (${fmtPct(calc.ebitdaMargin)} margin)`} value={calc.ebitda} bold highlight="green" divider />
+
+        {/* BELOW-THE-LINE */}
+        <ISSectionHead title="Below EBITDA" />
+        <ISRow label="Depreciation & amortization" value={-calc.depreciation} />
+        <ISRow label="EBIT (operating income)" value={calc.ebit} bold divider />
+        <ISRow label={`Interest expense (${m.debtRate}% on ${fmtM(calc.debt)})`} value={-calc.interestExp} />
+        <ISRow label="Pre-tax income" value={calc.preTaxIncome} bold />
+        <ISRow label="Income taxes (25%)" value={-calc.taxExpense} />
+        <ISRow label="Net income" value={calc.netIncome} bold highlight={calc.netIncome > 0 ? 'green' : 'red'} divider />
+
+        {/* CASH FLOW TO EQUITY */}
+        <ISSectionHead title="Cash Flow to Equity" />
+        <ISRow label="EBITDA" value={calc.ebitda} />
+        <ISRow label={`Less: debt service (interest + principal, ${m.amortYears}-yr amort)`} value={-calc.annualDebtService} />
+        <ISRow label="Free cash flow to equity" value={calc.cashFlow} bold highlight={calc.cashFlow > 0 ? 'green' : 'red'} />
+        <ISRow label={`Cash-on-cash yield (on ${fmtM(calc.equity)} equity)`} value={null} pctOverride={fmtPct(calc.cashOnCash)} highlight={calc.cashOnCash > 10 ? 'green' : calc.cashOnCash > 0 ? 'neutral' : 'red'} />
+      </div>
+
+      <div className={`insight-box insight-box--${calc.cashOnCash > 15 ? 'positive' : calc.cashOnCash > 0 ? 'neutral' : 'negative'}`}>
+        {calc.netIncome > 0
+          ? <>Net income of {fmtM(calc.netIncome)} translates to {fmtPct(calc.cashOnCash)} cash-on-cash after debt service. LP preferred return target is {fmtM(calc.lpPrefDollars)} / yr &mdash; {calc.cashFlow >= calc.lpPrefDollars ? 'covered' : 'short by ' + fmtM(calc.lpPrefDollars - calc.cashFlow)}.</>
+          : <>Negative net income under these assumptions. Raise ADR, occupancy, or reduce operating cost to break through.</>
+        }
+      </div>
+    </div>
+  )
+}
+
+function ISSectionHead({ title }) {
+  return <div className="is-section-head">{title}</div>
+}
+
+function ISRow({ label, value, bold, divider, highlight, pct, pctOverride, indent }) {
+  const cls = [
+    'is-row',
+    bold && 'is-row--bold',
+    divider && 'is-row--divider',
+    highlight === 'green' && 'is-row--green',
+    highlight === 'red' && 'is-row--red',
+    highlight === 'neutral' && 'is-row--neutral',
+    indent && 'is-row--indent'
+  ].filter(Boolean).join(' ')
+  return (
+    <div className={cls}>
+      <span>{label}</span>
+      <div className="is-row__values">
+        {(pct !== undefined && pct !== null) && <span className="is-row__pct">{fmtPct(Math.abs(pct))}</span>}
+        {pctOverride && <span className="is-row__value">{pctOverride}</span>}
+        {value !== null && value !== undefined && (
+          <span className="is-row__value">
+            {value < 0 ? `(${fmtM(Math.abs(value))})` : fmtM(value)}
+          </span>
+        )}
       </div>
     </div>
   )
