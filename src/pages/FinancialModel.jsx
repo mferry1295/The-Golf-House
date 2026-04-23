@@ -161,70 +161,68 @@ export default function FinancialModel() {
           </div>
         </div>
 
-        {/* Property Configuration */}
+        {/* Revenue Streams */}
         <div className="fin-card">
-          <div className="fin-card__header">PROPERTY CONFIGURATION</div>
-          <div className="config-grid">
-            <div className="config-item">
-              <label className="config-item__label">Number of cabins</label>
-              <select
-                className="config-select"
-                value={m.cabins}
-                onChange={e => update('cabins', parseInt(e.target.value))}
-              >
-                {CABIN_OPTIONS.map(n => <option key={n} value={n}>{n} cabins</option>)}
-              </select>
-            </div>
-            <div className="config-item">
-              <label className="config-item__label">Guests per cabin</label>
-              <select
-                className="config-select"
-                value={m.guestsPerCabin}
-                onChange={e => update('guestsPerCabin', parseInt(e.target.value))}
-              >
-                {GUEST_OPTIONS.map(n => <option key={n} value={n}>{n} guests</option>)}
-              </select>
-            </div>
-            <div className="config-item config-item--readout">
-              <label className="config-item__label">Total capacity</label>
-              <div className="config-readout">{calc.capacity} guests</div>
-            </div>
-            <div className="config-item config-item--readout">
-              <label className="config-item__label">Max nightly revenue</label>
-              <div className="config-readout">{fmt$(calc.maxNightly)}</div>
-            </div>
-          </div>
-        </div>
+          <div className="fin-card__header">REVENUE STREAMS</div>
 
-        {/* Financial Assumptions */}
-        <div className="fin-card">
-          <div className="fin-card__header">FINANCIAL ASSUMPTIONS</div>
-          <div className="slider-grid">
-            <Slider label="Nightly rate / cabin" min={1500} max={8000} step={50} value={m.nightlyRate} onChange={v => update('nightlyRate', v)} format={fmt$} />
-            <Slider label="Occupancy" min={30} max={90} step={1} value={m.occupancy} onChange={v => update('occupancy', v)} format={v => `${v}%`} />
-            <Slider label="F&B / spa per guest night" min={100} max={1000} step={25} value={m.fbPerGuest} onChange={v => update('fbPerGuest', v)} format={fmt$} />
-            <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
-            <Slider label="Build cost / cabin ($M)" min={1.5} max={5} step={0.1} value={m.buildCostPerCabin} onChange={v => update('buildCostPerCabin', parseFloat(v))} format={v => `$${v.toFixed(1)}M`} />
-            <Slider label="Equity invested" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
-          </div>
-        </div>
-
-        {/* Wedding & Event Venue */}
-        <div className="fin-card">
-          <div className="fin-card__header">WEDDING & EVENT VENUE</div>
-          <div className={`addon-card ${m.eventsEnabled ? '' : 'addon-card--off'}`}>
-            <div className="addon-card__head">
-              <div className="addon-card__title">
-                <span>Barn / ballroom</span>
-                <span className="addon-badge addon-badge--pink">Add-on</span>
-                {m.eventsEnabled && <span className="addon-badge addon-badge--green">+{fmtM(calc.eventsRev)} / yr</span>}
+          {/* Lodging */}
+          <div className="fin-subgroup">
+            <div className="fin-subgroup__title">
+              <span>Lodging</span>
+              <span className="fin-subgroup__badge fin-subgroup__badge--green">{fmtM(calc.cabinRev)} / yr</span>
+            </div>
+            <div className="config-grid">
+              <div className="config-item">
+                <label className="config-item__label">Number of cabins</label>
+                <select className="config-select" value={m.cabins} onChange={e => update('cabins', parseInt(e.target.value))}>
+                  {CABIN_OPTIONS.map(n => <option key={n} value={n}>{n} cabins</option>)}
+                </select>
               </div>
-              <label className="toggle">
+              <div className="config-item">
+                <label className="config-item__label">Guests per cabin</label>
+                <select className="config-select" value={m.guestsPerCabin} onChange={e => update('guestsPerCabin', parseInt(e.target.value))}>
+                  {GUEST_OPTIONS.map(n => <option key={n} value={n}>{n} guests</option>)}
+                </select>
+              </div>
+              <div className="config-item config-item--readout">
+                <label className="config-item__label">Total capacity</label>
+                <div className="config-readout">{calc.capacity} guests</div>
+              </div>
+              <div className="config-item config-item--readout">
+                <label className="config-item__label">Max nightly revenue</label>
+                <div className="config-readout">{fmt$(calc.maxNightly)}</div>
+              </div>
+            </div>
+            <div className="slider-grid">
+              <Slider label="Nightly rate / cabin" min={1500} max={8000} step={50} value={m.nightlyRate} onChange={v => update('nightlyRate', v)} format={fmt$} />
+              <Slider label="Occupancy" min={30} max={90} step={1} value={m.occupancy} onChange={v => update('occupancy', v)} format={v => `${v}%`} />
+            </div>
+          </div>
+
+          {/* F&B, Spa, Pro Shop */}
+          <div className="fin-subgroup">
+            <div className="fin-subgroup__title">
+              <span>F&amp;B, Spa &amp; Pro Shop</span>
+              <span className="fin-subgroup__badge fin-subgroup__badge--sage">{fmtM(calc.fbRev)} / yr</span>
+            </div>
+            <div className="slider-grid">
+              <Slider label="Ancillary spend / guest / night" min={100} max={1000} step={25} value={m.fbPerGuest} onChange={v => update('fbPerGuest', v)} format={fmt$} />
+            </div>
+            <div className="fin-subgroup__note">
+              Restaurant &amp; bar, spa treatments, pro shop retail, and activity fees combined per guest per night.
+            </div>
+          </div>
+
+          {/* Events & Weddings */}
+          <div className={`fin-subgroup ${m.eventsEnabled ? '' : 'fin-subgroup--off'}`}>
+            <div className="fin-subgroup__title">
+              <span>Events &amp; Weddings</span>
+              {m.eventsEnabled && <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">{fmtM(calc.eventsRev)} / yr</span>}
+              <label className="toggle toggle--inline">
                 <input type="checkbox" checked={m.eventsEnabled} onChange={e => update('eventsEnabled', e.target.checked)} />
                 <span className="toggle__slider" />
               </label>
             </div>
-
             {m.eventsEnabled && (
               <>
                 <div className="slider-grid">
@@ -232,17 +230,43 @@ export default function FinancialModel() {
                   <Slider label="Events per year" min={0} max={60} step={1} value={m.eventsPerYear} onChange={v => update('eventsPerYear', v)} format={v => `${v} events`} />
                   <Slider label="Catering / bar per event" min={2000} max={20000} step={500} value={m.cateringPerEvent} onChange={v => update('cateringPerEvent', v)} format={fmt$} />
                   <Slider label="Cabin buyout rate" min={0} max={100} step={5} value={m.cabinBuyoutRate} onChange={v => update('cabinBuyoutRate', v)} format={v => `${v}%`} />
-                  <Slider label="Venue build cost" min={0.5} max={4} step={0.1} value={m.venueBuildCost} onChange={v => update('venueBuildCost', parseFloat(v))} format={v => `$${v}M`} />
                 </div>
-
                 <div className="addon-summary">
                   <div className="addon-summary__item"><span>Venue rental</span><strong>{fmtM(calc.venueRentalRev)}</strong></div>
-                  <div className="addon-summary__item"><span>Catering & bar</span><strong>{fmtM(calc.cateringRev)}</strong></div>
+                  <div className="addon-summary__item"><span>Catering &amp; bar</span><strong>{fmtM(calc.cateringRev)}</strong></div>
                   <div className="addon-summary__item"><span>Cabin buyouts</span><strong>{fmtM(calc.buyoutRev)}</strong></div>
                   <div className="addon-summary__item addon-summary__item--total"><span>Total event revenue</span><strong>{fmtM(calc.eventsRev)}</strong></div>
                 </div>
               </>
             )}
+          </div>
+        </div>
+
+        {/* Build & Funding */}
+        <div className="fin-card">
+          <div className="fin-card__header">BUILD &amp; FUNDING</div>
+
+          <div className="fin-subgroup">
+            <div className="fin-subgroup__title">
+              <span>Development Cost</span>
+              <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">{fmtM(calc.totalBuild)} total</span>
+            </div>
+            <div className="slider-grid">
+              <Slider label="Build cost / cabin ($M)" min={1.5} max={5} step={0.1} value={m.buildCostPerCabin} onChange={v => update('buildCostPerCabin', parseFloat(v))} format={v => `$${v.toFixed(1)}M`} />
+              {m.eventsEnabled && (
+                <Slider label="Venue build cost ($M)" min={0.5} max={4} step={0.1} value={m.venueBuildCost} onChange={v => update('venueBuildCost', parseFloat(v))} format={v => `$${v}M`} />
+              )}
+            </div>
+          </div>
+
+          <div className="fin-subgroup">
+            <div className="fin-subgroup__title">
+              <span>Capital Stack</span>
+            </div>
+            <div className="slider-grid">
+              <Slider label="Equity invested" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
+              <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
+            </div>
           </div>
         </div>
 

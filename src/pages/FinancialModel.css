@@ -79,6 +79,63 @@
   text-transform: uppercase;
 }
 
+/* Sub-groups inside a card */
+.fin-subgroup {
+  padding: 1rem 0;
+  border-top: 1px solid rgba(43, 53, 41, 0.08);
+}
+.fin-subgroup:first-of-type {
+  border-top: none;
+  padding-top: 0.25rem;
+}
+.fin-subgroup--off {
+  opacity: 0.6;
+}
+.fin-subgroup__title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--deep-forest);
+  margin-bottom: 0.85rem;
+}
+.fin-subgroup__badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.18rem 0.6rem;
+  border-radius: 10px;
+  line-height: 1.3;
+}
+.fin-subgroup__badge--green {
+  background: rgba(74, 103, 65, 0.12);
+  color: var(--carolina-green);
+}
+.fin-subgroup__badge--sage {
+  background: rgba(107, 127, 106, 0.18);
+  color: #4a5c49;
+}
+.fin-subgroup__badge--tobacco {
+  background: rgba(139, 111, 78, 0.15);
+  color: var(--tobacco);
+}
+.fin-subgroup__note {
+  font-size: 0.78rem;
+  color: rgba(43, 53, 41, 0.55);
+  font-style: italic;
+  margin-top: 0.4rem;
+  line-height: 1.4;
+}
+.toggle--inline {
+  margin-left: auto;
+}
+.fin-subgroup .config-grid { margin-bottom: 0.5rem; }
+
 /* Top bar (scenario + capacity) */
 .fin-top-bar {
   display: flex;
