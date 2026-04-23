@@ -115,13 +115,9 @@ export default function FinancialModel() {
 
   return (
     <div className="fin-model">
-      <div className="fin-model__hero">
+      <div className="fin-model__hero fin-model__hero--slim">
         <div className="fin-model__hero-inner">
-          <span className="fin-model__label">FINANCIAL MODELING TOOL</span>
-          <h1 className="fin-model__title">Underwrite The Investment</h1>
-          <p className="fin-model__subtitle">
-            Interactive pro forma for an Albatross Club property — adjust cabins, rates, occupancy, and event mix to stress-test the business plan.
-          </p>
+          <h1 className="fin-model__label-heading">Financial Modeling Tool</h1>
         </div>
       </div>
 
