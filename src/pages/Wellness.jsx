@@ -1,19 +1,12 @@
 import { Link } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
 import './Wellness.css'
 
 export default function Wellness() {
   const base = import.meta.env.BASE_URL
   return (
     <div className="wellness">
-      <section className="well-hero" style={{ backgroundImage: `url(${base}renderings/spa-cold-tubs.png)` }}>
-        <div className="well-hero__overlay" />
-        <div className="well-hero__content">
-          <p className="section-label">06 &middot; Wellness & Recovery</p>
-          <h1 className="well-hero__title">Wellness & Recovery</h1>
-          <div className="gold-line" style={{ margin: '1rem auto' }} />
-          <p className="well-hero__sub">Cold plunge, sauna, and fitness designed for the active traveler</p>
-        </div>
-      </section>
+      <PageHeader title="Wellness & Recovery" />
 
       {/* Image showcase */}
       <section className="well-showcase">

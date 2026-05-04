@@ -1,19 +1,12 @@
 import { Link } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
 import './Dining.css'
 
 export default function Dining() {
   const base = import.meta.env.BASE_URL
   return (
     <div className="dining">
-      <section className="dining-hero" style={{ backgroundImage: `url(${base}renderings/lobby-bar.png)` }}>
-        <div className="dining-hero__overlay" />
-        <div className="dining-hero__content">
-          <p className="section-label">05 &middot; Dining &amp; Bar</p>
-          <h1 className="dining-hero__title">The 19th Hole</h1>
-          <div className="gold-line" style={{ margin: '1rem auto' }} />
-          <p className="dining-hero__sub">Where the round lives on</p>
-        </div>
-      </section>
+      <PageHeader title="Dining & Bar" />
 
       {/* Image showcase */}
       <section className="dining-showcase">

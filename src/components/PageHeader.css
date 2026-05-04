@@ -1,0 +1,19 @@
+.page-header {
+  background: linear-gradient(135deg, var(--deep-forest) 0%, var(--carolina-green) 100%);
+  padding: 2rem 0 1.75rem;
+  color: var(--cream);
+  margin-top: 72px;
+}
+.page-header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.page-header__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  margin: 0;
+}

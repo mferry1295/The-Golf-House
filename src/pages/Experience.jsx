@@ -1,20 +1,12 @@
 import { Link } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
 import './Experience.css'
 
 export default function Experience() {
   const base = import.meta.env.BASE_URL
   return (
     <div className="experience">
-      {/* Hero */}
-      <section className="exp-hero" style={{ backgroundImage: `url(${base}renderings/locker-room.png)` }}>
-        <div className="exp-hero__overlay" />
-        <div className="exp-hero__content">
-          <p className="section-label">02 &middot; The Experience</p>
-          <h1 className="exp-hero__title">The Experience</h1>
-          <div className="gold-line" style={{ margin: '1rem auto' }} />
-          <p className="exp-hero__sub">From short game grounds to the members' locker room &mdash; every corner of the clubhouse</p>
-        </div>
-      </section>
+      <PageHeader title="The Experience" />
 
       {/* Amenities Gallery */}
       <section className="exp-gallery">

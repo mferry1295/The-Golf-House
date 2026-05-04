@@ -67,6 +67,20 @@ export default function SiteSelection() {
   const [weights, setWeights] = useState(DEFAULT_WEIGHTS)
   const [mapZoom, setMapZoom] = useState(1)
   const [mapPan, setMapPan] = useState({ x: 0, y: 0 })
+  const [openSections, setOpenSections] = useState({ weights: true, filters: true })
+
+  function toggleSection(key) {
+    setOpenSections(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+  function resetAll() {
+    setWeights(DEFAULT_WEIGHTS)
+    setAccessFilter('All')
+    setStateFilter('All')
+    setSortBy('totalRounds')
+    setSelectedState(null)
+    setSelectedRegion(null)
+    setSelectedCourse(null)
+  }
 
   const courses = coursesData
 
@@ -201,6 +215,9 @@ export default function SiteSelection() {
 
   const filteredRegions = selectedRegion ? [selectedRegion] : regionStats
 
+  const wSum = weights.rounds + weights.count + weights.lodging + weights.build + weights.operate
+  const filtersActive = accessFilter !== 'All' || stateFilter !== 'All' || sortBy !== 'totalRounds' || !!selectedState || !!selectedRegion
+
   return (
     <div className="site-selection">
       <div className="site-selection__hero site-selection__hero--slim">
@@ -209,27 +226,75 @@ export default function SiteSelection() {
         </div>
       </div>
 
-      {/* Combined: weights → cards → map, all on cream bg */}
-      <section className="site-section">
-        <div className="site-section__inner">
-          <WeightPanel weights={weights} setWeights={setWeights} defaults={DEFAULT_WEIGHTS} />
+      <div className="site-layout">
+        {/* SIDEBAR — INPUTS */}
+        <aside className="ss-sidebar">
+          <div className="ss-sidebar__head">
+            <span className="ss-sidebar__title">Inputs</span>
+            <button className="ss-sidebar__reset" onClick={resetAll}>Reset</button>
+          </div>
 
+          <SBSection
+            label="Scoring Weights"
+            badge={`${wSum}%`}
+            badgeColor={wSum === 100 ? 'green' : 'tobacco'}
+            open={openSections.weights}
+            onToggle={() => toggleSection('weights')}
+          >
+            <WeightPanel weights={weights} setWeights={setWeights} />
+            <button className="ss-weight-reset" onClick={() => setWeights(DEFAULT_WEIGHTS)}>Reset weights</button>
+          </SBSection>
+
+          <SBSection
+            label="Filters"
+            badge={filtersActive ? 'Active' : null}
+            badgeColor="green"
+            open={openSections.filters}
+            onToggle={() => toggleSection('filters')}
+          >
+            <div className="ss-filter">
+              <label>Access</label>
+              <select value={accessFilter} onChange={e => setAccessFilter(e.target.value)}>
+                <option>All</option>
+                <option>Private</option>
+                <option>Resort</option>
+                <option>Public</option>
+                <option>Semi-Private</option>
+              </select>
+            </div>
+            <div className="ss-filter">
+              <label>State</label>
+              <select value={stateFilter} onChange={e => setStateFilter(e.target.value)}>
+                <option>All</option>
+                {Object.keys(stateStats).sort().map(s => <option key={s} value={s}>{s} — {STATE_NAMES[s]}</option>)}
+              </select>
+            </div>
+            <div className="ss-filter">
+              <label>Sort By</label>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                <option value="totalRounds">Total Rounds / Yr</option>
+                <option value="rank">Course Rank</option>
+                <option value="playableDays">Playable Days / Yr</option>
+                <option value="lodgingRate">Lodging Rate</option>
+                <option value="yearOpened">Year Opened (Newest)</option>
+                <option value="yearOpenedAsc">Year Opened (Oldest)</option>
+              </select>
+            </div>
+            {(selectedState || selectedRegion) && (
+              <button className="ss-filter-clear" onClick={() => { setSelectedState(null); setSelectedRegion(null) }}>
+                Clear map selection
+              </button>
+            )}
+          </SBSection>
+        </aside>
+
+        {/* CONTENT */}
+        <main className="ss-content">
           <div className="regions-grid">
             {filteredRegions.slice(0, 12).map(r => {
               const isExpanded = selectedRegion?.name === r.name
-              return (
-              <div key={r.name} className={`region-card ${r.rank <= 3 ? 'region-card--top' : ''} ${isExpanded ? 'region-card--expanded' : ''}`} onClick={() => setSelectedRegion(isExpanded ? null : r)}>
-                <div className="region-card__head">
-                  <div className="region-card__rank">#{r.rank}</div>
-                  <div className="region-card__score">
-                    <div className="region-card__score-value">{r.siteScore}</div>
-                    <div className="region-card__score-label">SITE SCORE</div>
-                  </div>
-                </div>
-                <h3 className="region-card__name">{r.name}</h3>
-                <div className="region-card__state">{STATE_NAMES[r.state]}</div>
-
-                {/* Score breakdown aligned to the 5 model inputs */}
+              const wSum = weights.rounds + weights.count + weights.lodging + weights.build + weights.operate
+              const scoreBreakdown = (
                 <div className="score-breakdown">
                   <div className="score-breakdown__title">SCORE BREAKDOWN</div>
                   {[
@@ -240,7 +305,6 @@ export default function SiteSelection() {
                     { key: 'operate', label: 'Operate Cost', weight: weights.operate },
                   ].map(f => {
                     const sub = r.subScores[f.key]
-                    const wSum = weights.rounds + weights.count + weights.lodging + weights.build + weights.operate
                     const wPct = wSum ? Math.round((f.weight / wSum) * 100) : 0
                     const contribution = Math.round((sub * f.weight) / (wSum || 1))
                     return (
@@ -256,74 +320,97 @@ export default function SiteSelection() {
                     )
                   })}
                 </div>
-
-                {isExpanded && (
-                  <div className="region-card__expanded" onClick={e => e.stopPropagation()}>
-                    <div className="region-card__metrics">
-                      <div className="region-metric">
-                        <div className="region-metric__label">Total Rounds</div>
-                        <div className="region-metric__value">{fmt(r.totalRounds)}</div>
-                        <div className="region-metric__sub">/ year</div>
-                      </div>
-                      <div className="region-metric">
-                        <div className="region-metric__label">Courses</div>
-                        <div className="region-metric__value">{r.courses.length}</div>
-                        <div className="region-metric__sub">in top 300</div>
-                      </div>
-                      <div className="region-metric">
-                        <div className="region-metric__label">Top 100</div>
-                        <div className="region-metric__value">{r.top100}</div>
-                        <div className="region-metric__sub">ranked courses</div>
-                      </div>
-                      <div className="region-metric">
-                        <div className="region-metric__label">Avg Lodging</div>
-                        <div className="region-metric__value">${fmt(r.avgLodging)}</div>
-                        <div className="region-metric__sub">nightly ADR</div>
-                      </div>
-                      <div className="region-metric">
-                        <div className="region-metric__label">Build Cost</div>
-                        <div className="region-metric__value">${(r.avgBuildCost || 0).toFixed(1)}M</div>
-                        <div className="region-metric__sub">per cabin</div>
-                      </div>
-                      <div className="region-metric">
-                        <div className="region-metric__label">Operate Cost</div>
-                        <div className="region-metric__value">{r.avgOperateCost}%</div>
-                        <div className="region-metric__sub">of revenue</div>
-                      </div>
-                    </div>
-
-                    <div className="region-card__courses">
-                      <div className="region-card__courses-title">
-                        CONTRIBUTING COURSES <span className="region-card__courses-count">({r.courses.length})</span>
-                      </div>
-                      <div className="region-card__course-list">
-                        {r.courses
-                          .slice()
-                          .sort((a, b) => (a.rank || 9999) - (b.rank || 9999))
-                          .map(c => (
-                            <div key={`${c.rank}-${c.course}`} className="region-course-row">
-                              <span className="region-course-row__rank">#{c.rank || '—'}</span>
-                              <div className="region-course-row__name-col">
-                                <div className="region-course-row__name">{c.course}</div>
-                                <div className="region-course-row__designer">
-                                  {[c.resort, c.designer].filter(Boolean).join(' · ')}
-                                </div>
-                              </div>
-                              <div className="region-course-row__meta">
-                                <span className={`region-course-row__access region-course-row__access--${(c.access || '').toLowerCase().replace(/\s+/g, '-')}`}>
-                                  {c.access || '—'}
-                                </span>
-                                <span className="region-course-row__rounds">{fmt(c.totalRounds)} rds/yr</span>
-                              </div>
+              )
+              const metricsBlock = (
+                <div className="region-card__metrics">
+                  <div className="region-metric">
+                    <div className="region-metric__label">Total Rounds</div>
+                    <div className="region-metric__value">{fmt(r.totalRounds)}</div>
+                    <div className="region-metric__sub">/ year</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__label">Courses</div>
+                    <div className="region-metric__value">{r.courses.length}</div>
+                    <div className="region-metric__sub">in top 300</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__label">Top 100</div>
+                    <div className="region-metric__value">{r.top100}</div>
+                    <div className="region-metric__sub">ranked courses</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__label">Avg Lodging</div>
+                    <div className="region-metric__value">${fmt(r.avgLodging)}</div>
+                    <div className="region-metric__sub">nightly ADR</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__label">Build Cost</div>
+                    <div className="region-metric__value">${(r.avgBuildCost || 0).toFixed(1)}M</div>
+                    <div className="region-metric__sub">per cabin</div>
+                  </div>
+                  <div className="region-metric">
+                    <div className="region-metric__label">Operate Cost</div>
+                    <div className="region-metric__value">{r.avgOperateCost}%</div>
+                    <div className="region-metric__sub">of revenue</div>
+                  </div>
+                </div>
+              )
+              const coursesBlock = (
+                <div className="region-card__courses">
+                  <div className="region-card__courses-title">
+                    CONTRIBUTING COURSES <span className="region-card__courses-count">({r.courses.length})</span>
+                  </div>
+                  <div className="region-card__course-list">
+                    {r.courses
+                      .slice()
+                      .sort((a, b) => (a.rank || 9999) - (b.rank || 9999))
+                      .map(c => (
+                        <div key={`${c.rank}-${c.course}`} className="region-course-row">
+                          <span className="region-course-row__rank">#{c.rank || '—'}</span>
+                          <div className="region-course-row__name-col">
+                            <div className="region-course-row__name">{c.course}</div>
+                            <div className="region-course-row__designer">
+                              {[c.resort, c.designer].filter(Boolean).join(' · ')}
                             </div>
-                          ))}
-                      </div>
-                    </div>
+                          </div>
+                          <div className="region-course-row__meta">
+                            <span className={`region-course-row__access region-course-row__access--${(c.access || '').toLowerCase().replace(/\s+/g, '-')}`}>
+                              {c.access || '—'}
+                            </span>
+                            <span className="region-course-row__rounds">{fmt(c.totalRounds)} rds/yr</span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )
+              return (
+              <div key={r.name} className={`region-card ${r.rank <= 3 ? 'region-card--top' : ''} ${isExpanded ? 'region-card--expanded' : ''}`} onClick={() => setSelectedRegion(isExpanded ? null : r)}>
+                <div className="region-card__head">
+                  <div className="region-card__rank">#{r.rank}</div>
+                  <div className="region-card__score">
+                    <div className="region-card__score-value">{r.siteScore}</div>
+                    <div className="region-card__score-label">SITE SCORE</div>
+                  </div>
+                </div>
+                <h3 className="region-card__name">{r.name}</h3>
+                <div className="region-card__state">{STATE_NAMES[r.state]}</div>
 
+                {isExpanded ? (
+                  <div className="region-card__expanded" onClick={e => e.stopPropagation()}>
+                    <div className="region-card__expanded-grid">
+                      <div className="region-card__expanded-left">
+                        {scoreBreakdown}
+                        {metricsBlock}
+                      </div>
+                      {coursesBlock}
+                    </div>
                     <button className="region-card__close" onClick={() => setSelectedRegion(null)}>
                       Collapse ×
                     </button>
                   </div>
+                ) : (
+                  scoreBreakdown
                 )}
 
               </div>
@@ -549,119 +636,98 @@ export default function SiteSelection() {
               </div>
             )
           })()}
-        </div>
-      </section>
 
-      {/* Filter & Explore — driven by map selection */}
-      <section className="site-section site-section--dark">
-        <div className="site-section__inner">
-          <div className="site-section__head">
-            <span className="section-label">COURSE EXPLORER</span>
-            <h2 className="section-title">Filter & Explore</h2>
-            <div className="gold-line" />
-            <p className="section-desc">
-              {selectedState
-                ? `Showing top courses in ${STATE_NAMES[selectedState]}.`
-                : 'Click a state on the map above to narrow the list, or filter manually below.'}
-            </p>
-          </div>
+          {/* Course Explorer table */}
+          <div className="ss-table-card">
+            <div className="ss-table-card__head">
+              <span className="ss-table-card__label">COURSE EXPLORER</span>
+              <h3 className="ss-table-card__title">
+                {selectedState
+                  ? `Top courses in ${STATE_NAMES[selectedState]}`
+                  : 'All courses — filter from the sidebar'}
+              </h3>
+            </div>
 
-          <div className="filters">
-            <div className="filter-group">
-              <label>Access</label>
-              <select value={accessFilter} onChange={e => setAccessFilter(e.target.value)}>
-                <option>All</option>
-                <option>Private</option>
-                <option>Resort</option>
-                <option>Public</option>
-                <option>Semi-Private</option>
-              </select>
-            </div>
-            <div className="filter-group">
-              <label>State</label>
-              <select value={stateFilter} onChange={e => setStateFilter(e.target.value)}>
-                <option>All</option>
-                {Object.keys(stateStats).sort().map(s => <option key={s} value={s}>{s} — {STATE_NAMES[s]}</option>)}
-              </select>
-            </div>
-            <div className="filter-group">
-              <label>Sort By</label>
-              <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
-                <option value="totalRounds">Total Rounds / Yr</option>
-                <option value="rank">Course Rank</option>
-                <option value="playableDays">Playable Days / Yr</option>
-                <option value="lodgingRate">Lodging Rate</option>
-                <option value="yearOpened">Year Opened (Newest)</option>
-                <option value="yearOpenedAsc">Year Opened (Oldest)</option>
-              </select>
-            </div>
-            {(selectedState || selectedRegion) && (
-              <button className="filter-reset" onClick={() => { setSelectedState(null); setSelectedRegion(null) }}>
-                Clear Map Selection
-              </button>
+            {selectedState && (
+              <div className="filter-notice">
+                Showing courses in <strong>{STATE_NAMES[selectedState]}</strong> — {stateStats[selectedState].count} courses,
+                {' '}{fmt(stateStats[selectedState].totalRounds)} rounds/year
+              </div>
             )}
-          </div>
 
-          {selectedState && (
-            <div className="filter-notice">
-              Showing courses in <strong>{STATE_NAMES[selectedState]}</strong> — {stateStats[selectedState].count} courses,
-              {' '}{fmt(stateStats[selectedState].totalRounds)} rounds/year
-            </div>
-          )}
-
-          <div className="course-table-wrap">
-            <table className="course-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Course</th>
-                  <th>Designer</th>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Access</th>
-                  <th className="num">Est.</th>
-                  <th className="num">Days/Yr</th>
-                  <th className="num">Rounds/Yr</th>
-                  <th className="num">Lodging $/Nt</th>
-                  <th className="num">Build</th>
-                  <th className="num">Op.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayCourses.map(c => (
-                  <tr key={c.rank}>
-                    <td className="rank-cell">{c.rank}</td>
-                    <td className="course-cell">
-                      <div className="course-name">{c.course}</div>
-                      {c.notes && <div className="course-note">{c.notes}</div>}
-                    </td>
-                    <td className="designer-cell">{c.designer || '—'}</td>
-                    <td>{c.city}</td>
-                    <td><span className="state-pill">{c.state}</span></td>
-                    <td><span className={`access-pill access-pill--${c.access?.toLowerCase().replace('-', '')}`}>{c.access}</span></td>
-                    <td className="num">{c.yearOpened}</td>
-                    <td className="num">{c.playableDays}</td>
-                    <td className="num rounds-cell">{fmt(c.totalRounds)}</td>
-                    <td className="num lodging-cell">${c.lodgingRate}</td>
-                    <td className="num cost-cell">{c.buildCost}</td>
-                    <td className="num cost-cell">{c.operateCost}</td>
+            <div className="course-table-wrap">
+              <table className="course-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Course</th>
+                    <th>Designer</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Access</th>
+                    <th className="num">Est.</th>
+                    <th className="num">Days/Yr</th>
+                    <th className="num">Rounds/Yr</th>
+                    <th className="num">Lodging $/Nt</th>
+                    <th className="num">Build</th>
+                    <th className="num">Op.</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {displayCourses.length >= 100 && (
-              <div className="table-footer">Showing top 100 of {courses.length} — narrow filters to see more.</div>
-            )}
+                </thead>
+                <tbody>
+                  {displayCourses.map(c => (
+                    <tr key={c.rank}>
+                      <td className="rank-cell">{c.rank}</td>
+                      <td className="course-cell">
+                        <div className="course-name">{c.course}</div>
+                        {c.notes && <div className="course-note">{c.notes}</div>}
+                      </td>
+                      <td className="designer-cell">{c.designer || '—'}</td>
+                      <td>{c.city}</td>
+                      <td><span className="state-pill">{c.state}</span></td>
+                      <td><span className={`access-pill access-pill--${c.access?.toLowerCase().replace('-', '')}`}>{c.access}</span></td>
+                      <td className="num">{c.yearOpened}</td>
+                      <td className="num">{c.playableDays}</td>
+                      <td className="num rounds-cell">{fmt(c.totalRounds)}</td>
+                      <td className="num lodging-cell">${c.lodgingRate}</td>
+                      <td className="num cost-cell">{c.buildCost}</td>
+                      <td className="num cost-cell">{c.operateCost}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {displayCourses.length >= 100 && (
+                <div className="table-footer">Showing top 100 of {courses.length} — narrow filters to see more.</div>
+              )}
+            </div>
           </div>
-        </div>
-      </section>
-
+        </main>
+      </div>
     </div>
   )
 }
 
-function WeightPanel({ weights, setWeights, defaults }) {
-  const sum = weights.rounds + weights.count + weights.lodging + weights.build + weights.operate
+function SBSection({ label, badge, badgeColor, open, onToggle, children }) {
+  return (
+    <div className={`ss-section ${open ? 'ss-section--open' : ''}`}>
+      <div
+        className="ss-section__head"
+        onClick={onToggle}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+      >
+        <span className="ss-section__label">{label}</span>
+        <span className="ss-section__meta">
+          {badge && <span className={`ss-section__badge ss-section__badge--${badgeColor || 'green'}`}>{badge}</span>}
+          <span className="ss-section__caret" aria-hidden>{open ? '−' : '+'}</span>
+        </span>
+      </div>
+      {open && <div className="ss-section__body">{children}</div>}
+    </div>
+  )
+}
+
+function WeightPanel({ weights, setWeights }) {
   const factors = [
     { key: 'rounds', label: 'Rounds', tip: 'Annual rounds played across the metro. Higher rounds = more demand.' },
     { key: 'count', label: 'Top-300 Density', tip: 'Count of top-300 courses in the region. Richer cluster supports longer stays.' },
@@ -671,35 +737,24 @@ function WeightPanel({ weights, setWeights, defaults }) {
   ]
 
   const update = (key, value) => setWeights(prev => ({ ...prev, [key]: value }))
-  const reset = () => setWeights(defaults)
 
   return (
-    <div className="weight-panel weight-panel--inline">
-      <div className="weight-panel__label">SCORING WEIGHTS</div>
-      <div className="weight-row">
-        {factors.map(f => {
-          const val = weights[f.key]
-          const dec = () => update(f.key, Math.max(0, val - 5))
-          const inc = () => update(f.key, Math.min(100, val + 5))
-          return (
-            <div key={f.key} className="weight-chip" title={f.tip}>
-              <div className="weight-chip__label">{f.label}</div>
-              <div className="weight-chip__stepper">
-                <button className="weight-stepper__btn" onClick={dec} disabled={val <= 0} aria-label="Decrease">&#9660;</button>
-                <span className="weight-chip__value">{val}%</span>
-                <button className="weight-stepper__btn" onClick={inc} disabled={val >= 100} aria-label="Increase">&#9650;</button>
-              </div>
+    <div className="ss-weights-stack">
+      {factors.map(f => {
+        const val = weights[f.key]
+        const dec = () => update(f.key, Math.max(0, val - 5))
+        const inc = () => update(f.key, Math.min(100, val + 5))
+        return (
+          <div key={f.key} className="ss-weight-row" title={f.tip}>
+            <div className="ss-weight-row__label">{f.label}</div>
+            <div className="ss-weight-row__stepper">
+              <button onClick={inc} disabled={val >= 100} aria-label="Increase">&#9650;</button>
+              <span>{val}%</span>
+              <button onClick={dec} disabled={val <= 0} aria-label="Decrease">&#9660;</button>
             </div>
-          )
-        })}
-        <div className={`weight-total ${sum === 100 ? 'weight-total--ok' : 'weight-total--warn'}`} title={sum === 100 ? 'Weights sum to 100%' : `Weights sum to ${sum}% — scores are normalized`}>
-          <div className="weight-total__label">Total</div>
-          <div className="weight-total__value">
-            {sum}%
           </div>
-        </div>
-        <button className="weight-reset weight-reset--compact" onClick={reset}>Reset</button>
-      </div>
+        )
+      })}
     </div>
   )
 }

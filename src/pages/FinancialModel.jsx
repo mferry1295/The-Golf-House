@@ -1,29 +1,12 @@
 import { useState, useMemo } from 'react'
 import './FinancialModel.css'
 
-// Scenario presets
-const SCENARIOS = {
-  base: {
-    cabins: 8, guestsPerCabin: 6, nightlyRate: 4300, occupancy: 60,
-    fbPerGuest: 450, opCostPct: 58, buildCostPerCabin: 2.5, equityPct: 35,
-    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
-    eventsEnabled: true, venueRental: 15000, eventsPerYear: 20, cateringPerEvent: 8000,
-    cabinBuyoutRate: 60, venueBuildCost: 1.5,
-  },
-  bear: {
-    cabins: 8, guestsPerCabin: 6, nightlyRate: 3200, occupancy: 45,
-    fbPerGuest: 325, opCostPct: 65, buildCostPerCabin: 2.8, equityPct: 35,
-    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
-    eventsEnabled: true, venueRental: 10000, eventsPerYear: 10, cateringPerEvent: 6000,
-    cabinBuyoutRate: 30, venueBuildCost: 1.5,
-  },
-  bull: {
-    cabins: 8, guestsPerCabin: 6, nightlyRate: 5500, occupancy: 75,
-    fbPerGuest: 575, opCostPct: 52, buildCostPerCabin: 2.5, equityPct: 35,
-    debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
-    eventsEnabled: true, venueRental: 22000, eventsPerYear: 30, cateringPerEvent: 10000,
-    cabinBuyoutRate: 80, venueBuildCost: 1.5,
-  }
+const DEFAULT_INPUTS = {
+  cabins: 8, guestsPerCabin: 6, nightlyRate: 4300, occupancy: 60,
+  fbPerGuest: 450, opCostPct: 58, buildCostPerCabin: 2.5, equityPct: 35,
+  debtRate: 7.2, amortYears: 25, mgmtFeePct: 6, numInvestors: 6, lpPrefReturn: 8, gpCarry: 20,
+  eventsEnabled: true, venueRental: 15000, eventsPerYear: 20, cateringPerEvent: 8000,
+  cabinBuyoutRate: 60, venueBuildCost: 1.5,
 }
 
 const CABIN_OPTIONS = [4, 6, 8, 10, 12, 16]
@@ -34,39 +17,38 @@ function fmtM(n) {
   if (Math.abs(n) >= 1_000) return `$${Math.round(n / 1_000)}K`
   return `$${Math.round(n).toLocaleString()}`
 }
-function fmtMDetail(n) {
-  return fmtM(n)
-}
 function fmtPct(n) { return `${Math.round(n)}%` }
 function fmt$(n) { return `$${Math.round(n).toLocaleString()}` }
 
 export default function FinancialModel() {
-  const [scenario, setScenario] = useState('base')
-  const [m, setM] = useState(SCENARIOS.base)
-  const [view, setView] = useState('inputs')
+  const [m, setM] = useState(DEFAULT_INPUTS)
+  const [view, setView] = useState('income')
+  const [openSections, setOpenSections] = useState({
+    lodging: true,
+    fb: false,
+    events: false,
+    build: false,
+    capital: false,
+    financing: false,
+  })
 
-  function applyScenario(key) {
-    setScenario(key)
-    setM(SCENARIOS[key])
+  function toggleSection(key) {
+    setOpenSections(prev => ({ ...prev, [key]: !prev[key] }))
   }
   function update(field, value) {
-    setScenario('custom')
     setM(prev => ({ ...prev, [field]: value }))
   }
 
   const calc = useMemo(() => {
     const capacity = m.cabins * m.guestsPerCabin
-    const maxNightly = m.cabins * m.nightlyRate * 2 // peak night illustrative
+    const maxNightly = m.cabins * m.nightlyRate * 2
     const nightsPerYear = 365
 
-    // Revenue streams
     const cabinRev = m.cabins * m.nightlyRate * nightsPerYear * (m.occupancy / 100)
     const fbRev = m.cabins * m.guestsPerCabin * nightsPerYear * (m.occupancy / 100) * m.fbPerGuest
 
-    // Events
     const venueRentalRev = m.eventsEnabled ? m.eventsPerYear * m.venueRental : 0
-    const cateringRev = m.eventsEnabled ? m.eventsPerYear * m.cateringPerEvent * 0.25 : 0 // 25% margin kept
-    // Cabin buyout: some % of events buyout cabins @ nightlyRate for the weekend (2 nights)
+    const cateringRev = m.eventsEnabled ? m.eventsPerYear * m.cateringPerEvent * 0.25 : 0
     const buyoutRev = m.eventsEnabled
       ? m.eventsPerYear * (m.cabinBuyoutRate / 100) * m.cabins * m.nightlyRate * 2 * 0.8
       : 0
@@ -78,17 +60,14 @@ export default function FinancialModel() {
     const ebitda = grossRev - opex - mgmtFee
     const ebitdaMargin = (ebitda / grossRev) * 100
 
-    // --- Detailed P&L breakdown ---
-    // Cost of Sales (direct variable costs tied to revenue)
-    const fbCOGS = fbRev * 0.32              // 32% F&B direct food/beverage cost
-    const cateringCOGS = cateringRev * 3 * 0.55 / 3 // catering direct (55% of gross catering, we kept 25% margin earlier; full catering gross is cateringRev*4)
-    const lodgingConsumables = cabinRev * 0.06 // linens, toiletries, supplies
+    const fbCOGS = fbRev * 0.32
+    const cateringCOGS = cateringRev * 3 * 0.55 / 3
+    const lodgingConsumables = cabinRev * 0.06
     const totalCOGS = fbCOGS + cateringCOGS + lodgingConsumables
     const grossProfit = grossRev - totalCOGS
     const grossMargin = (grossProfit / grossRev) * 100
 
-    // Operating Expense breakdown (sums to opex)
-    const laborExp = grossRev * Math.min(0.35, m.opCostPct / 100 * 0.6) // labor dominates opex
+    const laborExp = grossRev * Math.min(0.35, m.opCostPct / 100 * 0.6)
     const marketingExp = grossRev * 0.06
     const utilitiesExp = grossRev * 0.03
     const propertyTax = grossRev * 0.025
@@ -97,13 +76,11 @@ export default function FinancialModel() {
     const gaExp = grossRev * 0.02
     const otherOpex = Math.max(0, opex - (laborExp + marketingExp + utilitiesExp + propertyTax + insuranceExp + maintenanceExp + gaExp))
 
-    // Below EBITDA
-    // Capital stack
     const totalBuild = m.cabins * m.buildCostPerCabin * 1_000_000 + (m.eventsEnabled ? m.venueBuildCost * 1_000_000 : 0)
     const equity = totalBuild * (m.equityPct / 100)
     const debt = totalBuild * (1 - m.equityPct / 100)
 
-    const depreciation = totalBuild * 0.04  // ~25-year straight-line building
+    const depreciation = totalBuild * 0.04
     const ebit = ebitda - depreciation
     const interestExp = debt * (m.debtRate / 100)
     const principalPayment = debt / (m.amortYears || 25)
@@ -116,15 +93,13 @@ export default function FinancialModel() {
     const cashOnCash = (cashFlow / equity) * 100
     const paybackYears = cashFlow > 0 ? equity / cashFlow : 99
 
-    // Investor economics
     const equityPerInvestor = equity / Math.max(1, m.numInvestors || 1)
     const lpPrefDollars = equity * ((m.lpPrefReturn || 0) / 100)
 
-    // 5-year cumulative (ramping)
     const rampFactors = [0.55, 0.75, 0.9, 1.0, 1.05]
     let cumulative = -equity
     const yearlyCum = []
-    rampFactors.forEach((r, i) => {
+    rampFactors.forEach((r) => {
       const yrCash = cashFlow * r
       cumulative += yrCash
       yearlyCum.push(cumulative)
@@ -134,16 +109,12 @@ export default function FinancialModel() {
       capacity, maxNightly,
       cabinRev, fbRev, eventsRev, grossRev,
       venueRentalRev, cateringRev, buyoutRev,
-      // cost of sales
       fbCOGS, cateringCOGS, lodgingConsumables, totalCOGS, grossProfit, grossMargin,
-      // opex detail
       laborExp, marketingExp, utilitiesExp, propertyTax, insuranceExp,
       maintenanceExp, gaExp, otherOpex,
       opex, mgmtFee, ebitda, ebitdaMargin,
-      // below ebitda
       depreciation, ebit, interestExp, principalPayment,
       preTaxIncome, taxExpense, netIncome,
-      // capital
       totalBuild, equity, debt, annualDebtService, cashFlow,
       cashOnCash, paybackYears,
       equityPerInvestor, lpPrefDollars,
@@ -151,7 +122,6 @@ export default function FinancialModel() {
     }
   }, [m])
 
-  // Chart helpers
   const revMax = Math.max(calc.cabinRev, calc.fbRev, calc.eventsRev, 1)
   const cumMax = Math.max(...calc.yearlyCum, 1_000_000)
   const cumMin = Math.min(...calc.yearlyCum, -1_000_000)
@@ -164,75 +134,33 @@ export default function FinancialModel() {
         </div>
       </div>
 
-      <div className="fin-model__body">
-        {/* Primary view switcher */}
-        <div className="view-switcher">
-          <button className={`view-switcher__btn ${view === 'inputs' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('inputs')}>
-            Overall Inputs
-          </button>
-          <button className={`view-switcher__btn ${view === 'income' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('income')}>
-            Income Statement
-          </button>
-          <button className={`view-switcher__btn ${view === 'cashflow' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('cashflow')}>
-            Cash Flow & Returns
-          </button>
-          <button className={`view-switcher__btn ${view === 'exit' ? 'view-switcher__btn--active' : ''}`} onClick={() => setView('exit')}>
-            Exit Scenarios
-          </button>
-        </div>
+      <div className="fin-model__layout">
+        {/* SIDEBAR — INPUTS */}
+        <aside className="fin-sidebar">
+          <div className="fin-sidebar__head">
+            <span className="fin-sidebar__title">Inputs</span>
+            <button className="fin-sidebar__reset" onClick={() => setM(DEFAULT_INPUTS)}>Reset</button>
+          </div>
 
-        {/* Scenario + Summary bar */}
-        <div className="fin-card fin-top-bar">
-          <div className="scenario-toggle">
-            <button className={`scenario-btn ${scenario === 'base' ? 'scenario-btn--active' : ''}`} onClick={() => applyScenario('base')}>Base case</button>
-            <button className={`scenario-btn ${scenario === 'bear' ? 'scenario-btn--active' : ''}`} onClick={() => applyScenario('bear')}>Bear case</button>
-            <button className={`scenario-btn ${scenario === 'bull' ? 'scenario-btn--active' : ''}`} onClick={() => applyScenario('bull')}>Bull case</button>
-            {scenario === 'custom' && <span className="scenario-btn scenario-btn--custom">Custom</span>}
-          </div>
-          <div className="top-bar__stats">
-            <div className="top-bar__stat"><span>Capacity:</span> <strong>{calc.capacity} guests</strong></div>
-            <div className="top-bar__stat"><span>Max nightly:</span> <strong>{fmt$(calc.maxNightly)}</strong></div>
-          </div>
-        </div>
-
-        {view === 'inputs' && <>
-
-        {/* KPI cards */}
-        <div className="kpi-grid">
-          <div className="kpi-card">
-            <div className="kpi-card__label">ANNUAL REVENUE</div>
-            <div className="kpi-card__value">{fmtM(calc.grossRev)}</div>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-card__label">EBITDA</div>
-            <div className="kpi-card__value">{fmtM(calc.ebitda)}</div>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-card__label">EBITDA MARGIN</div>
-            <div className="kpi-card__value">{fmtPct(calc.ebitdaMargin)}</div>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-card__label">CASH-ON-CASH</div>
-            <div className="kpi-card__value">{fmtPct(calc.cashOnCash)}</div>
-            <div className="kpi-card__sub">on {fmtM(calc.equity)} equity</div>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-card__label">PAYBACK PERIOD</div>
-            <div className="kpi-card__value">{calc.paybackYears > 20 ? '20+' : calc.paybackYears.toFixed(1)} yrs</div>
-          </div>
-        </div>
-
-        {/* Revenue Streams */}
-        <div className="fin-card">
-          <div className="fin-card__header">REVENUE STREAMS</div>
-
-          {/* Lodging */}
-          <div className="fin-subgroup">
-            <div className="fin-subgroup__title">
-              <span>Lodging</span>
-              <span className="fin-subgroup__badge fin-subgroup__badge--green">{fmtM(calc.cabinRev)} / yr</span>
+          <div className="fin-sidebar__capacity">
+            <div className="fin-sidebar__cap-item">
+              <span>Capacity</span>
+              <strong>{calc.capacity} guests</strong>
             </div>
-            <div className="config-grid">
+            <div className="fin-sidebar__cap-item">
+              <span>Max nightly</span>
+              <strong>{fmt$(calc.maxNightly)}</strong>
+            </div>
+          </div>
+
+          <SidebarSection
+            label="Lodging"
+            badge={`${fmtM(calc.cabinRev)} / yr`}
+            badgeColor="green"
+            open={openSections.lodging}
+            onToggle={() => toggleSection('lodging')}
+          >
+            <div className="sb-config">
               <div className="config-item">
                 <label className="config-item__label">Number of cabins</label>
                 <select className="config-select" value={m.cabins} onChange={e => update('cabins', parseInt(e.target.value))}>
@@ -245,116 +173,101 @@ export default function FinancialModel() {
                   {GUEST_OPTIONS.map(n => <option key={n} value={n}>{n} guests</option>)}
                 </select>
               </div>
-              <div className="config-item config-item--readout">
-                <label className="config-item__label">Total capacity</label>
-                <div className="config-readout">{calc.capacity} guests</div>
-              </div>
-              <div className="config-item config-item--readout">
-                <label className="config-item__label">Max nightly revenue</label>
-                <div className="config-readout">{fmt$(calc.maxNightly)}</div>
-              </div>
             </div>
-            <div className="slider-grid">
+            <div className="sb-sliders">
               <Slider label="Nightly rate / cabin" min={1500} max={8000} step={50} value={m.nightlyRate} onChange={v => update('nightlyRate', v)} format={fmt$} />
               <Slider label="Occupancy" min={30} max={90} step={1} value={m.occupancy} onChange={v => update('occupancy', v)} format={v => `${v}%`} />
             </div>
-          </div>
+          </SidebarSection>
 
-          {/* F&B, Spa, Pro Shop */}
-          <div className="fin-subgroup">
-            <div className="fin-subgroup__title">
-              <span>F&amp;B, Spa &amp; Pro Shop</span>
-              <span className="fin-subgroup__badge fin-subgroup__badge--sage">{fmtM(calc.fbRev)} / yr</span>
-            </div>
-            <div className="slider-grid">
+          <SidebarSection
+            label="F&B, Spa & Pro Shop"
+            badge={`${fmtM(calc.fbRev)} / yr`}
+            badgeColor="sage"
+            open={openSections.fb}
+            onToggle={() => toggleSection('fb')}
+          >
+            <div className="sb-sliders">
               <Slider label="Ancillary spend / guest / night" min={100} max={1000} step={25} value={m.fbPerGuest} onChange={v => update('fbPerGuest', v)} format={fmt$} />
             </div>
-            <div className="fin-subgroup__note">
+            <div className="sb-note">
               Restaurant &amp; bar, spa treatments, pro shop retail, and activity fees combined per guest per night.
             </div>
-          </div>
+          </SidebarSection>
 
-          {/* Events & Weddings */}
-          <div className={`fin-subgroup ${m.eventsEnabled ? '' : 'fin-subgroup--off'}`}>
-            <div className="fin-subgroup__title">
-              <span>Events &amp; Weddings</span>
-              {m.eventsEnabled && <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">{fmtM(calc.eventsRev)} / yr</span>}
-              <label className="toggle toggle--inline">
+          <SidebarSection
+            label="Events & Weddings"
+            badge={m.eventsEnabled ? `${fmtM(calc.eventsRev)} / yr` : 'Off'}
+            badgeColor="tobacco"
+            open={openSections.events}
+            onToggle={() => toggleSection('events')}
+            extra={
+              <label className="toggle toggle--inline" onClick={e => e.stopPropagation()}>
                 <input type="checkbox" checked={m.eventsEnabled} onChange={e => update('eventsEnabled', e.target.checked)} />
                 <span className="toggle__slider" />
               </label>
-            </div>
-            {m.eventsEnabled && (
+            }
+          >
+            {m.eventsEnabled ? (
               <>
-                <div className="slider-grid">
+                <div className="sb-sliders">
                   <Slider label="Venue rental / event" min={5000} max={40000} step={500} value={m.venueRental} onChange={v => update('venueRental', v)} format={fmt$} />
                   <Slider label="Events per year" min={0} max={60} step={1} value={m.eventsPerYear} onChange={v => update('eventsPerYear', v)} format={v => `${v} events`} />
                   <Slider label="Catering / bar per event" min={2000} max={20000} step={500} value={m.cateringPerEvent} onChange={v => update('cateringPerEvent', v)} format={fmt$} />
                   <Slider label="Cabin buyout rate" min={0} max={100} step={5} value={m.cabinBuyoutRate} onChange={v => update('cabinBuyoutRate', v)} format={v => `${v}%`} />
                 </div>
-                <div className="addon-summary">
-                  <div className="addon-summary__item"><span>Venue rental</span><strong>{fmtM(calc.venueRentalRev)}</strong></div>
-                  <div className="addon-summary__item"><span>Catering &amp; bar</span><strong>{fmtM(calc.cateringRev)}</strong></div>
-                  <div className="addon-summary__item"><span>Cabin buyouts</span><strong>{fmtM(calc.buyoutRev)}</strong></div>
-                  <div className="addon-summary__item addon-summary__item--total"><span>Total event revenue</span><strong>{fmtM(calc.eventsRev)}</strong></div>
+                <div className="sb-mini-grid">
+                  <div className="sb-mini"><span>Venue</span><strong>{fmtM(calc.venueRentalRev)}</strong></div>
+                  <div className="sb-mini"><span>Catering</span><strong>{fmtM(calc.cateringRev)}</strong></div>
+                  <div className="sb-mini"><span>Buyouts</span><strong>{fmtM(calc.buyoutRev)}</strong></div>
                 </div>
               </>
+            ) : (
+              <div className="sb-note">Toggle on to model wedding &amp; event revenue.</div>
             )}
-          </div>
-        </div>
+          </SidebarSection>
 
-        {/* Build & Funding */}
-        <div className="fin-card">
-          <div className="fin-card__header">BUILD &amp; FUNDING</div>
-
-          <div className="fin-subgroup">
-            <div className="fin-subgroup__title">
-              <span>Development Cost</span>
-              <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">{fmtM(calc.totalBuild)} total</span>
-            </div>
-            <div className="slider-grid">
+          <SidebarSection
+            label="Development Cost"
+            badge={`${fmtM(calc.totalBuild)} total`}
+            badgeColor="tobacco"
+            open={openSections.build}
+            onToggle={() => toggleSection('build')}
+          >
+            <div className="sb-sliders">
               <Slider label="Build cost / cabin ($M)" min={1.5} max={5} step={0.1} value={m.buildCostPerCabin} onChange={v => update('buildCostPerCabin', parseFloat(v))} format={v => `$${v.toFixed(1)}M`} />
               {m.eventsEnabled && (
                 <Slider label="Venue build cost ($M)" min={0.5} max={4} step={0.1} value={m.venueBuildCost} onChange={v => update('venueBuildCost', parseFloat(v))} format={v => `$${v}M`} />
               )}
             </div>
-          </div>
+          </SidebarSection>
 
-          <div className="fin-subgroup">
-            <div className="fin-subgroup__title">
-              <span>Capital Stack</span>
-              <span className="fin-subgroup__badge fin-subgroup__badge--green">
-                {m.equityPct}% equity &middot; {100 - m.equityPct}% debt
-              </span>
-            </div>
-            <div className="slider-grid">
+          <SidebarSection
+            label="Capital Stack"
+            badge={`${m.equityPct}% / ${100 - m.equityPct}%`}
+            badgeColor="green"
+            open={openSections.capital}
+            onToggle={() => toggleSection('capital')}
+          >
+            <div className="sb-sliders">
               <Slider label="Equity share" min={20} max={60} step={1} value={m.equityPct} onChange={v => update('equityPct', v)} format={v => `${v}%`} />
               <Slider label="Operating cost %" min={40} max={75} step={1} value={m.opCostPct} onChange={v => update('opCostPct', v)} format={v => `${v}%`} />
             </div>
-            <div className="capital-mini-grid">
-              <div className="capital-mini">
-                <span>Equity raise</span>
-                <strong>{fmtM(calc.equity)}</strong>
-              </div>
-              <div className="capital-mini">
-                <span>Senior debt</span>
-                <strong>{fmtM(calc.debt)}</strong>
-              </div>
-              <div className="capital-mini">
-                <span>Equity / investor</span>
-                <strong>{fmtM(calc.equityPerInvestor)}</strong>
-              </div>
+            <div className="sb-mini-grid">
+              <div className="sb-mini"><span>Equity</span><strong>{fmtM(calc.equity)}</strong></div>
+              <div className="sb-mini"><span>Debt</span><strong>{fmtM(calc.debt)}</strong></div>
+              <div className="sb-mini"><span>Per LP</span><strong>{fmtM(calc.equityPerInvestor)}</strong></div>
             </div>
-          </div>
+          </SidebarSection>
 
-          <div className="fin-subgroup">
-            <div className="fin-subgroup__title">
-              <span>Financing Terms</span>
-              <span className="fin-subgroup__badge fin-subgroup__badge--tobacco">
-                {fmtM(calc.annualDebtService)} / yr debt service
-              </span>
-            </div>
-            <div className="slider-grid">
+          <SidebarSection
+            label="Financing Terms"
+            badge={`${fmtM(calc.annualDebtService)} / yr`}
+            badgeColor="tobacco"
+            open={openSections.financing}
+            onToggle={() => toggleSection('financing')}
+          >
+            <div className="sb-sliders">
               <Slider label="Debt interest rate" min={4} max={12} step={0.1} value={m.debtRate} onChange={v => update('debtRate', parseFloat(v))} format={v => `${v.toFixed(1)}%`} />
               <Slider label="Amortization period" min={10} max={30} step={1} value={m.amortYears} onChange={v => update('amortYears', v)} format={v => `${v} yrs`} />
               <Slider label="Number of LP investors" min={1} max={20} step={1} value={m.numInvestors} onChange={v => update('numInvestors', v)} format={v => `${v}`} />
@@ -362,109 +275,145 @@ export default function FinancialModel() {
               <Slider label="GP promote / carry" min={0} max={30} step={1} value={m.gpCarry} onChange={v => update('gpCarry', v)} format={v => `${v}%`} />
               <Slider label="Mgmt / brand fee" min={0} max={10} step={0.5} value={m.mgmtFeePct} onChange={v => update('mgmtFeePct', parseFloat(v))} format={v => `${v.toFixed(1)}%`} />
             </div>
-            <div className="debt-schedule">
-              <div className="debt-schedule__title">Annual debt service breakdown</div>
-              <div className="debt-schedule__row">
-                <span>Interest ({m.debtRate}% on {fmtM(calc.debt)})</span>
-                <strong>{fmtM(calc.interestExp)}</strong>
-              </div>
-              <div className="debt-schedule__row">
-                <span>Principal ({m.amortYears}-year amortization)</span>
-                <strong>{fmtM(calc.principalPayment)}</strong>
-              </div>
-              <div className="debt-schedule__row debt-schedule__row--total">
-                <span>Total annual debt service</span>
-                <strong>{fmtM(calc.annualDebtService)}</strong>
-              </div>
-              <div className="debt-schedule__row debt-schedule__row--hint">
-                <span>LP preferred return target ({m.lpPrefReturn}% of equity)</span>
-                <strong>{fmtM(calc.lpPrefDollars)} / yr</strong>
-              </div>
+          </SidebarSection>
+        </aside>
+
+        {/* MAIN — OUTPUTS */}
+        <main className="fin-content">
+          {/* View switcher */}
+          <div className="view-bar">
+            <span className="view-bar__label">VIEW</span>
+            <div className="view-bar__tabs">
+              <button className={`view-bar__btn ${view === 'income' ? 'view-bar__btn--active' : ''}`} onClick={() => setView('income')}>Income Statement</button>
+              <button className={`view-bar__btn ${view === 'cashflow' ? 'view-bar__btn--active' : ''}`} onClick={() => setView('cashflow')}>Cash Flow &amp; Returns</button>
+              <button className={`view-bar__btn ${view === 'exit' ? 'view-bar__btn--active' : ''}`} onClick={() => setView('exit')}>Exit Scenarios</button>
             </div>
           </div>
-        </div>
 
-        </>}
-
-        {view === 'income' && <IncomeStatement calc={calc} m={m} />}
-
-        {view === 'cashflow' && <>
-          {/* Revenue Breakdown */}
-          <div className="fin-card">
-            <div className="fin-card__header">REVENUE BREAKDOWN</div>
-            <RevenueBar label="Cabin revenue" value={calc.cabinRev} max={revMax} color="var(--carolina-green)" />
-            <RevenueBar label="F&B / spa" value={calc.fbRev} max={revMax} color="var(--sage)" />
-            <RevenueBar label="Events & weddings" value={calc.eventsRev} max={revMax} color="var(--tobacco)" />
+          {/* KPI summary always visible */}
+          <div className="kpi-grid kpi-grid--compact">
+            <div className="kpi-card">
+              <div className="kpi-card__label">ANNUAL REVENUE</div>
+              <div className="kpi-card__value">{fmtM(calc.grossRev)}</div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-card__label">EBITDA</div>
+              <div className="kpi-card__value">{fmtM(calc.ebitda)}</div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-card__label">EBITDA MARGIN</div>
+              <div className="kpi-card__value">{fmtPct(calc.ebitdaMargin)}</div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-card__label">CASH-ON-CASH</div>
+              <div className="kpi-card__value">{fmtPct(calc.cashOnCash)}</div>
+              <div className="kpi-card__sub">on {fmtM(calc.equity)} equity</div>
+            </div>
+            <div className="kpi-card">
+              <div className="kpi-card__label">PAYBACK</div>
+              <div className="kpi-card__value">{calc.paybackYears > 20 ? '20+' : calc.paybackYears.toFixed(1)} yrs</div>
+            </div>
           </div>
 
-          {/* 5-Year Cumulative Cash Flow */}
-          <div className="fin-card">
-            <div className="fin-card__header">5-YEAR CUMULATIVE CASH FLOW</div>
-            <div className="cash-chart">
-              <div className="cash-chart__ylabels">
-                {[cumMax, cumMax * 0.5, 0, cumMin * 0.5, cumMin].map((v, i) => (
-                  <div key={i} className="cash-chart__ylabel">{fmtM(v)}</div>
+          {view === 'income' && <IncomeStatement calc={calc} m={m} />}
+
+          {view === 'cashflow' && <>
+            <div className="fin-card">
+              <div className="fin-card__header">REVENUE BREAKDOWN</div>
+              <RevenueBar label="Cabin revenue" value={calc.cabinRev} max={revMax} color="var(--carolina-green)" />
+              <RevenueBar label="F&B / spa" value={calc.fbRev} max={revMax} color="var(--sage)" />
+              <RevenueBar label="Events & weddings" value={calc.eventsRev} max={revMax} color="var(--tobacco)" />
+            </div>
+
+            <div className="fin-card">
+              <div className="fin-card__header">5-YEAR CUMULATIVE CASH FLOW</div>
+              <div className="cash-chart">
+                <div className="cash-chart__ylabels">
+                  {[cumMax, cumMax * 0.5, 0, cumMin * 0.5, cumMin].map((v, i) => (
+                    <div key={i} className="cash-chart__ylabel">{fmtM(v)}</div>
+                  ))}
+                </div>
+                <div className="cash-chart__plot">
+                  <div className="cash-chart__zero" style={{ top: `${(cumMax / (cumMax - cumMin)) * 100}%` }} />
+                  {calc.yearlyCum.map((v, i) => {
+                    const range = cumMax - cumMin
+                    const zeroPct = (cumMax / range) * 100
+                    const barPct = Math.abs(v / range) * 100
+                    const top = v >= 0 ? zeroPct - barPct : zeroPct
+                    return (
+                      <div key={i} className="cash-chart__bar-wrap">
+                        <div
+                          className={`cash-chart__bar ${v >= 0 ? 'cash-chart__bar--pos' : 'cash-chart__bar--neg'}`}
+                          style={{ top: `${top}%`, height: `${barPct}%` }}
+                        >
+                          <span className="cash-chart__bar-label">{fmtM(v)}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+              <div className="cash-chart__xlabels">
+                {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map(y => (
+                  <div key={y} className="cash-chart__xlabel">{y}</div>
                 ))}
               </div>
-              <div className="cash-chart__plot">
-                <div className="cash-chart__zero" style={{ top: `${(cumMax / (cumMax - cumMin)) * 100}%` }} />
-                {calc.yearlyCum.map((v, i) => {
-                  const range = cumMax - cumMin
-                  const zeroPct = (cumMax / range) * 100
-                  const barPct = Math.abs(v / range) * 100
-                  const top = v >= 0 ? zeroPct - barPct : zeroPct
-                  return (
-                    <div key={i} className="cash-chart__bar-wrap">
-                      <div
-                        className={`cash-chart__bar ${v >= 0 ? 'cash-chart__bar--pos' : 'cash-chart__bar--neg'}`}
-                        style={{ top: `${top}%`, height: `${barPct}%` }}
-                      >
-                        <span className="cash-chart__bar-label">{fmtM(v)}</span>
-                      </div>
-                    </div>
-                  )
-                })}
+            </div>
+
+            <div className="fin-card">
+              <div className="fin-card__header">CAPITAL STACK &amp; ANNUAL RETURNS</div>
+              <div className="capital-stack">
+                <div className="capital-row"><span>Total build cost</span><strong>{fmtM(calc.totalBuild)}</strong></div>
+                <div className="capital-row"><span>Sponsor + LP equity ({m.equityPct}%)</span><strong>{fmtM(calc.equity)}</strong></div>
+                <div className="capital-row"><span>Senior debt ({100 - m.equityPct}%)</span><strong>{fmtM(calc.debt)}</strong></div>
+                <div className="capital-row"><span>Annual EBITDA ({fmtPct(calc.ebitdaMargin)} margin)</span><strong>{fmtM(calc.ebitda)}</strong></div>
+                <div className="capital-row"><span>Debt service ({m.debtRate}% rate, {m.amortYears}-yr amort)</span><strong>{fmtM(calc.annualDebtService)}</strong></div>
+                <div className="capital-row capital-row--highlight"><span>Year-1 cash flow to equity ({fmtPct(calc.cashOnCash)} CoC)</span><strong>{fmtM(calc.cashFlow)}</strong></div>
+              </div>
+
+              <div className={`insight-box insight-box--${calc.cashOnCash > 15 ? 'positive' : calc.cashOnCash > 0 ? 'neutral' : 'negative'}`}>
+                {calc.cashOnCash > 20 && (
+                  <>Pencils well. {fmtPct(calc.cashOnCash)} cash-on-cash and {fmtPct(calc.ebitdaMargin)} EBITDA margin clears most institutional hurdles.
+                  {m.eventsEnabled && ` Wedding / event venue adds ${fmtM(calc.eventsRev)} in annual revenue at near-zero incremental fixed cost.`}</>
+                )}
+                {calc.cashOnCash > 10 && calc.cashOnCash <= 20 && (
+                  <>Solid returns. {fmtPct(calc.cashOnCash)} cash-on-cash meets typical hospitality underwriting minimums. Consider tightening operating cost or raising ADR to improve margin.</>
+                )}
+                {calc.cashOnCash > 0 && calc.cashOnCash <= 10 && (
+                  <>Tight. {fmtPct(calc.cashOnCash)} cash-on-cash likely below institutional hurdle. Review occupancy assumptions and event mix to lift returns.</>
+                )}
+                {calc.cashOnCash <= 0 && (
+                  <>Negative cash-on-cash. Property would not service debt under current assumptions. Increase rate, occupancy, or reduce build cost.</>
+                )}
               </div>
             </div>
-            <div className="cash-chart__xlabels">
-              {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map(y => (
-                <div key={y} className="cash-chart__xlabel">{y}</div>
-              ))}
-            </div>
-          </div>
+          </>}
 
-          {/* Capital Stack + Returns */}
-          <div className="fin-card">
-            <div className="fin-card__header">CAPITAL STACK &amp; ANNUAL RETURNS</div>
-            <div className="capital-stack">
-              <div className="capital-row"><span>Total build cost</span><strong>{fmtM(calc.totalBuild)}</strong></div>
-              <div className="capital-row"><span>Sponsor + LP equity ({m.equityPct}%)</span><strong>{fmtM(calc.equity)}</strong></div>
-              <div className="capital-row"><span>Senior debt ({100 - m.equityPct}%)</span><strong>{fmtM(calc.debt)}</strong></div>
-              <div className="capital-row"><span>Annual EBITDA ({fmtPct(calc.ebitdaMargin)} margin)</span><strong>{fmtM(calc.ebitda)}</strong></div>
-              <div className="capital-row"><span>Debt service ({m.debtRate}% rate, {m.amortYears}-yr amort)</span><strong>{fmtM(calc.annualDebtService)}</strong></div>
-              <div className="capital-row capital-row--highlight"><span>Year-1 cash flow to equity ({fmtPct(calc.cashOnCash)} CoC)</span><strong>{fmtM(calc.cashFlow)}</strong></div>
-            </div>
-
-            <div className={`insight-box insight-box--${calc.cashOnCash > 15 ? 'positive' : calc.cashOnCash > 0 ? 'neutral' : 'negative'}`}>
-              {calc.cashOnCash > 20 && (
-                <>Pencils well. {fmtPct(calc.cashOnCash)} cash-on-cash and {fmtPct(calc.ebitdaMargin)} EBITDA margin clears most institutional hurdles.
-                {m.eventsEnabled && ` Wedding / event venue adds ${fmtM(calc.eventsRev)} in annual revenue at near-zero incremental fixed cost.`}</>
-              )}
-              {calc.cashOnCash > 10 && calc.cashOnCash <= 20 && (
-                <>Solid returns. {fmtPct(calc.cashOnCash)} cash-on-cash meets typical hospitality underwriting minimums. Consider tightening operating cost or raising ADR to improve margin.</>
-              )}
-              {calc.cashOnCash > 0 && calc.cashOnCash <= 10 && (
-                <>Tight. {fmtPct(calc.cashOnCash)} cash-on-cash likely below institutional hurdle. Review occupancy assumptions and event mix to lift returns.</>
-              )}
-              {calc.cashOnCash <= 0 && (
-                <>Negative cash-on-cash. Property would not service debt under current assumptions. Increase rate, occupancy, or reduce build cost.</>
-              )}
-            </div>
-          </div>
-        </>}
-
-        {view === 'exit' && <ExitScenarios calc={calc} m={m} />}
+          {view === 'exit' && <ExitScenarios calc={calc} m={m} />}
+        </main>
       </div>
+    </div>
+  )
+}
+
+function SidebarSection({ label, badge, badgeColor, open, onToggle, extra, children }) {
+  return (
+    <div className={`sb-section ${open ? 'sb-section--open' : ''}`}>
+      <div
+        className="sb-section__head"
+        onClick={onToggle}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+      >
+        <span className="sb-section__label">{label}</span>
+        <span className="sb-section__meta">
+          {badge && <span className={`sb-section__badge sb-section__badge--${badgeColor}`}>{badge}</span>}
+          {extra && <span className="sb-section__extra">{extra}</span>}
+          <span className="sb-section__caret" aria-hidden>{open ? '−' : '+'}</span>
+        </span>
+      </div>
+      {open && <div className="sb-section__body">{children}</div>}
     </div>
   )
 }
@@ -494,7 +443,6 @@ function IncomeStatement({ calc, m }) {
       </div>
 
       <div className="is-table">
-        {/* REVENUE */}
         <ISSectionHead title="Revenue" />
         <ISRow label="Cabin / lodging revenue" value={calc.cabinRev} />
         <ISRow label="F&B, spa, pro shop (ancillary)" value={calc.fbRev} />
@@ -505,7 +453,6 @@ function IncomeStatement({ calc, m }) {
         </>}
         <ISRow label="Total revenue" value={calc.grossRev} bold divider />
 
-        {/* COGS */}
         <ISSectionHead title="Cost of Sales" />
         <ISRow label="F&B direct costs (32% of F&B rev)" value={-calc.fbCOGS} />
         <ISRow label="Catering direct costs" value={-calc.cateringCOGS} />
@@ -513,7 +460,6 @@ function IncomeStatement({ calc, m }) {
         <ISRow label="Total cost of sales" value={-calc.totalCOGS} bold />
         <ISRow label={`Gross profit (${fmtPct(calc.grossMargin)} margin)`} value={calc.grossProfit} bold highlight="green" divider />
 
-        {/* OPERATING EXPENSES */}
         <ISSectionHead title="Operating Expenses" />
         <ISRow label="Labor & wages" value={-calc.laborExp} pct={-calc.laborExp / calc.grossRev * 100} />
         <ISRow label="Marketing & sales" value={-calc.marketingExp} pct={-calc.marketingExp / calc.grossRev * 100} />
@@ -527,7 +473,6 @@ function IncomeStatement({ calc, m }) {
         <ISRow label={`Mgmt / brand fee (${m.mgmtFeePct}%)`} value={-calc.mgmtFee} />
         <ISRow label={`EBITDA (${fmtPct(calc.ebitdaMargin)} margin)`} value={calc.ebitda} bold highlight="green" divider />
 
-        {/* BELOW-THE-LINE */}
         <ISSectionHead title="Below EBITDA" />
         <ISRow label="Depreciation & amortization" value={-calc.depreciation} />
         <ISRow label="EBIT (operating income)" value={calc.ebit} bold divider />
@@ -536,7 +481,6 @@ function IncomeStatement({ calc, m }) {
         <ISRow label="Income taxes (25%)" value={-calc.taxExpense} />
         <ISRow label="Net income" value={calc.netIncome} bold highlight={calc.netIncome > 0 ? 'green' : 'red'} divider />
 
-        {/* CASH FLOW TO EQUITY */}
         <ISSectionHead title="Cash Flow to Equity" />
         <ISRow label="EBITDA" value={calc.ebitda} />
         <ISRow label={`Less: debt service (interest + principal, ${m.amortYears}-yr amort)`} value={-calc.annualDebtService} />
@@ -621,7 +565,6 @@ function RevenueBar({ label, value, max, color }) {
 }
 
 function ExitScenarios({ calc, m }) {
-  // IRR solver (bisection) for a simple cash flow series
   function irr(cfs) {
     let lo = -0.5, hi = 1.5
     const npv = rate => cfs.reduce((s, cf, t) => s + cf / Math.pow(1 + rate, t), 0)
@@ -635,10 +578,6 @@ function ExitScenarios({ calc, m }) {
     return (lo + hi) / 2
   }
 
-  // Build stabilized NOI (for exit valuation)
-  const stabilizedNOI = calc.ebitda
-
-  // Ramping annual cash flows to equity (years 1-10)
   const rampFactors = [0.55, 0.75, 0.90, 1.00, 1.05, 1.08, 1.10, 1.12, 1.14, 1.16]
   const annualCashFlows = rampFactors.map(r => calc.cashFlow * r)
 
@@ -651,10 +590,8 @@ function ExitScenarios({ calc, m }) {
   const scenarios = EXIT_SCENARIOS.map(s => {
     const exitYearNOI = calc.ebitda * rampFactors[s.hold - 1]
     const grossSalePrice = exitYearNOI / (s.capRate / 100)
-    // Debt paydown: principal paid = principal × hold years (simplified)
     const remainingDebt = Math.max(0, calc.debt - calc.principalPayment * s.hold)
     const netExitProceeds = grossSalePrice - remainingDebt
-    // Cash flow series: -equity at t=0, yearly cash flow for hold years with exit on last year
     const cfs = [-calc.equity]
     for (let i = 0; i < s.hold; i++) {
       const yrCf = annualCashFlows[i] || calc.cashFlow
@@ -756,22 +693,6 @@ function ExitScenarios({ calc, m }) {
         <strong>{scenarios[1].irr !== null ? `${(scenarios[1].irr * 100).toFixed(1)}%` : '—'} IRR</strong>
         {' '}and a <strong>{scenarios[1].equityMultiple.toFixed(2)}x equity multiple</strong> on {fmtM(calc.equity)} of LP equity &mdash; assuming NOI ramps to {fmtM(scenarios[1].exitYearNOI)} and cap rates compress into the mid-7s.
       </div>
-    </div>
-  )
-}
-
-function PLRow({ label, value, bold, divider, highlight }) {
-  const cls = [
-    'pl-row',
-    bold && 'pl-row--bold',
-    divider && 'pl-row--divider',
-    highlight === 'green' && 'pl-row--green',
-    highlight === 'red' && 'pl-row--red'
-  ].filter(Boolean).join(' ')
-  return (
-    <div className={cls}>
-      <span>{label}</span>
-      <span>{value < 0 ? `-${fmtM(Math.abs(value))}` : fmtM(value)}</span>
     </div>
   )
 }

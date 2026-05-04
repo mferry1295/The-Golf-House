@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
 import './Cabins.css'
 
 const cabinTypes = [
@@ -31,18 +31,7 @@ const cabinTypes = [
 export default function Cabins() {
   return (
     <div className="suites">
-      <section
-        className="suites-hero"
-        style={{ backgroundImage: `url(${import.meta.env.BASE_URL}renderings/cabin-front-porch.png)` }}
-      >
-        <div className="suites-hero__overlay" />
-        <div className="suites-hero__content">
-          <p className="section-label">03 &middot; The Cabins</p>
-          <h1 className="suites-hero__title">The Cabin Experience</h1>
-          <div className="gold-line" style={{ margin: '1rem auto' }} />
-          <p className="suites-hero__sub">Eight luxury group cabins designed for the modern golfer's retreat</p>
-        </div>
-      </section>
+      <PageHeader title="The Cabin Experience" />
 
       <section className="suites-intro">
         <div className="container">
@@ -127,16 +116,6 @@ export default function Cabins() {
         </div>
       </section>
 
-      <section className="exp-cta">
-        <div className="container" style={{ textAlign: 'center' }}>
-          <h2 className="section-title" style={{ color: 'var(--cream)' }}>Design Your Property Layout</h2>
-          <div className="gold-line" style={{ margin: '1rem auto 1.5rem' }} />
-          <p style={{ color: 'rgba(245,240,232,0.8)', marginBottom: '2rem' }}>
-            Place cabins, amenities, and golf features on your property map
-          </p>
-          <Link to="/property-planner" className="btn btn--gold">Open Property Planner</Link>
-        </div>
-      </section>
     </div>
   )
 }
